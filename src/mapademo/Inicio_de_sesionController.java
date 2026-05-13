@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
-public class Inicio_de_sesionController {
+public class Registro_usuarioController {
 
     @FXML
     private DatePicker Birth;
