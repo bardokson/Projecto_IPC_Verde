@@ -5,6 +5,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -27,10 +28,10 @@
             </Label>
          </children>
       </HBox>
-      <GridPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="341.0" prefWidth="471.0">
+      <GridPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="332.0" prefWidth="471.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="237.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="234.0" minWidth="10.0" prefWidth="234.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="161.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="310.0" minWidth="10.0" prefWidth="310.0" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
@@ -39,16 +40,20 @@
           <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="-Infinity" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="358.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="61.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <TextField fx:id="NickName_reg" maxWidth="-Infinity" prefHeight="26.0" prefWidth="167.0" />
-                  <Label fx:id="Err_nick" prefHeight="18.0" prefWidth="226.0" textFill="RED" visible="false" />
+                  <TextField fx:id="NickName_reg" maxWidth="-Infinity" onKeyTyped="#Entering_Nick" prefHeight="26.0" prefWidth="236.0" />
+                  <Label fx:id="Err_nick" prefHeight="23.0" prefWidth="318.0" text="Tiene que ser de 6-15 letras/digitos/guione o subguion" textAlignment="CENTER" textFill="RED" visible="false">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Label>
                </children>
             </VBox>
-            <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="100.0" prefWidth="265.0" GridPane.rowIndex="1">
+            <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="65.0" prefWidth="237.0" GridPane.rowIndex="1">
                <children>
                   <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="NickName:   " textAlignment="RIGHT">
                      <font>
@@ -58,7 +63,7 @@
                   <Label text="Label" visible="false" />
                </children>
             </VBox>
-            <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="100.0" prefWidth="100.0" GridPane.rowIndex="2">
+            <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="64.0" prefWidth="237.0" GridPane.rowIndex="2">
                <children>
                   <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="Email:  " textAlignment="RIGHT">
                      <font>
@@ -68,7 +73,7 @@
                   <Label text="Label" visible="false" />
                </children>
             </VBox>
-            <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="100.0" prefWidth="100.0" GridPane.rowIndex="3">
+            <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="59.0" prefWidth="237.0" GridPane.rowIndex="3">
                <children>
                   <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="Contraseña:  " textAlignment="RIGHT">
                      <font>
@@ -78,7 +83,7 @@
                   <Label text="Label" visible="false" />
                </children>
             </VBox>
-            <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="100.0" prefWidth="100.0" GridPane.rowIndex="4">
+            <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="59.0" prefWidth="237.0" GridPane.rowIndex="4">
                <children>
                   <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="Año de nacimiento:  " textAlignment="RIGHT">
                      <font>
@@ -88,25 +93,38 @@
                   <Label text="Label" visible="false" />
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="358.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="64.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <TextField fx:id="Email_reg" maxWidth="-Infinity" prefHeight="26.0" prefWidth="167.0" promptText="usuario@dominio" />
-                  <Label fx:id="Err_email" prefHeight="18.0" prefWidth="226.0" textFill="RED" visible="false" />
+                  <TextField fx:id="Email_reg" maxWidth="-Infinity" onKeyTyped="#Entering_email" prefHeight="26.0" prefWidth="236.0" promptText="usuario@dominio">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </TextField>
+                  <Label fx:id="Err_email" prefHeight="18.0" prefWidth="226.0" text="El formato ha de ser: &quot;usuario@dominio&quot;" textFill="RED" visible="false">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Label>
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="170.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
-                  <TextField fx:id="Pass_reg" maxWidth="-Infinity" prefHeight="26.0" prefWidth="167.0" />
-                  <Label fx:id="Err_pass" prefHeight="18.0" prefWidth="226.0" textFill="RED" visible="false" />
+                  <PasswordField fx:id="Pass_reg" maxWidth="-Infinity" onKeyPressed="#Entering_pass" prefHeight="26.0" prefWidth="236.0" />
+                  <Label fx:id="Err_pass" prefHeight="18.0" prefWidth="338.0" text="8-20 caracteres, con al menos una mayúscula, una minúscula, undígito y un símbolo (!@#$%&amp;*()-+=)" textFill="RED" visible="false">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Label>
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="358.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="61.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <children>
-                  <DatePicker fx:id="Birth" prefHeight="26.0" prefWidth="122.0" promptText="dd/mm/yyyy" />
-                  <Label fx:id="Err_birth" prefHeight="18.0" prefWidth="226.0" textFill="RED" visible="false" />
+                  <DatePicker fx:id="Birth" onAction="#Entering_birth" prefHeight="26.0" prefWidth="122.0" promptText="dd/mm/yyyy" />
+                  <Label fx:id="Err_birth" prefHeight="18.0" prefWidth="226.0" text="El usuario debe ser mayor de 12 años" textFill="RED" visible="false">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Label>
                </children>
             </VBox>
-            <HBox alignment="CENTER" prefHeight="91.0" prefWidth="383.0" GridPane.columnSpan="2" GridPane.rowIndex="6">
+            <HBox alignment="CENTER" prefHeight="17.0" prefWidth="431.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
                <children>
                   <Button mnemonicParsing="false" onAction="#Acept_reg" text="Registrar">
                      <HBox.margin>
@@ -131,18 +149,31 @@
                   <Label text="aqui" />
                </children>
             </HBox>
-            <HBox maxWidth="-Infinity" prefHeight="60.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+            <HBox maxWidth="-Infinity" prefHeight="60.0" prefWidth="73.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                <children>
-                  <ImageView fitHeight="22.0" fitWidth="19.0" onMouseEntered="#Pass_specs" pickOnBounds="true" preserveRatio="true">
+                  <Button fx:id="Pass_show" mnemonicParsing="false" onAction="#Pass_show" prefHeight="22.0" prefWidth="43.0" text="Show">
+                     <HBox.margin>
+                        <Insets left="3.0" top="10.0" />
+                     </HBox.margin>
+                     <padding>
+                        <Insets bottom="-10.0" top="-10.0" />
+                     </padding>
+                  </Button>
+                  <ImageView fx:id="Info_pass" fitHeight="22.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../resources/advertencia_bl.png" />
                      </image>
                      <HBox.margin>
-                        <Insets top="10.0" />
+                        <Insets left="3.0" top="11.0" />
                      </HBox.margin>
                   </ImageView>
                </children>
             </HBox>
+            <Label fx:id="Err_tot" text="Algún campo es incorrecto, o falta por ser rellenado" textFill="RED" visible="false" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="6">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Label>
          </children>
       </GridPane>
    </children>
