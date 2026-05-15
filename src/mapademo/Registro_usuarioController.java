@@ -9,24 +9,34 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 
 /**
  * FXML Controller class
  *
  * @author bardokson
  */
-public class Inicio_de_sesionController implements Initializable {
+public class Registro_usuarioController implements Initializable {
 
     @FXML
-    private TextField NickName_ini;
+    private TextField NickName_reg;
     @FXML
-    private Label Err_nick_ini;
+    private Label Err_nick;
+    @FXML
+    private TextField Email_reg;
+    @FXML
+    private Label Err_email;
     @FXML
     private TextField Pass_reg;
     @FXML
-    private Label Err_pass_ini;
+    private Label Err_pass;
+    @FXML
+    private DatePicker Birth;
+    @FXML
+    private Label Err_birth;
 
     /**
      * Initializes the controller class.
@@ -45,7 +55,11 @@ public class Inicio_de_sesionController implements Initializable {
     }
 
     @FXML
-    private void Reg_ses(ActionEvent event) {
+    private void Ini_ses(ActionEvent event) {
+    }
+
+    @FXML
+    private void Pass_specs(MouseEvent event) {
     }
     
 }
