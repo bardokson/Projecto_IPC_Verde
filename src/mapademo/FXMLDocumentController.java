@@ -487,7 +487,7 @@ public class FXMLDocumentController implements Initializable {
         
         //userAvatar.setImage(new Image(getClass().getResourceAsStream("/resources/avatar_default.png")));
         //Usar icono del usuario registrado para el menu principal
-
+            
         if (user != null) {
             
             username.setText(user.getNickName());
