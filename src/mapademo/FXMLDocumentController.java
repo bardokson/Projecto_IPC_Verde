@@ -63,10 +63,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -113,7 +115,6 @@ public class FXMLDocumentController implements Initializable {
 
     /** Group que se escala para aplicar el zoom. */
     private Group zoomGroup;
-    private User user;
 
     /**
      * Pane que actúa como lienzo del mapa.
@@ -128,7 +129,8 @@ public class FXMLDocumentController implements Initializable {
     /** Menú contextual reutilizable para el clic derecho sobre el mapa. */
     private ContextMenu mapContextMenu;
 
-
+    //private SportActivityApp app = SportActivityApp.getInstance();
+    User user = LaSaforApp.app.getCurrentUser();
     /**
      * Indica si el controlador está en modo inserción de POI.
      * {@code true} → el próximo clic izquierdo sobre el mapa abre el diálogo.
@@ -174,7 +176,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private ListView<Activity> activityList;
     @FXML
-    private ImageView avatar;
+    private ImageView userAvatar;
+    @FXML
+    private GridPane gridBase;
+    @FXML
+    private Label username;
  
 
     // =========================================================
@@ -473,11 +479,30 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
         });
-        File archivoMapa = new File("src/maps/upv.jpg");
+        File archivoMapa = new File("src/resources/upv.jpg");
         if (!archivoMapa.exists()) {
-            archivoMapa = new File("maps/upv.jpg");
+            archivoMapa = new File("src/resources/upv.jpg");
         }
         buildMap(archivoMapa);
+        
+        //userAvatar.setImage(new Image(getClass().getResourceAsStream("/resources/avatar_default.png")));
+        //Usar icono del usuario registrado para el menu principal
+
+        if (user != null) {
+            
+            username.setText(user.getNickName());
+            String avatarPath = user.getAvatarPath();
+            
+            if (avatarPath != null) {
+                userAvatar.setImage(user.getAvatar());
+            }
+        }
+        
+        userAvatar.setFitWidth(60);
+        userAvatar.setFitHeight(60);
+        userAvatar.setPreserveRatio(true);
+        Rectangle cut = new Rectangle(60, 60);
+        userAvatar.setClip(cut);
     }
 
     // =========================================================
@@ -653,7 +678,7 @@ public class FXMLDocumentController implements Initializable {
     }
     @FXML
     private void importarGPX(ActionEvent event) {
-        SportActivityApp app = SportActivityApp.getInstance();
+        SportActivityApp app = LaSaforApp.app;
         FileChooser fc = new FileChooser();
         fc.setTitle("Seleccionar carrera GPX");
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos GPX", "*.gpx"));
@@ -682,7 +707,7 @@ public class FXMLDocumentController implements Initializable {
         Activity itemSelected = activityList.getSelectionModel().getSelectedItem();
         if (itemSelected == null) return;
         
-        SportActivityApp app = SportActivityApp.getInstance();
+        SportActivityApp app = LaSaforApp.app;
         MapRegion reco = app.findMapForActivity(itemSelected);
         File mapFile = new File(reco.getImagePath());
         buildMap(mapFile);
@@ -694,7 +719,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void logOut(ActionEvent event) {
-        SportActivityApp app = SportActivityApp.getInstance();
+        SportActivityApp app = LaSaforApp.app;
         app.logout();
         
         try {
@@ -717,7 +742,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void logOutExit(ActionEvent event) {
-        SportActivityApp app = SportActivityApp.getInstance();
+        SportActivityApp app = LaSaforApp.app;
         app.logout();
         Platform.exit();
     }
