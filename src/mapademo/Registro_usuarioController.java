@@ -60,7 +60,7 @@ public class Registro_usuarioController implements Initializable {
     private File Avatar_file;
     private Image Avatar;
     private String Avatar_Path;
-    private SportActivityApp app = SportActivityApp.getInstance();
+    //private SportActivityApp app = SportActivityApp.getInstance();
     /**
      * Initializes the controller class.
      * @param url
@@ -80,11 +80,11 @@ public class Registro_usuarioController implements Initializable {
         //LaSaforApp.setRoot("actividades"); //solo para testing, quitar luego
         if(Nick_ok && Email_ok && Pass_ok && Birth_ok){
             Err_tot.setVisible(false);
-            app.registerUser(Nick, Email, Pass, Birth, Avatar_Path);
-            app.login(Nick, Pass);
-            System.out.println(app.getCurrentUser());
+            boolean ok = LaSaforApp.app.registerUser(Nick, Email, Pass, Birth, Avatar_Path);
+            LaSaforApp.app.login(Nick, Pass);
+            
             //Cambiar a la escena de actividades
-            LaSaforApp.setRoot("actividades");
+            if (ok) LaSaforApp.setRoot("actividades");
         }else{
             Err_tot.setVisible(true);
         }
@@ -162,9 +162,10 @@ public class Registro_usuarioController implements Initializable {
     }
 
     @FXML
-    private void Avatar_reg(ActionEvent event) {
+    private void Avatar_reg(ActionEvent event) throws IOException {
         FileChooser fc = new FileChooser();
         fc.setTitle("Seleccionar mapa JPG");
+        fc.setInitialDirectory(new File("."));
         // Filtramos para que solo deje elegir archivos .jpg
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes JPG", "*.jpg", "*.jpeg"));
         
@@ -179,8 +180,8 @@ public class Registro_usuarioController implements Initializable {
             Image image = new Image(file.toURI().toString());
 
             Avatar_reg.setImage(image);
-            Avatar = image;
-            Avatar_Path = Avatar_file.getAbsolutePath();
+            //Avatar = image;
+            Avatar_Path = Avatar_file.getCanonicalPath();
             Avatar_reg.setFitWidth(60);
             Avatar_reg.setFitHeight(60);
             Avatar_reg.setPreserveRatio(true);
