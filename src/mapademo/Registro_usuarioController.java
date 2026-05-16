@@ -20,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import org.controlsfx.control.PopOver;
 import upv.ipc.sportlib.User;
@@ -45,6 +46,8 @@ public class Registro_usuarioController implements Initializable {
     @FXML private Label Err_pass;
     @FXML private ImageView Avatar_reg;
     
+    public User user;
+    
     private boolean Nick_ok = false;
     private boolean Email_ok = false;
     private boolean Pass_ok = false;
@@ -56,6 +59,7 @@ public class Registro_usuarioController implements Initializable {
     private LocalDate Birth;
     private File Avatar_file;
     private Image Avatar;
+    private String Avatar_Path;
     private SportActivityApp app = SportActivityApp.getInstance();
     /**
      * Initializes the controller class.
@@ -73,9 +77,12 @@ public class Registro_usuarioController implements Initializable {
 
     @FXML
     private void Acept_reg(ActionEvent event) throws IOException {
+        //LaSaforApp.setRoot("actividades"); //solo para testing, quitar luego
         if(Nick_ok && Email_ok && Pass_ok && Birth_ok){
             Err_tot.setVisible(false);
-            app.registerUser(Nick, Email, Pass, Birth, Avatar);
+            app.registerUser(Nick, Email, Pass, Birth, Avatar_Path);
+            app.login(Nick, Pass);
+            System.out.println(app.getCurrentUser());
             //Cambiar a la escena de actividades
             LaSaforApp.setRoot("actividades");
         }else{
@@ -166,10 +173,21 @@ public class Registro_usuarioController implements Initializable {
         if (file != null) {
             Avatar_file = file;
             // Escribimos la ruta en el cajón de texto para que el usuario la vea
-            Avatar_reg.setImage(new Image(getClass().getResourceAsStream(Avatar_file.getAbsolutePath())));
-            Avatar = Avatar_reg.getImage();
+            /*Avatar_reg.setImage(new Image(getClass().getResourceAsStream(Avatar_file.getAbsolutePath())));
+            Avatar = Avatar_reg.getImage();*/
+            
+            Image image = new Image(file.toURI().toString());
+
+            Avatar_reg.setImage(image);
+            Avatar = image;
+            Avatar_Path = Avatar_file.getAbsolutePath();
+            Avatar_reg.setFitWidth(60);
+            Avatar_reg.setFitHeight(60);
+            Avatar_reg.setPreserveRatio(true);
+            Rectangle cut = new Rectangle(60, 60);
+            Avatar_reg.setClip(cut);
         }
-        }
+    }
     
 }
     
