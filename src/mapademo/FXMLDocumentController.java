@@ -66,6 +66,12 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import upv.ipc.sportlib.SportActivityApp;
+import upv.ipc.sportlib.Activity;
+import upv.ipc.sportlib.Annotation;
+import upv.ipc.sportlib.GeoPoint;
+import upv.ipc.sportlib.AnnotationType;
+import upv.ipc.sportlib.MapProjection;  
 
 /**
  * Controlador principal de la aplicación de mapa con POIs.
@@ -108,7 +114,8 @@ public class FXMLDocumentController implements Initializable {
      * la imagen cargada.
      */
     private Pane mapPane;
-
+    private Activity actividadActual;
+    private MapProjection projection;
     
     /** Menú contextual reutilizable para el clic derecho sobre el mapa. */
     private ContextMenu mapContextMenu;
@@ -153,6 +160,7 @@ public class FXMLDocumentController implements Initializable {
     /** Etiqueta en la barra de estado que muestra las coordenadas del ratón. */
     @FXML
     private Label mousePosition;
+    
     @FXML
     private SplitPane splitPane;
  
@@ -376,9 +384,24 @@ public class FXMLDocumentController implements Initializable {
         final double clickY = y;
         mapContextMenu.getItems().get(0).setOnAction(e -> addPoi(clickX, clickY));
         mapContextMenu.getItems().get(1).setOnAction(e -> addCircle(clickX, clickY));
-
-        // Mostramos el menú en coordenadas de pantalla
-        mapContextMenu.show(
+        if (projection != null && actividadActual != null) {
+                GeoPoint puntoGps = projection.unproject(clickX, clickY);
+                    Annotation nota = new Annotation(
+                    AnnotationType.TEXT, 
+                    "Nota en ruta", 
+                    "#FF0000", 
+                    2.0, 
+                    java.util.List.of(puntoGps)
+                );
+                
+                SportActivityApp.getInstance().addAnnotation(actividadActual, nota);
+                
+                Text t = new Text(clickX, clickY, "📌");
+                mapPane.getChildren().add(t);
+            } else {
+                System.out.println("Error: Falta cargar mapa o actividad");
+            }
+            mapContextMenu.show(
             mapPane.getScene().getWindow(),
             mapPane.localToScreen(x, y).getX(),
             mapPane.localToScreen(x, y).getY()
@@ -428,23 +451,21 @@ public class FXMLDocumentController implements Initializable {
         map_listview.setCellFactory(listView -> new ListCell<Poi>() {
             @Override
             protected void updateItem(Poi poi, boolean empty) {
-                // Siempre llamar a super primero (requerido por JavaFX)
                 super.updateItem(poi, empty);
 
                 if (empty || poi == null) {
-                    // Celda vacía: limpiamos texto y gráfico
                     setText(null);
                     setGraphic(null);
                 } else {
-                    // Mostramos código y nombre separados por un guión largo
                     setText(poi.getCode() + " – " + poi.getPosition());
                 }
             }
         });
-
-        // ── Carga del mapa inicial ─────────────────────────────────────
-        // El fichero se busca relativo al directorio de trabajo del proyecto.
-        buildMap(new File("resources/upv.jpg"));
+        File archivoMapa = new File("src/maps/upv.jpg");
+        if (!archivoMapa.exists()) {
+            archivoMapa = new File("maps/upv.jpg");
+        }
+        buildMap(archivoMapa);
     }
 
     // =========================================================
@@ -618,7 +639,22 @@ public class FXMLDocumentController implements Initializable {
         circle.setCenterY(y);
         mapPane.getChildren().add(circle); // Se añade sobre el mapa como cualquier nodo
     }
-
-
-
+    @FXML
+    private void importarGPX(ActionEvent event) {
+        SportActivityApp app = SportActivityApp.getInstance();
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Seleccionar carrera GPX");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos GPX", "*.gpx"));
+        File seleccionado = fc.showOpenDialog(mapPane.getScene().getWindow());
+            if (seleccionado != null) {
+            actividadActual = app.importActivity(seleccionado);
+            int numPuntos = actividadActual.getTrackPoints().size();
+            String nombre = actividadActual.getName();
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setTitle("Éxito");
+            alerta.setHeaderText("Datos cargados correctamente");
+            alerta.setContentText("Actividad: " + nombre + "\nTotal de puntos GPS: " + numPuntos);
+            alerta.show();
+        }
+    }
 }
