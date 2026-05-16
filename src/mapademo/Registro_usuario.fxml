@@ -39,8 +39,8 @@
             <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="-Infinity" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="-Infinity" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
@@ -190,7 +190,7 @@
                <children>
                   <Button mnemonicParsing="false" onAction="#Avatar_reg">
                      <graphic>
-                        <ImageView fx:id="Avatar_reg" fitHeight="58.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="Avatar_reg" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../resources/avatar_default.png" />
                            </image>

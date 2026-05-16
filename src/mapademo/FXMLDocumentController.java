@@ -491,11 +491,10 @@ public class FXMLDocumentController implements Initializable {
         if (user != null) {
             
             username.setText(user.getNickName());
-            String avatarPath = user.getAvatarPath();
-            
-            if (avatarPath != null) {
-                userAvatar.setImage(user.getAvatar());
-            }
+            String avatar = user.getAvatarPath();
+            System.out.println(avatar);
+            userAvatar.setImage(user.getAvatar());
+
         }
         
         userAvatar.setFitWidth(60);
