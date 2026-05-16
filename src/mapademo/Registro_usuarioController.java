@@ -24,7 +24,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.controlsfx.control.PopOver;
@@ -52,19 +51,20 @@ public class Registro_usuarioController implements Initializable {
     @FXML private ImageView Avatar_reg;
     @FXML private TextField Pass_shown;
     @FXML private VBox Vbox_pass;
+    @FXML private ImageView Img_pass;
     
+    private static boolean pressed = false;
     private boolean Nick_ok = false;
     private boolean Email_ok = false;
     private boolean Pass_ok = false;
     private boolean Birth_ok = false;
-    private boolean pressed = false;
     private PopOver popover;
     private String Nick;
     private String Email;
     private String Pass;
     private LocalDate Birth;
     private File Avatar_file;
-    private Image Avatar;
+    private Image Avatar = new Image(getClass().getResourceAsStream("/resources/avatar_default.png"));
     private SportActivityApp app = SportActivityApp.getInstance();
     
     
@@ -106,6 +106,7 @@ public class Registro_usuarioController implements Initializable {
      * Saca al usuario de la app
      * @param event 
      */
+    @FXML
     private void Cancel_reg(ActionEvent event) {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Saliendo de la app");
@@ -194,46 +195,67 @@ public class Registro_usuarioController implements Initializable {
         }
     }
     
-    /**
-     * Muestra la contraseña
-     * @param event 
-     */
-    @FXML
-    private void Pass_show(ActionEvent event) {
-        if(pressed){
-            Pass_show.setOnAction(e -> Pass_show.setText("Hide"));            
-            pressed = false;
-            Pass_reg.setVisible(!pressed);
-            Pass_reg.setManaged(!pressed);
-            Vbox_pass.setVisible(pressed);
-            Vbox_pass.setManaged(pressed);
-        }else{
-            Pass_show.setOnAction(e -> Pass_show.setText("Show"));           
-            pressed = true;
-            Pass_reg.setVisible(pressed);
-            Pass_reg.setManaged(pressed);
-            Vbox_pass.setVisible(!pressed);           
-            Vbox_pass.setManaged(!pressed);
-        }
-    }
-    
-    
     @FXML
     private void Avatar_reg(ActionEvent event) {
         FileChooser fc = new FileChooser();
         fc.setTitle("Seleccionar mapa JPG");
         // Filtramos para que solo deje elegir archivos .jpg
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes JPG", "*.jpg", "*.jpeg"));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes JPG", "*.jpg", "*.jpeg",".png"));
         
         File file = fc.showOpenDialog(Avatar_reg.getScene().getWindow());
         
         if (file != null) {
             Avatar_file = file;
             // Escribimos la ruta en el cajón de texto para que el usuario la vea
-            Avatar_reg.setImage(new Image(getClass().getResourceAsStream(Avatar_file.getAbsolutePath())));
-            Avatar = Avatar_reg.getImage();
+            Avatar = new Image(getClass().getResourceAsStream(Avatar_file.getAbsolutePath()));
+            Avatar_reg.setImage(Avatar);
         }
-        }
+    }
     
+    /**
+     * Muestra la contraseña
+     * @param event 
+     */
+    @FXML
+    private void Pass_show(ActionEvent event) {
+        if(getPressed()){
+            disableShown();
+            enableReg();            
+            Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_cerrado.png")));
+            cyclePressed();
+        }else{
+            enableShown();
+            disableReg();            
+            Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_abierto.png")));
+            cyclePressed();
+        }
+        
+    }
+    
+    private static void cyclePressed(){
+        pressed = !pressed;
+    }
+    
+    private static boolean getPressed(){
+        return pressed;
+    }
+    
+    private void disableShown(){
+        Pass_shown.setDisable(true);
+        Pass_shown.setVisible(false);
+    }
+    private void disableReg(){
+        Pass_reg.setDisable(true);
+        Pass_reg.setVisible(false);
+    }
+    private void enableShown(){
+        Pass_shown.setDisable(false);
+        Pass_shown.setVisible(true);
+    }
+    private void enableReg(){
+        Pass_reg.setDisable(false);
+        Pass_reg.setVisible(true);
+    }
 }
     
