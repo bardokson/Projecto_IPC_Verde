@@ -20,7 +20,7 @@
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
             <TextField fx:id="rutaImagenField" editable="false" promptText="Ruta de la imagen..." />
-            <Button mnemonicParsing="false" onAction="#seleccionarImagen" text="Examinar..." />
+            <Button mnemonicParsing="false" onAction="#selecMapaDemoApp.javacionarImagen" text="Examinar..." />
          </children>
       </HBox>
       <GridPane>

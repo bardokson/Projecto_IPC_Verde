@@ -11,13 +11,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import upv.ipc.sportlib.User;
 
 /**
  * FXML Controller class
  *
  * @author bardokson
  */
-public class Inicio_de_sesionController implements Initializable {
+public class Inicio_de_sesionController implements Initializable{
 
     @FXML
     private TextField NickName_ini;
@@ -38,6 +39,8 @@ public class Inicio_de_sesionController implements Initializable {
 
     @FXML
     private void Acept_reg(ActionEvent event) {
+      
+        
     }
 
     @FXML
@@ -46,6 +49,7 @@ public class Inicio_de_sesionController implements Initializable {
 
     @FXML
     private void Reg_ses(ActionEvent event) {
+        LaSaforApp.setRoot("registro");
     }
     
 }

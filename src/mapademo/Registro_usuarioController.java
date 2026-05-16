@@ -4,6 +4,8 @@
  */
 package mapademo;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -15,11 +17,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
+import javafx.stage.FileChooser;
 import org.controlsfx.control.PopOver;
 import upv.ipc.sportlib.User;
+import upv.ipc.sportlib.SportActivityApp;
 
 /**
  * FXML Controller class
@@ -27,38 +31,39 @@ import upv.ipc.sportlib.User;
  * @author bardokson
  */
 public class Registro_usuarioController implements Initializable {
-
+       
+    @FXML private TextField NickName_reg;
+    @FXML private Label Err_nick;
+    @FXML private TextField Email_reg;
+    @FXML private Label Err_email;
+    @FXML private TextField Pass_reg;
+    @FXML private DatePicker Birth_reg;
+    @FXML private Label Err_birth;
+    @FXML private Label Err_tot;
+    @FXML private ImageView Info_pass;
+    @FXML private Button Pass_show;
+    @FXML private Label Err_pass;
+    @FXML private ImageView Avatar_reg;
+    
     private boolean Nick_ok = false;
     private boolean Email_ok = false;
     private boolean Pass_ok = false;
     private boolean Birth_ok = false;
     private PopOver popover;
-    @FXML
-    private TextField NickName_reg;
-    @FXML
-    private Label Err_nick;
-    @FXML
-    private TextField Email_reg;
-    @FXML
-    private Label Err_email;
-    @FXML
-    private TextField Pass_reg;
-    @FXML
-    private DatePicker Birth;
-    @FXML
-    private Label Err_birth;
-     @FXML
-    private Label Err_tot;
-    @FXML
-    private ImageView Info_pass;
-    @FXML
-    private Button Pass_show;
-
+    private String Nick;
+    private String Email;
+    private String Pass;
+    private LocalDate Birth;
+    private File Avatar_file;
+    private Image Avatar;
+    private SportActivityApp app = SportActivityApp.getInstance();
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         // TODO
         popover = new PopOver(new Label("  La contraseña debe tener entre 8 y 20 caracteres,  \n "
                 + "  con al menos una mayúscula, una minúscula, un   \n"
@@ -67,10 +72,12 @@ public class Registro_usuarioController implements Initializable {
     }    
 
     @FXML
-    private void Acept_reg(ActionEvent event) {
+    private void Acept_reg(ActionEvent event) throws IOException {
         if(Nick_ok && Email_ok && Pass_ok && Birth_ok){
             Err_tot.setVisible(false);
+            app.registerUser(Nick, Email, Pass, Birth, Avatar);
             //Cambiar a la escena de actividades
+            LaSaforApp.setRoot("actividades");
         }else{
             Err_tot.setVisible(true);
         }
@@ -83,12 +90,13 @@ public class Registro_usuarioController implements Initializable {
     }
 
     @FXML
-    private void Ini_ses(ActionEvent event) {
-        
+    private void Ini_ses(ActionEvent event) throws IOException {
+        LaSaforApp.setRoot("inicio_sesion");
     }
     @FXML
     private void Entering_Nick(KeyEvent event) {
-        if(!User.checkNickName(NickName_reg.getText())){
+        Nick = NickName_reg.getText();
+        if(!User.checkNickName(Nick)){
             Err_nick.setVisible(true);
             Nick_ok = false;
         } else {
@@ -99,7 +107,8 @@ public class Registro_usuarioController implements Initializable {
 
     @FXML
     private void Entering_email(KeyEvent event) {
-        if(!User.checkEmail(Email_reg.getText())){
+        Email = Email_reg.getText();
+        if(!User.checkEmail(Email)){
             Err_email.setVisible(true);
             Email_ok = false;
         } else {
@@ -110,20 +119,22 @@ public class Registro_usuarioController implements Initializable {
 
     @FXML
     private void Entering_pass(KeyEvent event) {
-        
-        if(!User.checkPassword(Pass_reg.getText())){
+        Pass = Pass_reg.getText();
+        if(!User.checkPassword(Pass)){
             if(!popover.isShowing()) popover.show(Info_pass);
+            Err_pass.setVisible(true);
             Pass_ok = false;
         } else {
             popover.hide();
+            Err_pass.setVisible(false);
             Pass_ok = true;
         }
     }
 
     @FXML
     private void Entering_birth(ActionEvent event) { 
-        LocalDate birthLD = Birth.getValue();
-        if(!User.isOlderThan(birthLD, 12)){
+        Birth = Birth_reg.getValue();
+        if(!User.isOlderThan(Birth, 12)){
             Err_birth.setVisible(true);
             Birth_ok = false;
         }else{
@@ -142,5 +153,23 @@ public class Registro_usuarioController implements Initializable {
             pressed = true;
         }
     }
+
+    @FXML
+    private void Avatar_reg(ActionEvent event) {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Seleccionar mapa JPG");
+        // Filtramos para que solo deje elegir archivos .jpg
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes JPG", "*.jpg", "*.jpeg"));
+        
+        File file = fc.showOpenDialog(Avatar_reg.getScene().getWindow());
+        
+        if (file != null) {
+            Avatar_file = file;
+            // Escribimos la ruta en el cajón de texto para que el usuario la vea
+            Avatar_reg.setImage(new Image(getClass().getResourceAsStream(Avatar_file.getAbsolutePath())));
+            Avatar = Avatar_reg.getImage();
+        }
+        }
     
 }
+    
