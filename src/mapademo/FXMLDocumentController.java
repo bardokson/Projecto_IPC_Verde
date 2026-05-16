@@ -35,11 +35,16 @@ import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -72,6 +77,8 @@ import upv.ipc.sportlib.Annotation;
 import upv.ipc.sportlib.GeoPoint;
 import upv.ipc.sportlib.AnnotationType;
 import upv.ipc.sportlib.MapProjection;  
+import upv.ipc.sportlib.MapRegion;
+import upv.ipc.sportlib.User;
 
 /**
  * Controlador principal de la aplicación de mapa con POIs.
@@ -106,6 +113,7 @@ public class FXMLDocumentController implements Initializable {
 
     /** Group que se escala para aplicar el zoom. */
     private Group zoomGroup;
+    private User user;
 
     /**
      * Pane que actúa como lienzo del mapa.
@@ -163,6 +171,10 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private SplitPane splitPane;
+    @FXML
+    private ListView<Activity> activityList;
+    @FXML
+    private ImageView avatar;
  
 
     // =========================================================
@@ -656,5 +668,57 @@ public class FXMLDocumentController implements Initializable {
             alerta.setContentText("Actividad: " + nombre + "\nTotal de puntos GPS: " + numPuntos);
             alerta.show();
         }
+    }
+
+    @FXML
+    private void verActividades(ActionEvent event) {
+        map_listview.setVisible(false);
+        activityList.setVisible(true);
+        activityList.getItems().setAll(user.getActivities());
+    }
+
+    @FXML
+    private void activitySelected(MouseEvent event) {
+        Activity itemSelected = activityList.getSelectionModel().getSelectedItem();
+        if (itemSelected == null) return;
+        
+        SportActivityApp app = SportActivityApp.getInstance();
+        MapRegion reco = app.findMapForActivity(itemSelected);
+        File mapFile = new File(reco.getImagePath());
+        buildMap(mapFile);
+    }
+
+    @FXML
+    private void modPerfil(ActionEvent event) {
+    }
+
+    @FXML
+    private void logOut(ActionEvent event) {
+        SportActivityApp app = SportActivityApp.getInstance();
+        app.logout();
+        
+        try {
+        FXMLLoader loader = new FXMLLoader(
+            getClass().getResource("Inicio_de_sesion.fxml")
+        );
+
+        Parent root = loader.load();
+
+        Stage stage = (Stage) ((Node) event.getSource())
+            .getScene()
+            .getWindow();
+
+        stage.setScene(new Scene(root));
+        stage.setTitle("Login");
+        stage.show();
+
+        } catch (IOException e) {}
+    }
+
+    @FXML
+    private void logOutExit(ActionEvent event) {
+        SportActivityApp app = SportActivityApp.getInstance();
+        app.logout();
+        Platform.exit();
     }
 }
