@@ -8,18 +8,24 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.controlsfx.control.PopOver;
 import upv.ipc.sportlib.User;
@@ -44,11 +50,14 @@ public class Registro_usuarioController implements Initializable {
     @FXML private Button Pass_show;
     @FXML private Label Err_pass;
     @FXML private ImageView Avatar_reg;
+    @FXML private TextField Pass_shown;
+    @FXML private VBox Vbox_pass;
     
     private boolean Nick_ok = false;
     private boolean Email_ok = false;
     private boolean Pass_ok = false;
     private boolean Birth_ok = false;
+    private boolean pressed = false;
     private PopOver popover;
     private String Nick;
     private String Email;
@@ -57,6 +66,8 @@ public class Registro_usuarioController implements Initializable {
     private File Avatar_file;
     private Image Avatar;
     private SportActivityApp app = SportActivityApp.getInstance();
+    
+    
     /**
      * Initializes the controller class.
      * @param url
@@ -65,14 +76,22 @@ public class Registro_usuarioController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb){
         // TODO
-        popover = new PopOver(new Label("  La contraseña debe tener entre 8 y 20 caracteres,  \n "
+        Pass_reg.textProperty().bindBidirectional(Pass_shown.textProperty());
+        //Se encarga de enseñar el popover sobre la contraseña
+        popover = new PopOver(new Label("  La contraseña debe tener entre 8 y 20 caracteres,  \n " 
                 + "  con al menos una mayúscula, una minúscula, un   \n"
                 + "             dígito y un símbolo (!@#$%&*()-+=)"));
         Info_pass.setOnMouseEntered(e -> popover.show(Info_pass));  
     }    
-
+    
+    /**
+     * Comprueba si todos son cerrectos y cambia la escena a la de actividades
+     * @param event
+     * @throws IOException 
+     */
     @FXML
     private void Acept_reg(ActionEvent event) throws IOException {
+        
         if(Nick_ok && Email_ok && Pass_ok && Birth_ok){
             Err_tot.setVisible(false);
             app.registerUser(Nick, Email, Pass, Birth, Avatar);
@@ -83,16 +102,35 @@ public class Registro_usuarioController implements Initializable {
         }
     }
 
-    @FXML
+    /**
+     * Saca al usuario de la app
+     * @param event 
+     */
     private void Cancel_reg(ActionEvent event) {
-        Platform.exit();
-        System.exit(0);
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Saliendo de la app");
+            alert.setHeaderText("¿Quiere salir de la app?");
+            alert.setContentText("Para acceder a la app debe registrarse o iniciar sesión");
+            Optional<ButtonType> result= alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK){                        
+                Platform.exit();
+                System.exit(0);}
+            
     }
-
+    /**
+     * HyperLink para pasar a la escena de inicio de sesion
+     * @param event
+     * @throws IOException 
+     */
     @FXML
     private void Ini_ses(ActionEvent event) throws IOException {
         LaSaforApp.setRoot("inicio_sesion");
     }
+    
+    /**
+     * TextField del NickName, comprueba si el Nick tiene el formato correcto cada vez que se escribe un caracter
+     * @param event 
+     */
     @FXML
     private void Entering_Nick(KeyEvent event) {
         Nick = NickName_reg.getText();
@@ -104,7 +142,11 @@ public class Registro_usuarioController implements Initializable {
             Nick_ok = true;
         }
     }
-
+    
+    /**
+     * TextField del email, comprueba si el email tiene el formato correcto cada vez que se escribe un caracter
+     * @param event 
+     */
     @FXML
     private void Entering_email(KeyEvent event) {
         Email = Email_reg.getText();
@@ -117,6 +159,11 @@ public class Registro_usuarioController implements Initializable {
         }
     }
 
+    /**
+     * TextField de la contraseña, comprueba si la pass tiene el formato correcto cada vez que se escribe un caracter
+     * Ademas muestra el popover con la info sobre la contraseña
+     * @param event 
+     */
     @FXML
     private void Entering_pass(KeyEvent event) {
         Pass = Pass_reg.getText();
@@ -130,7 +177,11 @@ public class Registro_usuarioController implements Initializable {
             Pass_ok = true;
         }
     }
-
+    
+    /**
+     * DatePicker del año de nacimiento, comprueba la edad al poner la fecha de nacimiento
+     * @param event 
+     */
     @FXML
     private void Entering_birth(ActionEvent event) { 
         Birth = Birth_reg.getValue();
@@ -142,18 +193,31 @@ public class Registro_usuarioController implements Initializable {
             Birth_ok = true;
         }
     }
+    
+    /**
+     * Muestra la contraseña
+     * @param event 
+     */
     @FXML
     private void Pass_show(ActionEvent event) {
-        boolean pressed = false;
         if(pressed){
-            Pass_show.setOnAction(e -> Pass_show.setText("Hide"));
+            Pass_show.setOnAction(e -> Pass_show.setText("Hide"));            
             pressed = false;
+            Pass_reg.setVisible(!pressed);
+            Pass_reg.setManaged(!pressed);
+            Vbox_pass.setVisible(pressed);
+            Vbox_pass.setManaged(pressed);
         }else{
             Pass_show.setOnAction(e -> Pass_show.setText("Show"));           
             pressed = true;
+            Pass_reg.setVisible(pressed);
+            Pass_reg.setManaged(pressed);
+            Vbox_pass.setVisible(!pressed);           
+            Vbox_pass.setManaged(!pressed);
         }
     }
-
+    
+    
     @FXML
     private void Avatar_reg(ActionEvent event) {
         FileChooser fc = new FileChooser();
