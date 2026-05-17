@@ -81,10 +81,10 @@ public class Registro_usuarioController implements Initializable {
         if(Nick_ok && Email_ok && Pass_ok && Birth_ok){
             Err_tot.setVisible(false);
             boolean ok = LaSaforApp.app.registerUser(Nick, Email, Pass, Birth, Avatar_Path);
-            LaSaforApp.app.login(Nick, Pass);
+            boolean logged = LaSaforApp.app.login(Nick, Pass);
             
             //Cambiar a la escena de actividades
-            if (ok) LaSaforApp.setRoot("actividades");
+            if (ok && logged) LaSaforApp.setRoot("actividades");
         }else{
             Err_tot.setVisible(true);
         }

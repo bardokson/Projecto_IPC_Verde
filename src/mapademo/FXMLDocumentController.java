@@ -59,6 +59,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -128,9 +129,7 @@ public class FXMLDocumentController implements Initializable {
     
     /** Menú contextual reutilizable para el clic derecho sobre el mapa. */
     private ContextMenu mapContextMenu;
-
-    //private SportActivityApp app = SportActivityApp.getInstance();
-    User user = LaSaforApp.app.getCurrentUser();
+    private User user;
     /**
      * Indica si el controlador está en modo inserción de POI.
      * {@code true} → el próximo clic izquierdo sobre el mapa abre el diálogo.
@@ -479,29 +478,13 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
         });
-        File archivoMapa = new File("src/resources/upv.jpg");
+        File archivoMapa = new File("src/maps/upv.jpg");
         if (!archivoMapa.exists()) {
-            archivoMapa = new File("src/resources/upv.jpg");
+            archivoMapa = new File("maps/upv.jpg");
         }
         buildMap(archivoMapa);
         
-        //userAvatar.setImage(new Image(getClass().getResourceAsStream("/resources/avatar_default.png")));
-        //Usar icono del usuario registrado para el menu principal
-            
-        if (user != null) {
-            
-            username.setText(user.getNickName());
-            String avatar = user.getAvatarPath();
-            System.out.println(avatar);
-            userAvatar.setImage(user.getAvatar());
-
-        }
-        
-        userAvatar.setFitWidth(60);
-        userAvatar.setFitHeight(60);
-        userAvatar.setPreserveRatio(true);
-        Rectangle cut = new Rectangle(60, 60);
-        userAvatar.setClip(cut);
+        setupUser();
     }
 
     // =========================================================
@@ -691,14 +674,38 @@ public class FXMLDocumentController implements Initializable {
             alerta.setHeaderText("Datos cargados correctamente");
             alerta.setContentText("Actividad: " + nombre + "\nTotal de puntos GPS: " + numPuntos);
             alerta.show();
-        }
+            
+            //Poner actividad importada como mapa
+            MapRegion reco = app.findMapForActivity(actividadActual);
+            File mapFile = new File(reco.getImagePath());
+            buildMap(mapFile);
+            verActividades();
+            }
     }
 
     @FXML
     private void verActividades(ActionEvent event) {
-        map_listview.setVisible(false);
-        activityList.setVisible(true);
-        activityList.getItems().setAll(user.getActivities());
+        verActividades();
+    }
+    
+    private void verActividades() {
+        
+        User currentUser = LaSaforApp.app.getCurrentUser();
+        
+        activityList.setCellFactory(list -> new ListCell<Activity>() {
+                @Override
+                protected void updateItem(Activity a, boolean empty) {
+                    super.updateItem(a, empty);
+
+                    if (empty || a == null) {
+                        setText(null);
+                    } else {
+                        setText(a.getName());
+                    }
+                }
+            });
+        activityList.getItems().setAll(currentUser.getActivities());
+        
     }
 
     @FXML
@@ -744,5 +751,83 @@ public class FXMLDocumentController implements Initializable {
         SportActivityApp app = LaSaforApp.app;
         app.logout();
         Platform.exit();
+    }
+    
+    @FXML
+    void removeActivity(ActionEvent event) {
+        Activity activity = activityList.getSelectionModel().getSelectedItem();
+        if (activity == null) return;
+        
+        LaSaforApp.app.removeActivity(activity);
+        activityList.refresh();
+    }
+
+    @FXML
+    void removeNote(ActionEvent event) {
+
+    }
+
+    @FXML
+    void renameActivity(ActionEvent event) {
+        Activity activity = activityList.getSelectionModel().getSelectedItem();
+        if (activity == null) return;
+
+        TextInputDialog dialog = new TextInputDialog(activity.getName());
+        dialog.setTitle("Rename Activity");
+        dialog.setHeaderText("Change activity name");
+        dialog.setContentText("New name:");
+
+        dialog.showAndWait().ifPresent(newName -> {
+            LaSaforApp.app.renameActivity(activity, newName);
+            activityList.refresh();
+        });
+    }
+
+    @FXML
+    void renameNote(ActionEvent event) {
+        /*Poi note = map_listview.getSelectionModel().getSelectedItem();
+        if (note == null) return;
+        
+        TextInputDialog dialog = new TextInputDialog(note.getText());
+        dialog.setTitle("Rename Activity");
+        dialog.setHeaderText("Change activity name");
+        dialog.setContentText("New name:");
+
+        dialog.showAndWait().ifPresent(newName -> {
+            LaSaforApp.app.renameActivity(note, newName);
+            activityList.refresh();
+        });*/
+    }
+    
+    private void setupUser() {
+    
+        user = LaSaforApp.app.getCurrentUser();
+        System.out.println(user.getNickName());
+        
+        /*if (user != null) {
+            
+            username.setText(user.getNickName());
+            String avatar = user.getAvatarPath();
+            System.out.println(avatar);
+            userAvatar.setImage(user.getAvatar());
+
+        }*/
+        
+        if (user == null) return;
+
+        username.setText(user.getNickName());
+
+        String path = user.getAvatarPath();
+        if (path != null && !path.isBlank()) {
+            Image img = new Image("file:" + path, false);
+            userAvatar.setImage(img);
+        }
+        
+        userAvatar.setFitWidth(60);
+        userAvatar.setFitHeight(60);
+        userAvatar.setPreserveRatio(true);
+        Rectangle cut = new Rectangle(60, 60);
+        userAvatar.setClip(cut);
+        
     }
 }
