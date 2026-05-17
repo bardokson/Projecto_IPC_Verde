@@ -98,11 +98,12 @@
                   <Button mnemonicParsing="false" onAction="#removeNote" text="Borrar Anotación" />
                   <Separator orientation="VERTICAL" prefHeight="200.0">
                      <HBox.margin>
-                        <Insets right="100.0" />
+                        <Insets />
                      </HBox.margin></Separator>
+                  <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                   <Separator orientation="VERTICAL" prefHeight="200.0">
                      <HBox.margin>
-                        <Insets left="150.0" />
+                        <Insets />
                      </HBox.margin>
                   </Separator>
                   <Label fx:id="mousePosition" minHeight="-Infinity" minWidth="-Infinity" text="SceneX:     ScenY:     " wrapText="true" HBox.hgrow="ALWAYS" />
@@ -126,18 +127,12 @@
                   <Insets />
                </HBox.margin>
             </Button>
-            <Separator orientation="VERTICAL" prefHeight="200.0">
-               <padding>
-                  <Insets right="200.0" />
-               </padding>
-            </Separator>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
             <Separator orientation="VERTICAL" prefHeight="200.0">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
-               <padding>
-                  <Insets left="200.0" />
-               </padding>
             </Separator>
             <Label fx:id="username" text="Username">
                <HBox.margin>
