@@ -740,29 +740,36 @@ public class FXMLDocumentController implements Initializable {
             javafx.scene.Parent desRoot = desLoader.load();
             DesnivelController desControl = desLoader.getController();
             desControl.setActivity(itemSelected);
+            desControl.setMapContext(mapPane, projection);
             
-            // EL TRUCO: Añadir la gráfica como un TERCER panel para no borrar el mapa
+           //Bloquear su anchura máxima y mínima a 320 píxeles
+            javafx.scene.layout.Region chartRegion = (javafx.scene.layout.Region) desRoot;
+            chartRegion.setMinWidth(320);
+            chartRegion.setMaxWidth(320);
+            
+            //(Lista | Mapa | Gráfica)
             if (splitPane.getItems().size() == 2) {
-                splitPane.getItems().add(desRoot); // Añade la gráfica a la derecha del mapa
-                System.out.println("Gráfica insertada OK (como 3er panel nuevo).");
+                splitPane.getItems().add(desRoot);
             } else if (splitPane.getItems().size() > 2) {
-                splitPane.getItems().set(2, desRoot); // Sustituye la gráfica si haces clic en otra actividad
-                System.out.println("Gráfica insertada OK (actualizando 3er panel).");
+                splitPane.getItems().set(2, desRoot);
             }
             
+           javafx.scene.control.SplitPane.setResizableWithParent(desRoot, false);
+            
+            System.out.println("Gráfica insertada OK (como panel lateral coquetón).");
             // Buscar el panel blanco del centro (índice 1 del SplitPane)
             if (splitPane.getItems().size() > 1) {
                 javafx.scene.Node panelCentro = splitPane.getItems().get(1); 
                 if (panelCentro instanceof javafx.scene.layout.Pane) {
                     javafx.scene.layout.Pane whitePane = (javafx.scene.layout.Pane) panelCentro;
                     whitePane.getChildren().clear(); // Limpiamos lo que haya
-                    whitePane.getChildren().add(desRoot); // Metemos tu gráfica
+                    whitePane.getChildren().add(desRoot); // Metemos la gráfica
                     System.out.println("Gráfica insertada OK.");
                 }
             }
         } catch (Exception e) {
             System.out.println("--- ERROR CARGANDO GRÁFICAS ---");
-            e.printStackTrace(); // Esto nos chivará qué archivo falta
+            e.printStackTrace();
         }
     }
 
