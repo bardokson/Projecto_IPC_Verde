@@ -317,7 +317,7 @@ public class FXMLDocumentController implements Initializable {
      *
      * @param imgFile fichero de imagen a cargar como fondo del mapa
      */
-    private void buildMap(File imgFile) {
+    private void buildMap(File imgFile, upv.ipc.sportlib.MapRegion region) {
         // Comprobación defensiva: si el fichero no existe mostramos un aviso
         if (!imgFile.exists()) {
             map_scrollpane.setContent(
@@ -329,6 +329,11 @@ public class FXMLDocumentController implements Initializable {
         Image img = new Image(imgFile.toURI().toString());
         double W = img.getWidth();
         double H = img.getHeight();
+        
+        // FIX: Inicializar la proyección para poder transformar GPS a píxeles
+        if (region != null) {
+            projection = new upv.ipc.sportlib.MapProjection(region, W, H);
+        }
 
         // ── mapPane: lienzo del mapa ───────────────────────────────────
         // Usamos un Pane (y no un Group) para poder posicionar los nodos
@@ -483,7 +488,7 @@ public class FXMLDocumentController implements Initializable {
         if (!archivoMapa.exists()) {
             archivoMapa = new File("maps/upv.jpg");
         }
-        buildMap(archivoMapa);
+        buildMap(archivoMapa, null);
         
         setupUser();
     }
@@ -632,7 +637,7 @@ public class FXMLDocumentController implements Initializable {
         // FIX 3: showOpenDialog() devuelve null si el usuario cancela la selección
         if (imgFile != null) {
             System.out.println("Mapa seleccionado: " + imgFile.getCanonicalPath());
-            buildMap(imgFile); // Reconstruimos la vista con la nueva imagen
+            buildMap(imgFile, null); // Reconstruimos la vista con la nueva imagen
             map_listview.getItems().clear(); // Borramos los datos del mapa anterior
         }
     }
@@ -679,7 +684,7 @@ public class FXMLDocumentController implements Initializable {
             //Poner actividad importada como mapa
             MapRegion reco = app.findMapForActivity(actividadActual);
             File mapFile = new File(reco.getImagePath());
-            buildMap(mapFile);
+            buildMap(mapFile, reco);
             verActividades();
             }
     }
@@ -717,7 +722,19 @@ public class FXMLDocumentController implements Initializable {
         SportActivityApp app = LaSaforApp.app;
         MapRegion reco = app.findMapForActivity(itemSelected);
         File mapFile = new File(reco.getImagePath());
-        buildMap(mapFile);
+        buildMap(mapFile, reco);
+        
+        //INTEGRACIÓN: CATEGORÍA 4 - VELOCIDAD SOBRE TRAZADO:
+        try {
+            javafx.fxml.FXMLLoader velLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Velocidad.fxml"));
+            velLoader.load(); 
+            VelocidadController velControl = velLoader.getController();
+            
+            javafx.scene.Group rutaColores = velControl.generarTrazadoVelocidad(itemSelected, projection);
+            mapPane.getChildren().add(rutaColores); 
+        } catch (Exception e) {
+            System.out.println("Error cargando velocidad: " + e.getMessage());
+        }
     }
 
     @FXML
