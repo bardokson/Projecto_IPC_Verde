@@ -135,7 +135,8 @@ public class FXMLDocumentController implements Initializable {
      * {@code true} → el próximo clic izquierdo sobre el mapa abre el diálogo.
      */
     private boolean insertionMode = false;
-
+    
+   
     // =========================================================
     //  ELEMENTOS FXML  (inyectados automáticamente por el cargador)
     // =========================================================

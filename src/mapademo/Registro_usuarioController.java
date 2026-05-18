@@ -8,12 +8,16 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -45,7 +49,11 @@ public class Registro_usuarioController implements Initializable {
     @FXML private Button Pass_show;
     @FXML private Label Err_pass;
     @FXML private ImageView Avatar_reg;
+    @FXML private TextField Pass_shown;
+    @FXML private VBox Vbox_pass;
+    @FXML private ImageView Img_pass;
     
+    private static boolean pressed = false;
     public User user;
     
     private boolean Nick_ok = false;
@@ -69,15 +77,22 @@ public class Registro_usuarioController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb){
         // TODO
-        popover = new PopOver(new Label("  La contraseña debe tener entre 8 y 20 caracteres,  \n "
+        Pass_reg.textProperty().bindBidirectional(Pass_shown.textProperty());
+        //Se encarga de enseñar el popover sobre la contraseña
+        popover = new PopOver(new Label("  La contraseña debe tener entre 8 y 20 caracteres,  \n " 
                 + "  con al menos una mayúscula, una minúscula, un   \n"
                 + "             dígito y un símbolo (!@#$%&*()-+=)"));
         Info_pass.setOnMouseEntered(e -> popover.show(Info_pass));  
     }    
-
+    
+    /**
+     * Comprueba si todos son cerrectos y cambia la escena a la de actividades
+     * @param event
+     * @throws IOException 
+     */
     @FXML
     private void Acept_reg(ActionEvent event) throws IOException {
-        //LaSaforApp.setRoot("actividades"); //solo para testing, quitar luego
+        
         if(Nick_ok && Email_ok && Pass_ok && Birth_ok){
             Err_tot.setVisible(false);
             boolean ok = LaSaforApp.app.registerUser(Nick, Email, Pass, Birth, Avatar_Path);
@@ -90,16 +105,36 @@ public class Registro_usuarioController implements Initializable {
         }
     }
 
+    /**
+     * Saca al usuario de la app
+     * @param event 
+     */
     @FXML
     private void Cancel_reg(ActionEvent event) {
-        Platform.exit();
-        System.exit(0);
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Saliendo de la app");
+            alert.setHeaderText("¿Quiere salir de la app?");
+            alert.setContentText("Para acceder a la app debe registrarse o iniciar sesión");
+            Optional<ButtonType> result= alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK){                        
+                Platform.exit();
+                System.exit(0);}
+            
     }
-
+    /**
+     * HyperLink para pasar a la escena de inicio de sesion
+     * @param event
+     * @throws IOException 
+     */
     @FXML
     private void Ini_ses(ActionEvent event) throws IOException {
         LaSaforApp.setRoot("inicio_sesion");
     }
+    
+    /**
+     * TextField del NickName, comprueba si el Nick tiene el formato correcto cada vez que se escribe un caracter
+     * @param event 
+     */
     @FXML
     private void Entering_Nick(KeyEvent event) {
         Nick = NickName_reg.getText();
@@ -111,7 +146,11 @@ public class Registro_usuarioController implements Initializable {
             Nick_ok = true;
         }
     }
-
+    
+    /**
+     * TextField del email, comprueba si el email tiene el formato correcto cada vez que se escribe un caracter
+     * @param event 
+     */
     @FXML
     private void Entering_email(KeyEvent event) {
         Email = Email_reg.getText();
@@ -124,6 +163,11 @@ public class Registro_usuarioController implements Initializable {
         }
     }
 
+    /**
+     * TextField de la contraseña, comprueba si la pass tiene el formato correcto cada vez que se escribe un caracter
+     * Ademas muestra el popover con la info sobre la contraseña
+     * @param event 
+     */
     @FXML
     private void Entering_pass(KeyEvent event) {
         Pass = Pass_reg.getText();
@@ -137,7 +181,11 @@ public class Registro_usuarioController implements Initializable {
             Pass_ok = true;
         }
     }
-
+    
+    /**
+     * DatePicker del año de nacimiento, comprueba la edad al poner la fecha de nacimiento
+     * @param event 
+     */
     @FXML
     private void Entering_birth(ActionEvent event) { 
         Birth = Birth_reg.getValue();
@@ -149,18 +197,7 @@ public class Registro_usuarioController implements Initializable {
             Birth_ok = true;
         }
     }
-    @FXML
-    private void Pass_show(ActionEvent event) {
-        boolean pressed = false;
-        if(pressed){
-            Pass_show.setOnAction(e -> Pass_show.setText("Hide"));
-            pressed = false;
-        }else{
-            Pass_show.setOnAction(e -> Pass_show.setText("Show"));           
-            pressed = true;
-        }
-    }
-
+    
     @FXML
     private void Avatar_reg(ActionEvent event) throws IOException {
         FileChooser fc = new FileChooser();
@@ -168,6 +205,7 @@ public class Registro_usuarioController implements Initializable {
         fc.setInitialDirectory(new File("."));
         // Filtramos para que solo deje elegir archivos .jpg
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes JPG", "*.jpg", "*.jpeg"));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes JPG", "*.jpg", "*.jpeg",".png"));
         
         File file = fc.showOpenDialog(Avatar_reg.getScene().getWindow());
         
@@ -189,6 +227,48 @@ public class Registro_usuarioController implements Initializable {
             Avatar_reg.setClip(cut);
         }
     }
+  /**
+     * Muestra la contraseña
+     * @param event 
+     */
+    @FXML
+    private void Pass_show(ActionEvent event) {
+        if(getPressed()){
+            disableShown();
+            enableReg();            
+            Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_cerrado.png")));
+            cyclePressed();
+        }else{
+            enableShown();
+            disableReg();            
+            Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_abierto.png")));
+            cyclePressed();
+        }
+        
+    }
     
+    private static void cyclePressed(){
+        pressed = !pressed;
+    
+    private static boolean getPressed(){
+        return pressed;
+    }
+    
+    private void disableShown(){
+        Pass_shown.setDisable(true);
+        Pass_shown.setVisible(false);
+    }
+    private void disableReg(){
+        Pass_reg.setDisable(true);
+        Pass_reg.setVisible(false);
+    }
+    private void enableShown(){
+        Pass_shown.setDisable(false);
+        Pass_shown.setVisible(true);
+    }
+    private void enableReg(){
+        Pass_reg.setDisable(false);
+        Pass_reg.setVisible(true);
+    }
 }
     
