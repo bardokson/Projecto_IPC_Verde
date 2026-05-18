@@ -26,6 +26,12 @@ public class LaSaforApp extends Application {
     
     private static HashMap<String,Parent> roots = new HashMap<>();
     
+    /**
+     * Cambia la raiz de la escena actual y ajusta el tamaño de ventana.
+     * @param root nodo raíz que se mostrará en la escena
+     * @param w ancho de la ventana en píxeles
+     * @param h alto de la ventana en píxeles
+     */
     static void setRoot(Parent root, int w, int h){
         scene.setRoot(root);
         Stage stage = (Stage) scene.getWindow();
@@ -34,12 +40,20 @@ public class LaSaforApp extends Application {
         stage.centerOnScreen();
     }
     
-        static void setRoot(Parent root){
+    /**
+     * Cambia la raiz de la escena actual.
+     * @param root nodo raíz que se mostrará en la escena
+     */
+    static void setRoot(Parent root){
         scene.setRoot(root);
         Stage stage = (Stage) scene.getWindow();
         stage.centerOnScreen();
     }
     
+    /**
+     * Cambia la raiz de la escena actual llamando el metodo del mismo nombre que acepte como @param root.
+     * @param clave identificador de la vista a cargar
+     */
     static void setRoot(String clave){
         Parent root = roots.get(clave);
         if(root != null){
@@ -70,6 +84,9 @@ public class LaSaforApp extends Application {
         stage.show();
     }
    
+    /**
+     * Metodo para cambiar a la pantalla de actividades y inicia su tamaño de ventana.
+     */
     public static void abrirActividades() {
         try {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("FXMLDocument.fxml"));
@@ -79,6 +96,9 @@ public class LaSaforApp extends Application {
         } catch (Exception e) {e.printStackTrace();}
     }
     
+    /**
+     * Metodo para cambiar a la pantalla de modificar perfil y inicia su tamaño de ventana.
+     */
     public static void modPerfil() {
         try {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("ModificarUsuario.fxml"));
@@ -88,6 +108,9 @@ public class LaSaforApp extends Application {
         } catch (Exception e) {e.printStackTrace();}
     }
     
+    /**
+     * Metodo para cambiar a la pantalla de registro y inicia su tamaño de ventana.
+     */
     public static void abrirReg() {
         try {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("Registro_usuario.fxml"));
@@ -97,6 +120,9 @@ public class LaSaforApp extends Application {
         } catch (Exception e) {e.printStackTrace();}
     }
     
+    /**
+     * Metodo para cambiar a la pantalla de iniciar sesion y inicia su tamaño de ventana.
+     */
     public static void abrirSignIn() {
         try {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("Inicio_de_sesion.fxml"));

@@ -85,8 +85,10 @@ public class ModificarUsuarioController implements Initializable {
     @FXML
     private Label name;
 
+    /**Abre filechooser para elegir una imagen que poner como avatar
+     */
     @FXML
-    void Avatar_mod(ActionEvent event) throws Exception{
+    void Avatar_mod() throws Exception{
         FileChooser fc = new FileChooser();
         fc.setTitle("Seleccionar mapa JPG");
         fc.setInitialDirectory(new File("."));
@@ -114,7 +116,11 @@ public class ModificarUsuarioController implements Initializable {
             Avatar_mod.setClip(cut);
         }
     }
-
+    
+    /**
+     * DatePicker del año de nacimiento, comprueba la edad al poner la fecha de nacimiento
+     * @param event 
+     */
     @FXML
     void Entering_birth(ActionEvent event) {
         Birth = Birth_mod.getValue();
@@ -127,6 +133,10 @@ public class ModificarUsuarioController implements Initializable {
         }
     }
 
+    /**
+     * TextField del email, comprueba si el email tiene el formato correcto cada vez que se escribe un caracter
+     * @param event 
+     */
     @FXML
     void Entering_email(KeyEvent event) {
         Email = Email_mod.getText();
@@ -139,6 +149,11 @@ public class ModificarUsuarioController implements Initializable {
         }
     }
 
+    /**
+     * TextField de la contraseña, comprueba si la pass tiene el formato correcto cada vez que se escribe un caracter
+     * Ademas muestra el popover con la info sobre la contraseña
+     * @param event 
+     */
     @FXML
     void Entering_pass(KeyEvent event) {
         Pass = Pass_mod.getText();
@@ -153,6 +168,10 @@ public class ModificarUsuarioController implements Initializable {
         }
     }
 
+    /**
+     * Muestra la contraseña
+     * @param event 
+     */
     @FXML
     private void Pass_show(ActionEvent event) {
         if(getPressed()){
@@ -190,13 +209,20 @@ public class ModificarUsuarioController implements Initializable {
         Pass_mod.setVisible(true);
     }
 
+    /**
+     * Cancela la modificacion del perfil, no guarda datos y vuelve a pantalla actividades.
+     */
     @FXML
-    public void cancelMod(ActionEvent event) {
+    public void cancelMod() {
         LaSaforApp.abrirActividades();
     }
 
+    /**
+     * Guarda los cambios hechos, chequeando email, contraseña y fecha nacimiento.
+     * Cambia a pantalla actividades.
+     */
     @FXML
-    public void saveChange(ActionEvent event) {
+    public void saveChange() {
         if(Email_ok && Pass_ok && Birth_ok){
             Err_tot.setVisible(false);
             boolean ok = LaSaforApp.app.updateCurrentUser(Email, Pass, Birth, Avatar_Path);

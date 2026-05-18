@@ -690,10 +690,13 @@ public class FXMLDocumentController implements Initializable {
             }
     }
 
+    /**
+     * Metodo FXML
+     */
     @FXML
-    private void verActividades(ActionEvent event) {
+    /*private void verActividades(ActionEvent event) {
         verActividades();
-    }
+    }*/
     
     private void verActividades() {
         
@@ -715,8 +718,11 @@ public class FXMLDocumentController implements Initializable {
         
     }
 
+    /**
+     * Abre y mueve el mapa a la zona de inicio de la actividad seleccionada de la lista.
+     */
     @FXML
-    private void activitySelected(MouseEvent event) {
+    private void activitySelected() {
         Activity itemSelected = activityList.getSelectionModel().getSelectedItem();
         if (itemSelected == null) return;
         
@@ -784,21 +790,15 @@ public class FXMLDocumentController implements Initializable {
         double xNorm = (lon - region.getLonMin()) / (region.getLonMax() - region.getLonMin());
         double yNorm = (region.getLatMax() - lat) / (region.getLatMax() - region.getLatMin());
 
-        // ── Tamaño visible del ScrollPane (viewport) ───────────────────
         double viewW = map_scrollpane.getViewportBounds().getWidth();
         double viewH = map_scrollpane.getViewportBounds().getHeight();
 
-        // ── Cálculo del scroll normalizado [0, 1] ─────────────────────
-        // Restamos la mitad del viewport para que el POI quede centrado
-        // y no en la esquina superior-izquierda del área visible.
         double scrollH = (lon - viewW / 2) / (mapWidth  - viewW);
         double scrollV = (lat - viewH / 2) / (mapHeight - viewH);
 
-        // Garantizamos que el valor esté dentro del rango válido [0, 1]
         scrollH = Math.max(0, Math.min(1, scrollH));
         scrollV = Math.max(0, Math.min(1, scrollV));
 
-        // ── Animación suave con Timeline ──────────────────────────────
         final Timeline timeline = new Timeline();
         final KeyValue kv1 = new KeyValue(map_scrollpane.hvalueProperty(), scrollH);
         final KeyValue kv2 = new KeyValue(map_scrollpane.vvalueProperty(), scrollV);
@@ -807,27 +807,39 @@ public class FXMLDocumentController implements Initializable {
         timeline.play();
     }
 
+    /**
+     * Cambia ventana a la de modificar perfil.
+     */
     @FXML
-    private void modPerfil(ActionEvent event) throws IOException {
+    private void modPerfil() throws IOException {
         LaSaforApp.modPerfil();
     }
 
+    /**
+     * Guarda la informacion y cambia ventana a la de iniciar sesion.
+     */
     @FXML
-    private void logOut(ActionEvent event) {
+    private void logOut() {
         SportActivityApp app = LaSaforApp.app;
         app.logout();
         LaSaforApp.abrirSignIn();
     }
 
+    /**
+     * Guarda la informacion y cierra la aplicacion.
+     */
     @FXML
-    private void logOutExit(ActionEvent event) {
+    private void logOutExit() {
         SportActivityApp app = LaSaforApp.app;
         app.logout();
         Platform.exit();
     }
     
+    /**
+     * Quita la actividad seleccionada de la lista de actividades.
+     */
     @FXML
-    void removeActivity(ActionEvent event) {
+    void removeActivity() {
         Activity activity = activityList.getSelectionModel().getSelectedItem();
         if (activity == null) return;
         
@@ -835,13 +847,11 @@ public class FXMLDocumentController implements Initializable {
         activityList.refresh();
     }
 
+    /**
+     * Renombra la actividad seleccionada de la lista de actividades.
+     */
     @FXML
-    void removeNote(ActionEvent event) {
-
-    }
-
-    @FXML
-    void renameActivity(ActionEvent event) {
+    void renameActivity() {
         Activity activity = activityList.getSelectionModel().getSelectedItem();
         if (activity == null) return;
 
@@ -855,9 +865,14 @@ public class FXMLDocumentController implements Initializable {
             activityList.refresh();
         });
     }
-
+    
     @FXML
-    void renameNote(ActionEvent event) {
+    void removeNote() {
+
+    }
+    
+    @FXML
+    void renameNote() {
         /*Poi note = map_listview.getSelectionModel().getSelectedItem();
         if (note == null) return;
         
@@ -872,6 +887,10 @@ public class FXMLDocumentController implements Initializable {
         });*/
     }
     
+    /**
+     * Cambia la foto de perfil y el texto del nombre de usuario.
+     * Se llama cada vez que se abre la ventana para refrescar por cambios.
+     */
     private void setupUser() {
         user = LaSaforApp.app.getCurrentUser();
         
