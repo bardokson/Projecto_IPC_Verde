@@ -317,7 +317,7 @@ public class FXMLDocumentController implements Initializable {
      *
      * @param imgFile fichero de imagen a cargar como fondo del mapa
      */
-    private void buildMap(File imgFile) {
+    private void buildMap(File imgFile, upv.ipc.sportlib.MapRegion region) {
         // Comprobación defensiva: si el fichero no existe mostramos un aviso
         if (!imgFile.exists()) {
             map_scrollpane.setContent(
@@ -329,6 +329,11 @@ public class FXMLDocumentController implements Initializable {
         Image img = new Image(imgFile.toURI().toString());
         double W = img.getWidth();
         double H = img.getHeight();
+        
+        // FIX: Inicializar la proyección para poder transformar GPS a píxeles
+        if (region != null) {
+            projection = new upv.ipc.sportlib.MapProjection(region, W, H);
+        }
 
         // ── mapPane: lienzo del mapa ───────────────────────────────────
         // Usamos un Pane (y no un Group) para poder posicionar los nodos
@@ -483,7 +488,7 @@ public class FXMLDocumentController implements Initializable {
         if (!archivoMapa.exists()) {
             archivoMapa = new File("maps/upv.jpg");
         }
-        buildMap(archivoMapa);
+        buildMap(archivoMapa, null);
         
         setupUser();
     }
@@ -632,7 +637,7 @@ public class FXMLDocumentController implements Initializable {
         // FIX 3: showOpenDialog() devuelve null si el usuario cancela la selección
         if (imgFile != null) {
             System.out.println("Mapa seleccionado: " + imgFile.getCanonicalPath());
-            buildMap(imgFile); // Reconstruimos la vista con la nueva imagen
+            buildMap(imgFile, null); // Reconstruimos la vista con la nueva imagen
             map_listview.getItems().clear(); // Borramos los datos del mapa anterior
         }
     }
@@ -679,7 +684,7 @@ public class FXMLDocumentController implements Initializable {
             //Poner actividad importada como mapa
             MapRegion reco = app.findMapForActivity(actividadActual);
             File mapFile = new File(reco.getImagePath());
-            buildMap(mapFile);
+            buildMap(mapFile, reco);
             verActividades();
             }
     }
@@ -717,7 +722,55 @@ public class FXMLDocumentController implements Initializable {
         SportActivityApp app = LaSaforApp.app;
         MapRegion reco = app.findMapForActivity(itemSelected);
         File mapFile = new File(reco.getImagePath());
-        buildMap(mapFile);
+        buildMap(mapFile, reco); 
+        
+        try {
+            // 1. VELOCIDAD SOBRE TRAZADO
+            System.out.println("Intentando cargar Velocidad...");
+            javafx.fxml.FXMLLoader velLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Velocidad.fxml"));
+            velLoader.load(); 
+            VelocidadController velControl = velLoader.getController();
+            javafx.scene.Group rutaColores = velControl.generarTrazadoVelocidad(itemSelected, projection);
+            mapPane.getChildren().add(rutaColores); 
+            System.out.println("Velocidad cargada OK.");
+
+            // 2. PERFIL DE DESNIVEL
+            System.out.println("Intentando cargar Desnivel...");
+            javafx.fxml.FXMLLoader desLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Desnivel.fxml"));
+            javafx.scene.Parent desRoot = desLoader.load();
+            DesnivelController desControl = desLoader.getController();
+            desControl.setActivity(itemSelected);
+            desControl.setMapContext(mapPane, projection);
+            
+           //Bloquear su anchura máxima y mínima a 320 píxeles
+            javafx.scene.layout.Region chartRegion = (javafx.scene.layout.Region) desRoot;
+            chartRegion.setMinWidth(320);
+            chartRegion.setMaxWidth(320);
+            
+            //(Lista | Mapa | Gráfica)
+            if (splitPane.getItems().size() == 2) {
+                splitPane.getItems().add(desRoot);
+            } else if (splitPane.getItems().size() > 2) {
+                splitPane.getItems().set(2, desRoot);
+            }
+            
+           javafx.scene.control.SplitPane.setResizableWithParent(desRoot, false);
+            
+            System.out.println("Gráfica insertada OK (como panel lateral coquetón).");
+            // Buscar el panel blanco del centro (índice 1 del SplitPane)
+            if (splitPane.getItems().size() > 1) {
+                javafx.scene.Node panelCentro = splitPane.getItems().get(1); 
+                if (panelCentro instanceof javafx.scene.layout.Pane) {
+                    javafx.scene.layout.Pane whitePane = (javafx.scene.layout.Pane) panelCentro;
+                    whitePane.getChildren().clear(); // Limpiamos lo que haya
+                    whitePane.getChildren().add(desRoot); // Metemos la gráfica
+                    System.out.println("Gráfica insertada OK.");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("--- ERROR CARGANDO GRÁFICAS ---");
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -801,34 +854,44 @@ public class FXMLDocumentController implements Initializable {
     }
     
     private void setupUser() {
-    
         user = LaSaforApp.app.getCurrentUser();
-        System.out.println(user.getNickName());
         
-        /*if (user != null) {
-            
-            username.setText(user.getNickName());
-            String avatar = user.getAvatarPath();
-            System.out.println(avatar);
-            userAvatar.setImage(user.getAvatar());
-
-        }*/
+        if (user == null) return; // Primero comprobamos que no sea null
         
-        if (user == null) return;
-
+        System.out.println(user.getNickName()); // Ahora ya es seguro imprimirlo
+        
         username.setText(user.getNickName());
-
+        
         String path = user.getAvatarPath();
         if (path != null && !path.isBlank()) {
-            Image img = new Image("file:" + path, false);
+            javafx.scene.image.Image img = new javafx.scene.image.Image("file:" + path, false);
             userAvatar.setImage(img);
         }
         
         userAvatar.setFitWidth(60);
         userAvatar.setFitHeight(60);
         userAvatar.setPreserveRatio(true);
-        Rectangle cut = new Rectangle(60, 60);
+        javafx.scene.shape.Rectangle cut = new javafx.scene.shape.Rectangle(60, 60);
         userAvatar.setClip(cut);
-        
     }
+    
+    //  INTEGRACIÓN: CATEGORÍA 5 - AÑADIR MAPA 
+    @FXML
+    private void abrirMenuAnadirMapa(ActionEvent event) {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("AnadirMapa.fxml"));
+            javafx.scene.Parent root = loader.load();
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("Añadir Nuevo Mapa al Sistema");
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("--- ERROR ABRIENDO AÑADIR MAPA ---");
+            e.printStackTrace(); // saber fallo exacto en la consola
+        }
+    }
+    
+    
+    
+    
 }
