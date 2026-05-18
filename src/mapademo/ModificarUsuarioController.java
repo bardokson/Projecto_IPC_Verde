@@ -193,7 +193,6 @@ public class ModificarUsuarioController implements Initializable {
     @FXML
     public void cancelMod(ActionEvent event) {
         LaSaforApp.abrirActividades();
-        LaSaforApp.setRoot("actividades");
     }
 
     @FXML
@@ -203,7 +202,6 @@ public class ModificarUsuarioController implements Initializable {
             boolean ok = LaSaforApp.app.updateCurrentUser(Email, Pass, Birth, Avatar_Path);
             if (ok) {
                 LaSaforApp.abrirActividades();
-                LaSaforApp.setRoot("actividades");
             }
         }else{
             Err_tot.setVisible(true);

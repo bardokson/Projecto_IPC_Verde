@@ -130,7 +130,7 @@ public class Registro_usuarioController implements Initializable {
      */
     @FXML
     private void Ini_ses(ActionEvent event) throws IOException {
-        LaSaforApp.setRoot("inicio_sesion");
+        LaSaforApp.abrirSignIn();
     }
     
     /**

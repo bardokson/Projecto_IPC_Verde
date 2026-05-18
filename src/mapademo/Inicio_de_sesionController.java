@@ -70,7 +70,7 @@ public class Inicio_de_sesionController implements Initializable{
 
     @FXML
     private void Reg_ses(ActionEvent event) {
-        LaSaforApp.setRoot("registro");
+        LaSaforApp.abrirReg();
     }
 
 }

@@ -816,23 +816,7 @@ public class FXMLDocumentController implements Initializable {
     private void logOut(ActionEvent event) {
         SportActivityApp app = LaSaforApp.app;
         app.logout();
-        
-        try {
-        FXMLLoader loader = new FXMLLoader(
-            getClass().getResource("Inicio_de_sesion.fxml")
-        );
-
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource())
-            .getScene()
-            .getWindow();
-
-        stage.setScene(new Scene(root));
-        stage.setTitle("Login");
-        stage.show();
-
-        } catch (IOException e) {}
+        LaSaforApp.abrirSignIn();
     }
 
     @FXML

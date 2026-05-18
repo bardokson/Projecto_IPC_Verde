@@ -26,9 +26,20 @@ public class LaSaforApp extends Application {
     
     private static HashMap<String,Parent> roots = new HashMap<>();
     
-    static void setRoot(Parent root){
+    static void setRoot(Parent root, int w, int h){
         scene.setRoot(root);
+        Stage stage = (Stage) scene.getWindow();
+        stage.setWidth(w);
+        stage.setHeight(h);
+        stage.centerOnScreen();
     }
+    
+        static void setRoot(Parent root){
+        scene.setRoot(root);
+        Stage stage = (Stage) scene.getWindow();
+        stage.centerOnScreen();
+    }
+    
     static void setRoot(String clave){
         Parent root = roots.get(clave);
         if(root != null){
@@ -64,7 +75,7 @@ public class LaSaforApp extends Application {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("FXMLDocument.fxml"));
             Parent actividadesRoot = loader.load();
             LaSaforApp.roots.put("actividades", actividadesRoot);
-            LaSaforApp.scene.setRoot(actividadesRoot);
+            setRoot(actividadesRoot, 1000, 700);
         } catch (Exception e) {e.printStackTrace();}
     }
     
@@ -73,7 +84,25 @@ public class LaSaforApp extends Application {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("ModificarUsuario.fxml"));
             Parent modRoot = loader.load();
             LaSaforApp.roots.put("modificar", modRoot);
-            LaSaforApp.scene.setRoot(modRoot);
+            setRoot(modRoot, 480, 470);
+        } catch (Exception e) {e.printStackTrace();}
+    }
+    
+    public static void abrirReg() {
+        try {
+            FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("Registro_usuario.fxml"));
+            Parent regRoot = loader.load();
+            LaSaforApp.roots.put("registro", regRoot);
+            setRoot(regRoot, 480, 470);
+        } catch (Exception e) {e.printStackTrace();}
+    }
+    
+    public static void abrirSignIn() {
+        try {
+            FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("Inicio_de_sesion.fxml"));
+            Parent signRoot = loader.load();
+            LaSaforApp.roots.put("signin", signRoot);
+            setRoot(signRoot, 400, 350);
         } catch (Exception e) {e.printStackTrace();}
     }
     /**
