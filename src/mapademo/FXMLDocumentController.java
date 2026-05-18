@@ -81,6 +81,7 @@ import upv.ipc.sportlib.GeoPoint;
 import upv.ipc.sportlib.AnnotationType;
 import upv.ipc.sportlib.MapProjection;  
 import upv.ipc.sportlib.MapRegion;
+import upv.ipc.sportlib.TrackPoint;
 import upv.ipc.sportlib.User;
 
 /**
@@ -771,6 +772,42 @@ public class FXMLDocumentController implements Initializable {
             System.out.println("--- ERROR CARGANDO GRÁFICAS ---");
             e.printStackTrace();
         }
+        MapRegion region = app.findMapForActivity(itemSelected);
+        File mapFile = new File(region.getImagePath());
+        buildMap(mapFile);
+        
+        double mapWidth  = mapPane.getWidth()  * zoomGroup.getScaleX();
+        double mapHeight = mapPane.getHeight() * zoomGroup.getScaleY();
+        
+        TrackPoint p = itemSelected.getStartPoint();
+
+        double lat = p.getLatitude();
+        double lon = p.getLongitude();
+
+        double xNorm = (lon - region.getLonMin()) / (region.getLonMax() - region.getLonMin());
+        double yNorm = (region.getLatMax() - lat) / (region.getLatMax() - region.getLatMin());
+
+        // ── Tamaño visible del ScrollPane (viewport) ───────────────────
+        double viewW = map_scrollpane.getViewportBounds().getWidth();
+        double viewH = map_scrollpane.getViewportBounds().getHeight();
+
+        // ── Cálculo del scroll normalizado [0, 1] ─────────────────────
+        // Restamos la mitad del viewport para que el POI quede centrado
+        // y no en la esquina superior-izquierda del área visible.
+        double scrollH = (lon - viewW / 2) / (mapWidth  - viewW);
+        double scrollV = (lat - viewH / 2) / (mapHeight - viewH);
+
+        // Garantizamos que el valor esté dentro del rango válido [0, 1]
+        scrollH = Math.max(0, Math.min(1, scrollH));
+        scrollV = Math.max(0, Math.min(1, scrollV));
+
+        // ── Animación suave con Timeline ──────────────────────────────
+        final Timeline timeline = new Timeline();
+        final KeyValue kv1 = new KeyValue(map_scrollpane.hvalueProperty(), scrollH);
+        final KeyValue kv2 = new KeyValue(map_scrollpane.vvalueProperty(), scrollV);
+        final KeyFrame kf  = new KeyFrame(Duration.millis(500), kv1, kv2);
+        timeline.getKeyFrames().add(kf);
+        timeline.play();
     }
 
     @FXML
