@@ -721,9 +721,9 @@ public class FXMLDocumentController implements Initializable {
         if (itemSelected == null) return;
         
         SportActivityApp app = LaSaforApp.app;
-        MapRegion reco = app.findMapForActivity(itemSelected);
-        File mapFile = new File(reco.getImagePath());
-        buildMap(mapFile, reco); 
+        MapRegion region = app.findMapForActivity(itemSelected);
+        File mapFile = new File(region.getImagePath());
+        buildMap(mapFile, region);
         
         try {
             // 1. VELOCIDAD SOBRE TRAZADO
