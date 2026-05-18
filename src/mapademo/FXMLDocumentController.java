@@ -801,35 +801,25 @@ public class FXMLDocumentController implements Initializable {
     }
     
     private void setupUser() {
-    
         user = LaSaforApp.app.getCurrentUser();
-        System.out.println(user.getNickName());
         
-        /*if (user != null) {
-            
-            username.setText(user.getNickName());
-            String avatar = user.getAvatarPath();
-            System.out.println(avatar);
-            userAvatar.setImage(user.getAvatar());
-
-        }*/
+        if (user == null) return; // Primero comprobamos que no sea null
         
-        if (user == null) return;
-
+        System.out.println(user.getNickName()); // Ahora ya es seguro imprimirlo
+        
         username.setText(user.getNickName());
-
+        
         String path = user.getAvatarPath();
         if (path != null && !path.isBlank()) {
-            Image img = new Image("file:" + path, false);
+            javafx.scene.image.Image img = new javafx.scene.image.Image("file:" + path, false);
             userAvatar.setImage(img);
         }
         
         userAvatar.setFitWidth(60);
         userAvatar.setFitHeight(60);
         userAvatar.setPreserveRatio(true);
-        Rectangle cut = new Rectangle(60, 60);
+        javafx.scene.shape.Rectangle cut = new javafx.scene.shape.Rectangle(60, 60);
         userAvatar.setClip(cut);
-        
     }
     
     
