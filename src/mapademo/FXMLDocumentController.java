@@ -772,9 +772,6 @@ public class FXMLDocumentController implements Initializable {
             System.out.println("--- ERROR CARGANDO GRÁFICAS ---");
             e.printStackTrace();
         }
-        MapRegion region = app.findMapForActivity(itemSelected);
-        File mapFile = new File(region.getImagePath());
-        buildMap(mapFile);
         
         double mapWidth  = mapPane.getWidth()  * zoomGroup.getScaleX();
         double mapHeight = mapPane.getHeight() * zoomGroup.getScaleY();
@@ -811,7 +808,8 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void modPerfil(ActionEvent event) {
+    private void modPerfil(ActionEvent event) throws IOException {
+        LaSaforApp.modPerfil();
     }
 
     @FXML
@@ -893,10 +891,8 @@ public class FXMLDocumentController implements Initializable {
     private void setupUser() {
         user = LaSaforApp.app.getCurrentUser();
         
-        if (user == null) return; // Primero comprobamos que no sea null
-        
-        System.out.println(user.getNickName()); // Ahora ya es seguro imprimirlo
-        
+        if (user == null) return; 
+
         username.setText(user.getNickName());
         
         String path = user.getAvatarPath();

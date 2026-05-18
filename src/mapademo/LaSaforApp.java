@@ -37,6 +37,7 @@ public class LaSaforApp extends Application {
             System.err.printf("No se encuntra la escena: %s", clave);
         }
     }
+
     
    
     @Override
@@ -51,7 +52,6 @@ public class LaSaforApp extends Application {
         stage.setTitle("Running la Safor - Equipo verde");
         stage.setScene(scene);
         
-        
         loader = new FXMLLoader(getClass().getResource("Inicio_de_sesion.fxml"));
         root = loader.load();
         roots.put("inicio_sesion", root);
@@ -60,15 +60,22 @@ public class LaSaforApp extends Application {
     }
    
     public static void abrirActividades() {
-    try {
-        FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("FXMLDocument.fxml"));
-        Parent actividadesRoot = loader.load();
-        LaSaforApp.roots.put("actividades", actividadesRoot);
-        LaSaforApp.scene.setRoot(actividadesRoot);
-    } catch (Exception e) {
-        e.printStackTrace();
+        try {
+            FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("FXMLDocument.fxml"));
+            Parent actividadesRoot = loader.load();
+            LaSaforApp.roots.put("actividades", actividadesRoot);
+            LaSaforApp.scene.setRoot(actividadesRoot);
+        } catch (Exception e) {e.printStackTrace();}
     }
-}
+    
+    public static void modPerfil() {
+        try {
+            FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("ModificarUsuario.fxml"));
+            Parent modRoot = loader.load();
+            LaSaforApp.roots.put("modificar", modRoot);
+            LaSaforApp.scene.setRoot(modRoot);
+        } catch (Exception e) {e.printStackTrace();}
+    }
     /**
      * @param args the command line arguments
      */
