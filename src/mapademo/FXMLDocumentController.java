@@ -831,4 +831,23 @@ public class FXMLDocumentController implements Initializable {
         userAvatar.setClip(cut);
         
     }
+    
+    
+    //  INTEGRACIÓN: CATEGORÍA 5 - AÑADIR MAPA 
+    @FXML
+    private void abrirMenuAnadirMapa(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AnadirMapa.fxml"));
+            javafx.scene.Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Añadir Nuevo Mapa al Sistema");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            System.out.println("Error abriendo la ventana de Añadir Mapa: " + e.getMessage());
+        }
+    }
+    
+    
+    
 }
