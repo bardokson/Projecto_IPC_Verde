@@ -41,26 +41,34 @@ public class LaSaforApp extends Application {
    
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root;
-        FXMLLoader loader;
-        loader = new FXMLLoader(getClass().getResource("Registro_usuario.fxml"));
-        root = loader.load();
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Registro_usuario.fxml"));
+        Parent root = loader.load();
         roots.put("registro", root);
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+        
         scene = new Scene(root);
         stage.setTitle("Running la Safor - Equipo verde");
         stage.setScene(scene);
-        stage.show();
+        
+        
         loader = new FXMLLoader(getClass().getResource("Inicio_de_sesion.fxml"));
         root = loader.load();
         roots.put("inicio_sesion", root);
-        loader = new FXMLLoader(getClass().getResource("FXMLDocument.fxml"));
-        root = loader.load();
-        roots.put("actividades", root);
-
+        
+        stage.show();
     }
    
-
+    public static void abrirActividades() {
+    try {
+        FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("FXMLDocument.fxml"));
+        Parent actividadesRoot = loader.load();
+        LaSaforApp.roots.put("actividades", actividadesRoot);
+        LaSaforApp.scene.setRoot(actividadesRoot);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
     /**
      * @param args the command line arguments
      */
