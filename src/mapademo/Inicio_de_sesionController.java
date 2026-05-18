@@ -24,25 +24,23 @@ import upv.ipc.sportlib.SportActivityApp;
  */
 public class Inicio_de_sesionController implements Initializable{
 
-    @FXML
-    private TextField NickName_ini;
-    @FXML
-    private Label Err_nick_ini;
-    @FXML
-    private TextField Pass_reg;
-    @FXML
-    private Label Err_pass_ini;
+    @FXML private TextField NickName_ini;
+    @FXML private Label Err_nick_ini;
+    @FXML private TextField Pass_reg;
+    @FXML private Label Err_pass_ini;
     
-    private String Nick = NickName_ini.getText();
-    private String Pass = Pass_reg.getText();
-    /**
-     * Initializes the controller class.
-     */
+    private String Nick;    
+    private String Pass;
     SportActivityApp app = SportActivityApp.getInstance();
     
+    /**
+     * Initializes the controller class.
+     */    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        NickName_ini.setOnKeyTyped(e -> Nick = NickName_ini.getText());
+        Pass_reg.setOnKeyTyped(e -> Pass = Pass_reg.getText());
         
     }    
 

@@ -24,11 +24,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import org.controlsfx.control.PopOver;
 import upv.ipc.sportlib.User;
-import upv.ipc.sportlib.SportActivityApp;
 
 /**
  * FXML Controller class
@@ -249,8 +249,10 @@ public class Registro_usuarioController implements Initializable {
     
     private static void cyclePressed(){
         pressed = !pressed;
+    }
     
     private static boolean getPressed(){
+        
         return pressed;
     }
     

@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -40,7 +41,7 @@
          <children>
             <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="358.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <TextField fx:id="NickName_ini" maxWidth="-Infinity" prefHeight="26.0" prefWidth="167.0" />
+                  <TextField fx:id="NickName_ini" maxWidth="-Infinity" onKeyTyped="#Nick_ini" prefHeight="26.0" prefWidth="167.0" />
                   <Label fx:id="Err_nick_ini" prefHeight="18.0" prefWidth="226.0" textFill="RED" visible="false" />
                </children>
             </VBox>
@@ -66,7 +67,7 @@
             </VBox>
             <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="170.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
-                  <TextField fx:id="Pass_reg" maxWidth="-Infinity" prefHeight="26.0" prefWidth="167.0" />
+                  <PasswordField fx:id="Pass_reg" />
                   <Label fx:id="Err_pass_ini" prefHeight="18.0" prefWidth="226.0" textFill="RED" visible="false" />
                </children>
             </VBox>
