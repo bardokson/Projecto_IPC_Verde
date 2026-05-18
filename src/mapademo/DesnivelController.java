@@ -4,74 +4,134 @@
  */
 package mapademo;
 
+import java.util.ArrayList;
 import java.util.List;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import upv.ipc.sportlib.Activity;
 import upv.ipc.sportlib.TrackPoint;
 import upv.ipc.sportlib.GeoUtils;
+import upv.ipc.sportlib.MapProjection;
 
 public class DesnivelController {
 
-    // Tus elementos del FXML (asegúrate de que los fx:id coinciden en Scene Builder)
     @FXML private AreaChart<Number, Number> graficaDesnivel;
     @FXML private NumberAxis ejeX;
     @FXML private NumberAxis ejeY;
 
-    // Guardaremos la actividad actual para usarla luego en los hovers
     private Activity actividadActual;
+    private List<Double> distanciasAcumuladas; // Guardar la distancia de cada punto
+
+    // Variables para comunicar con mapa principal
+    private Pane mapPane;
+    private MapProjection projection;
+    private Circle puntoRastreador; // El punto flotante que viaja por el mapa
 
     @FXML
     public void initialize() {
-        // Configuraciones visuales de la gráfica para que quede más limpia
-        graficaDesnivel.setLegendVisible(false); // Quitamos la leyenda porque solo hay una línea
-        graficaDesnivel.setCreateSymbols(false); // Quitamos los puntitos de cada dato para que la línea sea fluida
-        graficaDesnivel.setAnimated(false); // Quitamos la animación de carga que a veces da tirones con muchos datos
+        graficaDesnivel.setLegendVisible(false); 
+        graficaDesnivel.setCreateSymbols(false); 
+        graficaDesnivel.setAnimated(false); 
+
+        // Escuchar movimiento del ratón sobre la gráfica
+        graficaDesnivel.setOnMouseMoved(this::onMouseMovedGraph);
+        
+        // Esconder el punto si sacas el ratón de la gráfica
+        graficaDesnivel.setOnMouseExited(e -> {
+            if (puntoRastreador != null) {
+                puntoRastreador.setVisible(false);
+            }
+        });
     }
 
-    /**
-     * Este es el método "mágico" que llamarán tus compañeros desde el Main 
-     * pasándole la actividad que el usuario haya cargado.
-     */
+    
+    public void setMapContext(Pane mapPane, MapProjection projection) {
+        this.mapPane = mapPane;
+        this.projection = projection;
+
+        // Creamos punto rastreador
+        this.puntoRastreador = new Circle(6, Color.BLUE);
+        this.puntoRastreador.setStroke(Color.WHITE);
+        this.puntoRastreador.setStrokeWidth(2);
+        this.puntoRastreador.setMouseTransparent(true); // Para que no bloquee clics
+        this.puntoRastreador.setVisible(false);
+        
+        // Añadimos al lienzo del mapa
+        this.mapPane.getChildren().add(puntoRastreador);
+    }
+
     public void setActivity(Activity actividad) {
         this.actividadActual = actividad;
-        
-        // Limpiamos la gráfica por si hubiera una ruta cargada de antes
+        this.distanciasAcumuladas = new ArrayList<>();
         graficaDesnivel.getData().clear();
 
         if (actividad == null || actividad.getTrackPoints().isEmpty()) {
             return;
         }
 
-        // Creamos la "Serie" de datos que formará la línea de la montaña
         XYChart.Series<Number, Number> serieDesnivel = new XYChart.Series<>();
         List<TrackPoint> puntos = actividad.getTrackPoints();
 
         double distanciaAcumuladaMetros = 0.0;
         TrackPoint puntoAnterior = puntos.get(0);
 
-        // Recorremos todos los puntos GPS del fichero GPX
         for (TrackPoint puntoActual : puntos) {
-            // Calculamos la distancia desde el punto anterior al actual y la sumamos
             distanciaAcumuladaMetros += GeoUtils.distance(puntoAnterior, puntoActual);
-            
-            // Pasamos la distancia a kilómetros (para el eje X)
             double distanciaKm = distanciaAcumuladaMetros / 1000.0;
             
-            // Obtenemos la altitud en metros (para el eje Y)
-            double altitud = puntoActual.getElevation();
+            // Guardamos esto para que el ratón sepa qué buscar luego
+            distanciasAcumuladas.add(distanciaKm);
 
-            // Añadimos el dato a la gráfica
+            double altitud = puntoActual.getElevation();
             XYChart.Data<Number, Number> datoGrafica = new XYChart.Data<>(distanciaKm, altitud);
             serieDesnivel.getData().add(datoGrafica);
 
             puntoAnterior = puntoActual;
         }
 
-        // Finalmente, metemos toda la serie de datos en la gráfica
         graficaDesnivel.getData().add(serieDesnivel);
     }
+
+ 
+    // Sincronizar el ratón con el mapa
+    private void onMouseMovedGraph(MouseEvent event) {
+        if (actividadActual == null || mapPane == null || projection == null || puntoRastreador == null) {
+            return;
+        }
+
+        //qué coordenada X (kilómetros) tenemos el ratón
+        double xEnPixels = ejeX.sceneToLocal(event.getSceneX(), event.getSceneY()).getX();
+        Number distanciaKmObj = ejeX.getValueForDisplay(xEnPixels);
+        if (distanciaKmObj == null) return;
+        double distanciaRaton = distanciaKmObj.doubleValue();
+
+        // 2. Buscar en la lista qué punto GPS está más cerca de esa distancia
+        int indiceMasCercano = 0;
+        double diferenciaMinima = Double.MAX_VALUE;
+
+        for (int i = 0; i < distanciasAcumuladas.size(); i++) {
+            double dif = Math.abs(distanciasAcumuladas.get(i) - distanciaRaton);
+            if (dif < diferenciaMinima) {
+                diferenciaMinima = dif;
+                indiceMasCercano = i;
+            }
+        }
+
+        // 3. Obtener el punto GPS real, traducirlo a píxeles y mover la bolita azul
+        TrackPoint puntoGPS = actividadActual.getTrackPoints().get(indiceMasCercano);
+        Point2D pixelPos = projection.project(puntoGPS);
+
+        puntoRastreador.setCenterX(pixelPos.getX());
+        puntoRastreador.setCenterY(pixelPos.getY());
+        puntoRastreador.setVisible(true);
+        puntoRastreador.toFront(); // Ponerlo siempre encima de todo
+    }
 }
+
