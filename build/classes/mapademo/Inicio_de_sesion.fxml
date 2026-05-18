@@ -41,7 +41,7 @@
          <children>
             <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="358.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <TextField fx:id="NickName_ini" maxWidth="-Infinity" onKeyTyped="#Nick_ini" prefHeight="26.0" prefWidth="167.0" />
+                  <TextField fx:id="NickName_ini" maxWidth="-Infinity" prefHeight="26.0" prefWidth="167.0" />
                   <Label fx:id="Err_nick_ini" prefHeight="18.0" prefWidth="226.0" textFill="RED" visible="false" />
                </children>
             </VBox>
