@@ -722,18 +722,47 @@ public class FXMLDocumentController implements Initializable {
         SportActivityApp app = LaSaforApp.app;
         MapRegion reco = app.findMapForActivity(itemSelected);
         File mapFile = new File(reco.getImagePath());
-        buildMap(mapFile, reco);
+        buildMap(mapFile, reco); 
         
-        //INTEGRACIÓN: CATEGORÍA 4 - VELOCIDAD SOBRE TRAZADO:
         try {
+            // 1. VELOCIDAD SOBRE TRAZADO
+            System.out.println("Intentando cargar Velocidad...");
             javafx.fxml.FXMLLoader velLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Velocidad.fxml"));
             velLoader.load(); 
             VelocidadController velControl = velLoader.getController();
-            
             javafx.scene.Group rutaColores = velControl.generarTrazadoVelocidad(itemSelected, projection);
             mapPane.getChildren().add(rutaColores); 
+            System.out.println("Velocidad cargada OK.");
+
+            // 2. PERFIL DE DESNIVEL
+            System.out.println("Intentando cargar Desnivel...");
+            javafx.fxml.FXMLLoader desLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Desnivel.fxml"));
+            javafx.scene.Parent desRoot = desLoader.load();
+            DesnivelController desControl = desLoader.getController();
+            desControl.setActivity(itemSelected);
+            
+            // EL TRUCO: Añadir la gráfica como un TERCER panel para no borrar el mapa
+            if (splitPane.getItems().size() == 2) {
+                splitPane.getItems().add(desRoot); // Añade la gráfica a la derecha del mapa
+                System.out.println("Gráfica insertada OK (como 3er panel nuevo).");
+            } else if (splitPane.getItems().size() > 2) {
+                splitPane.getItems().set(2, desRoot); // Sustituye la gráfica si haces clic en otra actividad
+                System.out.println("Gráfica insertada OK (actualizando 3er panel).");
+            }
+            
+            // Buscar el panel blanco del centro (índice 1 del SplitPane)
+            if (splitPane.getItems().size() > 1) {
+                javafx.scene.Node panelCentro = splitPane.getItems().get(1); 
+                if (panelCentro instanceof javafx.scene.layout.Pane) {
+                    javafx.scene.layout.Pane whitePane = (javafx.scene.layout.Pane) panelCentro;
+                    whitePane.getChildren().clear(); // Limpiamos lo que haya
+                    whitePane.getChildren().add(desRoot); // Metemos tu gráfica
+                    System.out.println("Gráfica insertada OK.");
+                }
+            }
         } catch (Exception e) {
-            System.out.println("Error cargando velocidad: " + e.getMessage());
+            System.out.println("--- ERROR CARGANDO GRÁFICAS ---");
+            e.printStackTrace(); // Esto nos chivará qué archivo falta
         }
     }
 
@@ -849,8 +878,9 @@ public class FXMLDocumentController implements Initializable {
             stage.setTitle("Añadir Nuevo Mapa al Sistema");
             stage.setScene(new javafx.scene.Scene(root));
             stage.show();
-        } catch (java.io.IOException e) {
-            System.out.println("Error abriendo la ventana de Añadir Mapa: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("--- ERROR ABRIENDO AÑADIR MAPA ---");
+            e.printStackTrace(); // saber fallo exacto en la consola
         }
     }
     
