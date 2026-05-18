@@ -35,11 +35,16 @@ import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -54,18 +59,29 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import upv.ipc.sportlib.SportActivityApp;
+import upv.ipc.sportlib.Activity;
+import upv.ipc.sportlib.Annotation;
+import upv.ipc.sportlib.GeoPoint;
+import upv.ipc.sportlib.AnnotationType;
+import upv.ipc.sportlib.MapProjection;  
+import upv.ipc.sportlib.MapRegion;
+import upv.ipc.sportlib.User;
 
 /**
  * Controlador principal de la aplicación de mapa con POIs.
@@ -108,12 +124,12 @@ public class FXMLDocumentController implements Initializable {
      * la imagen cargada.
      */
     private Pane mapPane;
-
+    private Activity actividadActual;
+    private MapProjection projection;
     
     /** Menú contextual reutilizable para el clic derecho sobre el mapa. */
     private ContextMenu mapContextMenu;
-
-
+    private User user;
     /**
      * Indica si el controlador está en modo inserción de POI.
      * {@code true} → el próximo clic izquierdo sobre el mapa abre el diálogo.
@@ -154,8 +170,17 @@ public class FXMLDocumentController implements Initializable {
     /** Etiqueta en la barra de estado que muestra las coordenadas del ratón. */
     @FXML
     private Label mousePosition;
+    
     @FXML
     private SplitPane splitPane;
+    @FXML
+    private ListView<Activity> activityList;
+    @FXML
+    private ImageView userAvatar;
+    @FXML
+    private GridPane gridBase;
+    @FXML
+    private Label username;
  
 
     // =========================================================
@@ -377,9 +402,24 @@ public class FXMLDocumentController implements Initializable {
         final double clickY = y;
         mapContextMenu.getItems().get(0).setOnAction(e -> addPoi(clickX, clickY));
         mapContextMenu.getItems().get(1).setOnAction(e -> addCircle(clickX, clickY));
-
-        // Mostramos el menú en coordenadas de pantalla
-        mapContextMenu.show(
+        if (projection != null && actividadActual != null) {
+                GeoPoint puntoGps = projection.unproject(clickX, clickY);
+                    Annotation nota = new Annotation(
+                    AnnotationType.TEXT, 
+                    "Nota en ruta", 
+                    "#FF0000", 
+                    2.0, 
+                    java.util.List.of(puntoGps)
+                );
+                
+                SportActivityApp.getInstance().addAnnotation(actividadActual, nota);
+                
+                Text t = new Text(clickX, clickY, "📌");
+                mapPane.getChildren().add(t);
+            } else {
+                System.out.println("Error: Falta cargar mapa o actividad");
+            }
+            mapContextMenu.show(
             mapPane.getScene().getWindow(),
             mapPane.localToScreen(x, y).getX(),
             mapPane.localToScreen(x, y).getY()
@@ -429,23 +469,23 @@ public class FXMLDocumentController implements Initializable {
         map_listview.setCellFactory(listView -> new ListCell<Poi>() {
             @Override
             protected void updateItem(Poi poi, boolean empty) {
-                // Siempre llamar a super primero (requerido por JavaFX)
                 super.updateItem(poi, empty);
 
                 if (empty || poi == null) {
-                    // Celda vacía: limpiamos texto y gráfico
                     setText(null);
                     setGraphic(null);
                 } else {
-                    // Mostramos código y nombre separados por un guión largo
                     setText(poi.getCode() + " – " + poi.getPosition());
                 }
             }
         });
-
-        // ── Carga del mapa inicial ─────────────────────────────────────
-        // El fichero se busca relativo al directorio de trabajo del proyecto.
-        buildMap(new File("resources/upv.jpg"));
+        File archivoMapa = new File("src/maps/upv.jpg");
+        if (!archivoMapa.exists()) {
+            archivoMapa = new File("maps/upv.jpg");
+        }
+        buildMap(archivoMapa);
+        
+        setupUser();
     }
 
     // =========================================================
@@ -619,6 +659,176 @@ public class FXMLDocumentController implements Initializable {
         circle.setCenterY(y);
         mapPane.getChildren().add(circle); // Se añade sobre el mapa como cualquier nodo
     }
-    
+    @FXML
+    private void importarGPX(ActionEvent event) {
+        SportActivityApp app = LaSaforApp.app;
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Seleccionar carrera GPX");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos GPX", "*.gpx"));
+        File seleccionado = fc.showOpenDialog(mapPane.getScene().getWindow());
+            if (seleccionado != null) {
+            actividadActual = app.importActivity(seleccionado);
+            int numPuntos = actividadActual.getTrackPoints().size();
+            String nombre = actividadActual.getName();
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setTitle("Éxito");
+            alerta.setHeaderText("Datos cargados correctamente");
+            alerta.setContentText("Actividad: " + nombre + "\nTotal de puntos GPS: " + numPuntos);
+            alerta.show();
+            
+            //Poner actividad importada como mapa
+            MapRegion reco = app.findMapForActivity(actividadActual);
+            File mapFile = new File(reco.getImagePath());
+            buildMap(mapFile);
+            verActividades();
+            }
+    }
 
+    @FXML
+    private void verActividades(ActionEvent event) {
+        verActividades();
+    }
+    
+    private void verActividades() {
+        
+        User currentUser = LaSaforApp.app.getCurrentUser();
+        
+        activityList.setCellFactory(list -> new ListCell<Activity>() {
+                @Override
+                protected void updateItem(Activity a, boolean empty) {
+                    super.updateItem(a, empty);
+
+                    if (empty || a == null) {
+                        setText(null);
+                    } else {
+                        setText(a.getName());
+                    }
+                }
+            });
+        activityList.getItems().setAll(currentUser.getActivities());
+        
+    }
+
+    @FXML
+    private void activitySelected(MouseEvent event) {
+        Activity itemSelected = activityList.getSelectionModel().getSelectedItem();
+        if (itemSelected == null) return;
+        
+        SportActivityApp app = LaSaforApp.app;
+        MapRegion reco = app.findMapForActivity(itemSelected);
+        File mapFile = new File(reco.getImagePath());
+        buildMap(mapFile);
+    }
+
+    @FXML
+    private void modPerfil(ActionEvent event) {
+    }
+
+    @FXML
+    private void logOut(ActionEvent event) {
+        SportActivityApp app = LaSaforApp.app;
+        app.logout();
+        
+        try {
+        FXMLLoader loader = new FXMLLoader(
+            getClass().getResource("Inicio_de_sesion.fxml")
+        );
+
+        Parent root = loader.load();
+
+        Stage stage = (Stage) ((Node) event.getSource())
+            .getScene()
+            .getWindow();
+
+        stage.setScene(new Scene(root));
+        stage.setTitle("Login");
+        stage.show();
+
+        } catch (IOException e) {}
+    }
+
+    @FXML
+    private void logOutExit(ActionEvent event) {
+        SportActivityApp app = LaSaforApp.app;
+        app.logout();
+        Platform.exit();
+    }
+    
+    @FXML
+    void removeActivity(ActionEvent event) {
+        Activity activity = activityList.getSelectionModel().getSelectedItem();
+        if (activity == null) return;
+        
+        LaSaforApp.app.removeActivity(activity);
+        activityList.refresh();
+    }
+
+    @FXML
+    void removeNote(ActionEvent event) {
+
+    }
+
+    @FXML
+    void renameActivity(ActionEvent event) {
+        Activity activity = activityList.getSelectionModel().getSelectedItem();
+        if (activity == null) return;
+
+        TextInputDialog dialog = new TextInputDialog(activity.getName());
+        dialog.setTitle("Rename Activity");
+        dialog.setHeaderText("Change activity name");
+        dialog.setContentText("New name:");
+
+        dialog.showAndWait().ifPresent(newName -> {
+            LaSaforApp.app.renameActivity(activity, newName);
+            activityList.refresh();
+        });
+    }
+
+    @FXML
+    void renameNote(ActionEvent event) {
+        /*Poi note = map_listview.getSelectionModel().getSelectedItem();
+        if (note == null) return;
+        
+        TextInputDialog dialog = new TextInputDialog(note.getText());
+        dialog.setTitle("Rename Activity");
+        dialog.setHeaderText("Change activity name");
+        dialog.setContentText("New name:");
+
+        dialog.showAndWait().ifPresent(newName -> {
+            LaSaforApp.app.renameActivity(note, newName);
+            activityList.refresh();
+        });*/
+    }
+    
+    private void setupUser() {
+    
+        user = LaSaforApp.app.getCurrentUser();
+        System.out.println(user.getNickName());
+        
+        /*if (user != null) {
+            
+            username.setText(user.getNickName());
+            String avatar = user.getAvatarPath();
+            System.out.println(avatar);
+            userAvatar.setImage(user.getAvatar());
+
+        }*/
+        
+        if (user == null) return;
+
+        username.setText(user.getNickName());
+
+        String path = user.getAvatarPath();
+        if (path != null && !path.isBlank()) {
+            Image img = new Image("file:" + path, false);
+            userAvatar.setImage(img);
+        }
+        
+        userAvatar.setFitWidth(60);
+        userAvatar.setFitHeight(60);
+        userAvatar.setPreserveRatio(true);
+        Rectangle cut = new Rectangle(60, 60);
+        userAvatar.setClip(cut);
+        
+    }
 }

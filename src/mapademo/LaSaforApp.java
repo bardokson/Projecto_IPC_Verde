@@ -19,6 +19,9 @@ import upv.ipc.sportlib.SportActivityApp;
  * @author jose
  */
 public class LaSaforApp extends Application {
+    
+    protected static SportActivityApp app = SportActivityApp.getInstance();
+
     private static Scene scene;
     
     private static HashMap<String,Parent> roots = new HashMap<>();

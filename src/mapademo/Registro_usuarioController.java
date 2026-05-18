@@ -24,7 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import org.controlsfx.control.PopOver;
 import upv.ipc.sportlib.User;
@@ -54,6 +54,8 @@ public class Registro_usuarioController implements Initializable {
     @FXML private ImageView Img_pass;
     
     private static boolean pressed = false;
+    public User user;
+    
     private boolean Nick_ok = false;
     private boolean Email_ok = false;
     private boolean Pass_ok = false;
@@ -64,10 +66,9 @@ public class Registro_usuarioController implements Initializable {
     private String Pass;
     private LocalDate Birth;
     private File Avatar_file;
-    private Image Avatar = new Image(getClass().getResourceAsStream("/resources/avatar_default.png"));
-    private SportActivityApp app = SportActivityApp.getInstance();
-    
-    
+    private Image Avatar;
+    private String Avatar_Path;
+    //private SportActivityApp app = SportActivityApp.getInstance();
     /**
      * Initializes the controller class.
      * @param url
@@ -94,9 +95,11 @@ public class Registro_usuarioController implements Initializable {
         
         if(Nick_ok && Email_ok && Pass_ok && Birth_ok){
             Err_tot.setVisible(false);
-            app.registerUser(Nick, Email, Pass, Birth, Avatar);
+            boolean ok = LaSaforApp.app.registerUser(Nick, Email, Pass, Birth, Avatar_Path);
+            boolean logged = LaSaforApp.app.login(Nick, Pass);
+            
             //Cambiar a la escena de actividades
-            LaSaforApp.setRoot("actividades");
+            if (ok && logged) LaSaforApp.setRoot("actividades");
         }else{
             Err_tot.setVisible(true);
         }
@@ -196,9 +199,10 @@ public class Registro_usuarioController implements Initializable {
     }
     
     @FXML
-    private void Avatar_reg(ActionEvent event) {
+    private void Avatar_reg(ActionEvent event) throws IOException {
         FileChooser fc = new FileChooser();
         fc.setTitle("Seleccionar mapa JPG");
+        fc.setInitialDirectory(new File("."));
         // Filtramos para que solo deje elegir archivos .jpg
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes JPG", "*.jpg", "*.jpeg"));
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes JPG", "*.jpg", "*.jpeg",".png"));
@@ -208,12 +212,22 @@ public class Registro_usuarioController implements Initializable {
         if (file != null) {
             Avatar_file = file;
             // Escribimos la ruta en el cajón de texto para que el usuario la vea
-            Avatar = new Image(getClass().getResourceAsStream(Avatar_file.getAbsolutePath()));
-            Avatar_reg.setImage(Avatar);
+            /*Avatar_reg.setImage(new Image(getClass().getResourceAsStream(Avatar_file.getAbsolutePath())));
+            Avatar = Avatar_reg.getImage();*/
+            
+            Image image = new Image(file.toURI().toString());
+
+            Avatar_reg.setImage(image);
+            //Avatar = image;
+            Avatar_Path = Avatar_file.getCanonicalPath();
+            Avatar_reg.setFitWidth(60);
+            Avatar_reg.setFitHeight(60);
+            Avatar_reg.setPreserveRatio(true);
+            Rectangle cut = new Rectangle(60, 60);
+            Avatar_reg.setClip(cut);
         }
     }
-    
-    /**
+  /**
      * Muestra la contraseña
      * @param event 
      */
@@ -235,7 +249,6 @@ public class Registro_usuarioController implements Initializable {
     
     private static void cyclePressed(){
         pressed = !pressed;
-    }
     
     private static boolean getPressed(){
         return pressed;
