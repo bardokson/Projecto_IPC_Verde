@@ -73,6 +73,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import upv.ipc.sportlib.SportActivityApp;
 import upv.ipc.sportlib.Activity;
@@ -127,6 +128,8 @@ public class FXMLDocumentController implements Initializable {
     private Pane mapPane;
     private Activity actividadActual;
     private MapProjection projection;
+    private double mapaAltoActual;
+    private double mapaAnchoActual;
     
     /** Menú contextual reutilizable para el clic derecho sobre el mapa. */
     private ContextMenu mapContextMenu;
@@ -665,36 +668,62 @@ public class FXMLDocumentController implements Initializable {
         circle.setCenterY(y);
         mapPane.getChildren().add(circle); // Se añade sobre el mapa como cualquier nodo
     }
-    
+
     /**
      * Abre un filechooser para importar un archivo gpx y la añade a la lista de actividades.
      */
     @FXML
     private void importarGPX() {
+
+@FXML
+    private void importarGPX(ActionEvent event) {
+
         SportActivityApp app = LaSaforApp.app;
         FileChooser fc = new FileChooser();
         fc.setTitle("Seleccionar carrera GPX");
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos GPX", "*.gpx"));
         File seleccionado = fc.showOpenDialog(mapPane.getScene().getWindow());
-            if (seleccionado != null) {
+            
+        if (seleccionado != null) {
             actividadActual = app.importActivity(seleccionado);
             int numPuntos = actividadActual.getTrackPoints().size();
             String nombre = actividadActual.getName();
+            
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
             alerta.setTitle("Éxito");
             alerta.setHeaderText("Datos cargados correctamente");
             alerta.setContentText("Actividad: " + nombre + "\nTotal de puntos GPS: " + numPuntos);
-            alerta.show();
             
-            MapRegion reco = app.findMapForActivity(actividadActual);
-            File mapFile = new File(reco.getImagePath());
-            buildMap(mapFile, reco);
+            Window ventanaActual = mapPane.getScene().getWindow();
+            alerta.initOwner(ventanaActual);
+            alerta.showAndWait();
+
+            MapRegion region = app.findMapForActivity(actividadActual);
+            File mapFile = new File(region.getImagePath());
+            buildMap(mapFile, region);
+            
+            this.projection = new MapProjection(region, this.mapaAnchoActual, this.mapaAltoActual);
+            
+            // ── ¡FALTABA ESTO!: Limpiar las líneas de la ruta anterior antes de pintar la nueva ──
+            mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
+            
+            // Pintamos la ruta en el mapa recién cambiado
+            //dibujarRutaPorVelocidad();
+            
+
+            buildMap(mapFile, region);
             verActividades();
+<<<<<<< HEAD
             
             //Desaparecio lo de hector? Para dibujar la ruta
             
             }
+=======
+            activityList.getSelectionModel().select(actividadActual);
+        }
+>>>>>>> 5756df7a06b9077a4168d82e7b8192b5d30d67c2
     }
+
 
     /**
      * Actualiza la lista de actividades cada vez que se añaden.
@@ -724,15 +753,14 @@ public class FXMLDocumentController implements Initializable {
     /**
      * Abre y mueve el mapa a la zona de inicio de la actividad seleccionada de la lista.
      */
-    @FXML
-    private void activitySelected() {
+       @FXML
+     private void activitySelected(MouseEvent event) {
         Activity itemSelected = activityList.getSelectionModel().getSelectedItem();
         if (itemSelected == null) return;
-        
         SportActivityApp app = LaSaforApp.app;
         MapRegion region = app.findMapForActivity(itemSelected);
         File mapFile = new File(region.getImagePath());
-        buildMap(mapFile, region);
+        buildMap(mapFile, region); 
         
         try {
             // 1. VELOCIDAD SOBRE TRAZADO
@@ -793,15 +821,21 @@ public class FXMLDocumentController implements Initializable {
         double xNorm = (lon - region.getLonMin()) / (region.getLonMax() - region.getLonMin());
         double yNorm = (region.getLatMax() - lat) / (region.getLatMax() - region.getLatMin());
 
+        // ── Tamaño visible del ScrollPane (viewport) ───────────────────
         double viewW = map_scrollpane.getViewportBounds().getWidth();
         double viewH = map_scrollpane.getViewportBounds().getHeight();
 
+        // ── Cálculo del scroll normalizado [0, 1] ─────────────────────
+        // Restamos la mitad del viewport para que el POI quede centrado
+        // y no en la esquina superior-izquierda del área visible.
         double scrollH = (lon - viewW / 2) / (mapWidth  - viewW);
         double scrollV = (lat - viewH / 2) / (mapHeight - viewH);
 
+        // Garantizamos que el valor esté dentro del rango válido [0, 1]
         scrollH = Math.max(0, Math.min(1, scrollH));
         scrollV = Math.max(0, Math.min(1, scrollV));
 
+        // ── Animación suave con Timeline ──────────────────────────────
         final Timeline timeline = new Timeline();
         final KeyValue kv1 = new KeyValue(map_scrollpane.hvalueProperty(), scrollH);
         final KeyValue kv2 = new KeyValue(map_scrollpane.vvalueProperty(), scrollV);
@@ -842,14 +876,48 @@ public class FXMLDocumentController implements Initializable {
      * Quita la actividad seleccionada de la lista de actividades.
      */
     @FXML
-    void removeActivity() {
+    private void removeActivity(ActionEvent event) {
+        // 1. Obtener la actividad seleccionada en la lista
         Activity activity = activityList.getSelectionModel().getSelectedItem();
-        if (activity == null) return;
-        
-        LaSaforApp.app.removeActivity(activity);
-        activityList.refresh();
-    }
+        if (activity == null) {
+            // Opcional: mostrar un aviso si pulsa borrar sin seleccionar nada
+            return;
+        }
+        MapRegion region = LaSaforApp.app.findMapForActivity(activity);
+        // 2. Pedir confirmación al usuario (Alerta Modal)
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar eliminación");
+        alert.setHeaderText("¿Estás seguro de que deseas eliminar la actividad?");
+        alert.setContentText("Esta acción eliminará permanentemente la actividad: " + activity.getName());
+        alert.initOwner(activityList.getScene().getWindow()); // Aseguramos que salga al frente
 
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+
+            // 3. Eliminar del modelo lógico
+            LaSaforApp.app.removeActivity(activity);
+
+            // 4. Actualizar la lista visualmente volviendo a cargar las actividades del usuario
+            verActividades();
+
+            // 5. Limpieza de interfaz si borramos la actividad activa en pantalla
+            if (actividadActual != null && actividadActual.equals(activity)) {
+                // Desvincular la actividad actual para que no cause errores
+                this.actividadActual = null;
+                this.projection = null;
+
+                // Cargar el mapa por defecto (el de la UPV) para limpiar la pantalla
+                File archivoMapa = new File("src/maps/upv.jpg");
+                if (!archivoMapa.exists()) {
+                    archivoMapa = new File("maps/upv.jpg");
+                }
+                buildMap(archivoMapa, region);
+
+                // Limpiar también los POIs antiguos de la lista lateral del mapa si los hubiera
+                map_listview.getItems().clear();
+            }
+        }
+    }
     /**
      * Renombra la actividad seleccionada de la lista de actividades.
      */
@@ -929,8 +997,50 @@ public class FXMLDocumentController implements Initializable {
             e.printStackTrace(); // saber fallo exacto en la consola
         }
     }
-    
-    
-    
-    
+    /*private void dibujarRutaPorVelocidad() {
+    // 1. Validaciones defensivas
+    if (actividadActual == null || projection == null) {
+        System.out.println("Error: No hay actividad o proyección cargada para dibujar la ruta.");
+        return;
+    }
+
+    java.util.List<TrackPoint> puntos = actividadActual.getTrackPoints();
+    if (puntos == null || puntos.size() < 2) return;
+
+    // 2. Recorremos los puntos de dos en dos para trazar segmentos de línea
+    for (int i = 0; i < puntos.size() - 1; i++) {
+        TrackPoint p1 = puntos.get(i);
+        TrackPoint p2 = puntos.get(i + 1);
+
+        // Transformamos las coordenadas GPS (Lat, Lon) a píxeles del plano (X, Y)
+        Point2D pixel1 = projection.project(p1.getLatitude(), p1.getLongitude());
+        Point2D pixel2 = projection.project(p2.getLatitude(), p2.getLongitude());
+
+        // Creamos el segmento visual
+        javafx.scene.shape.Line segmento = new javafx.scene.shape.Line(
+            pixel1.getX(), pixel1.getY(), 
+            pixel2.getX(), pixel2.getY()
+        );
+
+        // 3. Lógica de color según velocidad (puedes ajustar los umbrales según tu práctica)
+        // Obtenemos la velocidad media del punto (normalmente p1.getSpeed())
+        double velocidad = p1.get(); 
+
+        if (velocidad < 5.0) {
+            segmento.setStroke(Color.BLUE);     // Velocidad lenta (ej. subida o andando)
+        } else if (velocidad < 15.0) {
+            segmento.setStroke(Color.GREEN);    // Velocidad media
+        } else {
+            segmento.setStroke(Color.RED);      // Velocidad rápida (ej. bajadas)
+        }
+
+        // Configuración estética de la línea
+        segmento.setStrokeWidth(3.0); 
+
+        // Añadimos el segmento directamente sobre el lienzo del mapa
+        mapPane.getChildren().add(segmento);
+    }
+    }*/
 }
+    
+  
