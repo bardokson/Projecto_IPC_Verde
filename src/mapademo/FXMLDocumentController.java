@@ -560,6 +560,13 @@ public class FXMLDocumentController implements Initializable {
 
         mensaje.setTitle("Acerca de");
         mensaje.setHeaderText("IPC - 2026");
+        mensaje.setContentText("""
+                               Autores del programa:
+                                Jiaxiang Liu Shan
+                                Erik Tzvetkov Radev
+                                Hector Saez Montero
+                                Javier Blanch Rozalen
+                               """);
         mensaje.showAndWait(); // Bloquea hasta que el usuario cierra el diálogo
     }
 
@@ -730,7 +737,7 @@ public class FXMLDocumentController implements Initializable {
             double anchoReal = mapPane.getWidth();
             double altoReal = mapPane.getHeight();
 
-            System.out.println("[Importar] Dimensiones reales detectadas en mapPane: " + anchoReal + "x" + altoReal);
+            //System.out.println("[Importar] Dimensiones reales detectadas en mapPane: " + anchoReal + "x" + altoReal);
 
             // 2. Inicializamos la proyección con las medidas reales geométricas del panel
             this.projection = new MapProjection(region, anchoReal, altoReal);
@@ -791,7 +798,7 @@ public class FXMLDocumentController implements Initializable {
         double anchoReal = mapPane.getWidth();
         double altoReal = mapPane.getHeight();
 
-        System.out.println("[Selección] Dimensiones reales detectadas en mapPane: " + anchoReal + "x" + altoReal);
+        //System.out.println("[Selección] Dimensiones reales detectadas en mapPane: " + anchoReal + "x" + altoReal);
 
         this.projection = new MapProjection(region, anchoReal, altoReal);
         mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
@@ -818,11 +825,13 @@ public class FXMLDocumentController implements Initializable {
             }            
             javafx.scene.control.SplitPane.setResizableWithParent(desRoot, false);
             javafx.stage.Stage stage = (javafx.stage.Stage) splitPane.getScene().getWindow();
-            stage.sizeToScene();
-            stage.setWidth(stage.getWidth() + 350);
-            stage.setMinWidth(1200);
+            if (stage.getScene() != null && stage.getScene().getRoot().getClass().getSimpleName().equals("ActividadesController")) {
+                stage.sizeToScene();
+                stage.setWidth(stage.getWidth() + 350);
+                stage.setMinWidth(1200);
+            }           
         } catch (Exception e) {
-            System.out.println("Error cargando el panel de desnivel:");
+            //System.out.println("Error cargando el panel de desnivel:");
             e.printStackTrace();
         }
 
@@ -898,11 +907,6 @@ public class FXMLDocumentController implements Initializable {
             LaSaforApp.app.removeActivity(activity);
             verActividades();
 
-            /*if (actividadActual != null && actividadActual.equals(activity)) {
-                // Desvincular la actividad actual para que no cause errores
-                this.actividadActual = null;
-                this.projection = null;*/
-
             File archivoMapa = new File("src/maps/upv.jpg");
             if (!archivoMapa.exists()) {
                 archivoMapa = new File("maps/upv.jpg");
@@ -977,20 +981,21 @@ public class FXMLDocumentController implements Initializable {
     }
     
     //  INTEGRACIÓN: CATEGORÍA 5 - AÑADIR MAPA 
-        @FXML
-        private void abrirMenuAnadirMapa(ActionEvent event) { 
-            try {
-                javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("AnadirMapa.fxml"));
-                javafx.scene.Parent root = loader.load();
-                javafx.stage.Stage stage = new javafx.stage.Stage();
-                stage.setTitle("Añadir Nuevo Mapa al Sistema");
-                stage.setScene(new javafx.scene.Scene(root));
-                stage.show();
-            } catch (Exception e) {
-                System.out.println("--- ERROR ABRIENDO AÑADIR MAPA ---");
-                e.printStackTrace(); // saber fallo exacto en la consola
-            }
+    @FXML
+    private void abrirMenuAnadirMapa(ActionEvent event) { 
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("AnadirMapa.fxml"));
+            javafx.scene.Parent root = loader.load();
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("Añadir Nuevo Mapa al Sistema");
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("--- ERROR ABRIENDO AÑADIR MAPA ---");
+            e.printStackTrace(); // saber fallo exacto en la consola
         }
+    }
+        
     private void dibujarRutaPorVelocidad() {
        if (actividadActual == null || projection == null) return;
 
@@ -1071,6 +1076,7 @@ public class FXMLDocumentController implements Initializable {
 
        mostrarEstadisticas(distanciaTotalMetros, puntos);
    }
+    
     private void mostrarEstadisticas(double distanciaMetros, java.util.List<TrackPoint> puntos) {
        if (puntos == null || puntos.size() < 2) return;
        double distanciaKm = distanciaMetros / 1000.0;
