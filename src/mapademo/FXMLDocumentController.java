@@ -741,6 +741,7 @@ public class FXMLDocumentController implements Initializable {
         mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
         
         try {
+
             //System.out.println("Intentando cargar Velocidad...");
             javafx.fxml.FXMLLoader velLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Velocidad.fxml"));
             velLoader.load(); 
@@ -766,8 +767,11 @@ public class FXMLDocumentController implements Initializable {
                 splitPane.getItems().set(2, desRoot);
             }
             
-           javafx.scene.control.SplitPane.setResizableWithParent(desRoot, false);
-            
+            javafx.scene.control.SplitPane.setResizableWithParent(desRoot, false);
+            javafx.stage.Stage stage = (javafx.stage.Stage) splitPane.getScene().getWindow();
+            stage.sizeToScene();
+            stage.setWidth(stage.getWidth() + 350);
+            stage.setMinWidth(1200);
             //System.out.println("Gráfica insertada OK (como panel lateral coquetón).");
             // Buscar el panel blanco del centro (índice 1 del SplitPane)
             if (splitPane.getItems().size() > 1) {
@@ -948,7 +952,7 @@ public class FXMLDocumentController implements Initializable {
     
     //  INTEGRACIÓN: CATEGORÍA 5 - AÑADIR MAPA 
     @FXML
-    private void abrirMenuAnadirMapa(ActionEvent event) {
+    private void abrirMenuAnadirMapa(ActionEvent event) { 
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("AnadirMapa.fxml"));
             javafx.scene.Parent root = loader.load();

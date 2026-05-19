@@ -18,37 +18,43 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.Registro_usuarioController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="480.0" styleClass="Background" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.Registro_usuarioController">
    <children>
       <HBox alignment="CENTER" prefHeight="50.0" prefWidth="471.0" style="-fx-background-color: orange;">
          <children>
-            <Label text="Registro">
+            <Label styleClass="header" text="Registro">
                <font>
                   <Font size="31.0" />
                </font>
             </Label>
          </children>
       </HBox>
-      <GridPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="413.0" prefWidth="471.0">
+      <Separator prefHeight="7.0" prefWidth="480.0">
+         <opaqueInsets>
+            <Insets top="16.0" />
+         </opaqueInsets>
+      </Separator>
+      <GridPane alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="413.0" prefWidth="471.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="161.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="310.0" minWidth="10.0" prefWidth="310.0" />
         </columnConstraints>
         <rowConstraints>
+            <RowConstraints />
             <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="-Infinity" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="61.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="61.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <TextField fx:id="NickName_reg" maxWidth="-Infinity" onKeyTyped="#Entering_Nick" prefHeight="26.0" prefWidth="236.0">
+                  <TextField fx:id="NickName_reg" maxWidth="-Infinity" onKeyTyped="#Entering_Nick" prefHeight="26.0" prefWidth="236.0" styleClass="Field">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin></TextField>
@@ -58,9 +64,9 @@
                      </font></Label>
                </children>
             </VBox>
-            <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="65.0" prefWidth="237.0" GridPane.rowIndex="1">
+            <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="65.0" prefWidth="237.0" GridPane.rowIndex="2">
                <children>
-                  <Label alignment="CENTER_RIGHT" text="NickName:   " textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" styleClass="Label" text="NickName:   " textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -68,19 +74,9 @@
                   <Label text="Label" visible="false" />
                </children>
             </VBox>
-            <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="64.0" prefWidth="237.0" GridPane.rowIndex="2">
+            <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="64.0" prefWidth="237.0" GridPane.rowIndex="3">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="Email:  " textAlignment="RIGHT">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label text="Label" visible="false" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="59.0" prefWidth="237.0" GridPane.rowIndex="3">
-               <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="Contraseña:  " textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="Label" text="Email:  " textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -90,7 +86,17 @@
             </VBox>
             <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="59.0" prefWidth="237.0" GridPane.rowIndex="4">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="Fecha nacimiento:" textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="Label" text="Contraseña:  " textAlignment="RIGHT">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label text="Label" visible="false" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="59.0" prefWidth="237.0" GridPane.rowIndex="5">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="Label" text="Fecha nacimiento:" textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -101,9 +107,9 @@
                   <Label text="Label" visible="false" />
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="64.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="64.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
-                  <TextField fx:id="Email_reg" maxWidth="-Infinity" onKeyTyped="#Entering_email" prefHeight="26.0" prefWidth="236.0" promptText="usuario@dominio">
+                  <TextField fx:id="Email_reg" maxWidth="-Infinity" onKeyTyped="#Entering_email" prefHeight="26.0" prefWidth="236.0" promptText="usuario@dominio" styleClass="Field">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
@@ -114,12 +120,12 @@
                      </font></Label>
                </children>
             </VBox>
-            <VBox fx:id="V_box" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <VBox fx:id="V_box" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <children>
                   <StackPane maxWidth="-Infinity" prefHeight="45.0" prefWidth="236.0">
                      <children>
-                        <PasswordField fx:id="Pass_reg" maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#Entering_pass" prefHeight="26.0" prefWidth="236.0" />
-                        <TextField fx:id="Pass_shown" disable="true" maxWidth="-Infinity" prefWidth="236.0" visible="false" />
+                        <PasswordField fx:id="Pass_reg" maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#Entering_pass" prefHeight="26.0" prefWidth="236.0" styleClass="Field" />
+                        <TextField fx:id="Pass_shown" disable="true" maxWidth="-Infinity" prefWidth="236.0" styleClass="Field" visible="false" />
                      </children>
                   </StackPane>
                   <Label fx:id="Err_pass" prefHeight="18.0" prefWidth="338.0" text="El formato de la contraseña es incorecto" textFill="RED" visible="false">
@@ -128,23 +134,23 @@
                      </font></Label>
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="61.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="61.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <children>
-                  <DatePicker fx:id="Birth_reg" onAction="#Entering_birth" prefHeight="26.0" prefWidth="122.0" promptText="dd/mm/yyyy" />
+                  <DatePicker fx:id="Birth_reg" onAction="#Entering_birth" prefHeight="26.0" prefWidth="122.0" promptText="dd/mm/yyyy" styleClass="Field" />
                   <Label fx:id="Err_birth" prefHeight="18.0" prefWidth="226.0" text="El usuario debe ser mayor de 12 años" textFill="RED" visible="false">
                      <font>
                         <Font size="10.0" />
                      </font></Label>
                </children>
             </VBox>
-            <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="55.0" prefWidth="166.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="8">
+            <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="55.0" prefWidth="166.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="9">
                <children>
-                  <Button mnemonicParsing="false" onAction="#Acept_reg" text="Registrar">
+                  <Button mnemonicParsing="false" onAction="#Acept_reg" styleClass="Boton-pos" text="Registrar">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="11.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#Cancel_reg" text="Salir">
+                  <Button mnemonicParsing="false" onAction="#Cancel_reg" styleClass="Boton-neg" text="Salir">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="11.0" />
                      </HBox.margin>
@@ -154,21 +160,20 @@
                   <Insets bottom="20.0" left="20.0" right="20.0" />
                </GridPane.margin>
             </HBox>
-            <Separator prefWidth="200.0" GridPane.columnSpan="2" />
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="6">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
                <children>
-                  <Label alignment="CENTER" text="Si ya tienes una cuenta puedes">
+                  <Label alignment="CENTER" styleClass="Texto" text="Si ya tienes una cuenta puedes">
                      <HBox.margin>
                         <Insets right="-3.0" />
                      </HBox.margin></Label>
-                  <Hyperlink onAction="#Ini_ses" prefHeight="24.0" prefWidth="93.0" text="iniciar sesion" />
-                  <Label text="aqui">
+                  <Hyperlink onAction="#Ini_ses" prefHeight="24.0" prefWidth="93.0" styleClass="Hyper" text="iniciar sesion" />
+                  <Label styleClass="Texto" text="aqui">
                      <HBox.margin>
                         <Insets left="-8.0" />
                      </HBox.margin></Label>
                </children>
             </HBox>
-            <HBox maxWidth="-Infinity" prefHeight="60.0" prefWidth="73.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+            <HBox maxWidth="-Infinity" prefHeight="60.0" prefWidth="73.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
                <children>
                   <Button mnemonicParsing="false" onAction="#Pass_show" prefHeight="25.0" prefWidth="28.0">
                      <HBox.margin>
@@ -178,7 +183,7 @@
                         <Insets bottom="-10.0" left="-22.0" right="-21.0" top="-10.0" />
                      </padding>
                      <graphic>
-                        <ImageView fx:id="Img_pass" fitHeight="15.0" fitWidth="24.0" pickOnBounds="true">
+                        <ImageView fx:id="Img_pass" fitHeight="15.0" fitWidth="24.0" pickOnBounds="true" styleClass="Boton">
                            <image>
                               <Image url="@../resources/ojo_cerrado.png" />
                            </image>
@@ -195,7 +200,7 @@
                   </ImageView>
                </children>
             </HBox>
-            <Label fx:id="Err_tot" text="Algún campo es incorrecto, o falta por ser rellenado" textFill="RED" visible="false" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="7">
+            <Label fx:id="Err_tot" text="Algún campo es incorrecto, o falta por ser rellenado" textFill="RED" visible="false" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="8">
                <font>
                   <Font size="10.0" />
                </font>
@@ -203,27 +208,34 @@
                   <Insets bottom="10.0" />
                </GridPane.margin>
             </Label>
-            <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="Avatar:  " textAlignment="RIGHT" GridPane.rowIndex="5">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+            <VBox alignment="CENTER_RIGHT" GridPane.rowIndex="6">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="Label" text="Avatar:  " textAlignment="RIGHT">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label text="(Opcional)">
+                     <padding>
+                        <Insets left="12.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets right="10.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
                <children>
                   <Button mnemonicParsing="false" onAction="#Avatar_reg">
                      <graphic>
-                        <ImageView fx:id="Avatar_reg" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="Avatar_reg" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" styleClass="Boton">
                            <image>
                               <Image url="@../resources/avatar_default.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Label text="(Opcional)">
-                     <padding>
-                        <Insets left="12.0" />
-                     </padding>
-                  </Label>
                </children>
             </HBox>
          </children>
