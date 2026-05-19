@@ -41,8 +41,11 @@
          <children>
             <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="217.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <TextField fx:id="NickName_ini" maxWidth="-Infinity" prefHeight="26.0" prefWidth="167.0" />
-                  <Label fx:id="Err_nick_ini" prefHeight="18.0" prefWidth="226.0" textFill="RED" visible="false" />
+                  <TextField fx:id="NickName_ini" maxWidth="-Infinity" prefHeight="26.0" prefWidth="221.0" />
+                  <Label fx:id="Err_nick_ini" prefHeight="18.0" prefWidth="226.0" textFill="RED" visible="false">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Label>
                </children>
             </VBox>
             <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="100.0" prefWidth="265.0" GridPane.rowIndex="1">
