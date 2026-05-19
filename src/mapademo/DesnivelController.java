@@ -138,7 +138,7 @@ public class DesnivelController {
         puntoRastreador.setCenterX(pixelPos.getX());
         puntoRastreador.setCenterY(pixelPos.getY());
         puntoRastreador.setVisible(true);
-        puntoRastreador.toFront(); // Ponerlo siempre encima de todo
+        puntoRastreador.toFront(); // Poner siempre encima de todo
     }
 }
 

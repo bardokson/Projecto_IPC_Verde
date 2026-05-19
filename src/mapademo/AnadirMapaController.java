@@ -70,7 +70,8 @@ public class AnadirMapaController {
             if (nuevaRegion != null) {
                 mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "El mapa se ha añadido correctamente a la base de datos.");
                 
-                // Cierra la ventana actual tras guardar con éxito
+                // Cierra la ventana actual tras guardar
+                
                 javafx.scene.Node source = (javafx.scene.Node) event.getSource();
                 Stage stage = (Stage) source.getScene().getWindow();
                 stage.close();
@@ -88,7 +89,7 @@ public class AnadirMapaController {
     
     
 
-    // Método de apoyo para mostrar ventanitas emergentes bonitas
+    // Método de apoyo para mostrar ventanas emergentes 
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);

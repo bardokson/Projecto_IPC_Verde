@@ -11,7 +11,6 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
 import upv.ipc.sportlib.Activity;
 import upv.ipc.sportlib.MapProjection;
 import upv.ipc.sportlib.TrackPoint;
@@ -20,15 +19,15 @@ public class VelocidadController {
 
     @FXML
     public void initialize() {
-        // El panel visual se inicializa aquí. 
-        // Como es solo una leyenda informativa, no necesitamos lógica extra de botones.
+        
+        // Como es solo una leyenda informativa, no se necesita lógica extra de botones.
     }
 
-    /**
-     * Este método es el que usarán tus compañeros. 
-     * Recibe la actividad y el proyector de coordenadas, y devuelve un conjunto 
-     * de líneas pintadas según la velocidad del corredor.
-     */
+   
+    
+    
+    
+    
     public Group generarTrazadoVelocidad(Activity actividad, MapProjection proj) {
         Group trazadoColores = new Group();
 
@@ -65,7 +64,7 @@ public class VelocidadController {
                 tramo.setStroke(Color.LIMEGREEN);  // Rápido
             }
 
-            // Añadimos el tramo al grupo
+            // Añadir tramo al grupo
             trazadoColores.getChildren().add(tramo);
         }
 
