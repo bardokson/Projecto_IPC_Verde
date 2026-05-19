@@ -98,30 +98,15 @@ public class Registro_usuarioController implements Initializable {
      * @throws IOException 
      */
     @FXML
-    private void Acept_reg() throws IOException {
+    private void Acept_reg(ActionEvent event) throws IOException {
         
         if(Nick_ok && Email_ok && Pass_ok && Birth_ok){
             Err_tot.setVisible(false);
             boolean ok = LaSaforApp.app.registerUser(Nick, Email, Pass, Birth, Avatar_Path);
             boolean logged = LaSaforApp.app.login(Nick, Pass);
             //Cambiar a la escena de  actividades
-            if (ok && logged) {
-                try {
-            FXMLLoader loader = new FXMLLoader(
-            getClass().getResource("FXMLDocument.fxml")
-            );
-
-            Parent root = loader.load();
-
-            Stage stage = (Stage) ((Node) event.getSource())
-                .getScene()
-                .getWindow();
-
-            stage.setScene(new Scene(root));
-            stage.setTitle("LaSaforApp");
-            stage.show();
-            } catch (IOException e) {}
-            }
+            if (ok && logged) LaSaforApp.abrirActividades();
+                
         }else{
             Err_tot.setVisible(true);
         }
@@ -142,22 +127,7 @@ public class Registro_usuarioController implements Initializable {
      */
     @FXML
     private void Ini_ses(ActionEvent event) throws IOException {
-        try {
-        FXMLLoader loader = new FXMLLoader(
-            getClass().getResource("Inicio_de_sesion.fxml")
-        );
-
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource())
-            .getScene()
-            .getWindow();
-
-        stage.setScene(new Scene(root));
-        stage.setTitle("Login");
-        stage.show();
-
-        } catch (IOException e) {}
+        LaSaforApp.abrirSignIn();
     }
     
     /**
