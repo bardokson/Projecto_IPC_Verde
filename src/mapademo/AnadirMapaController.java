@@ -60,6 +60,14 @@ public class AnadirMapaController {
             double latMax = Double.parseDouble(latMaxField.getText());
             double lonMin = Double.parseDouble(lonMinField.getText());
             double lonMax = Double.parseDouble(lonMaxField.getText());
+            
+            
+            // MEJORA: Comprobamos que las coordenadas tengan sentido lógico
+            if (latMin >= latMax || lonMin >= lonMax) {
+                mostrarAlerta(Alert.AlertType.WARNING, "Coordenadas inválidas", "Las coordenadas máximas deben ser estrictamente mayores que las mínimas.");
+                return; // Cortamos la ejecución aquí para no guardar un mapa roto
+            }
+            
 
             String nombreMapa = imagenSeleccionada.getName().replaceFirst("[.][^.]+$", "");
 
