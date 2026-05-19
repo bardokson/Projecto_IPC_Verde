@@ -137,6 +137,12 @@ public class Registro_usuarioController implements Initializable {
     @FXML
     private void Entering_Nick(KeyEvent event) {
         Nick = NickName_reg.getText();
+        if(LaSaforApp.app.nickNameExists(Nick)){
+            Err_nick.setText("Este nick ya existe, porfavor sea original");
+            Err_nick.setVisible(true);
+        }else{
+            Err_nick.setText("Tiene que ser de 6-15 letras/digitos/guione o subguion");
+        }
         if(!User.checkNickName(Nick)){
             Err_nick.setVisible(true);
             Nick_ok = false;
