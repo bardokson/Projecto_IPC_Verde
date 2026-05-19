@@ -15,10 +15,10 @@
       </Label>
       <AreaChart fx:id="graficaDesnivel">
         <xAxis>
-          <NumberAxis fx:id="ejeX" prefHeight="21.0" prefWidth="544.0" side="BOTTOM" />
+          <NumberAxis fx:id="ejeX" label="Distancia (km)" prefHeight="21.0" prefWidth="544.0" side="BOTTOM" />
         </xAxis>
         <yAxis>
-          <NumberAxis fx:id="ejeY" side="LEFT" />
+          <NumberAxis fx:id="ejeY" label="Altitud (m)" side="LEFT" />
         </yAxis>
       </AreaChart>
    </children>
