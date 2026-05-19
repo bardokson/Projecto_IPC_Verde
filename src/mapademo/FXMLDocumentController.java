@@ -60,6 +60,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -222,6 +223,19 @@ public class FXMLDocumentController implements Initializable {
         // permanezca estable durante el zoom
         map_scrollpane.setHvalue(scrollH);
         map_scrollpane.setVvalue(scrollV);
+    }
+    @FXML
+    private void ZoomCtrl(ScrollEvent event) {
+        if (event.isControlDown()) {
+            double valorActual = zoom_slider.getValue();
+            double sensibilidad = 0.05; 
+            if (event.getDeltaY() > 0) {
+                zoom_slider.setValue(Math.min(zoom_slider.getMax(), valorActual + sensibilidad));
+            } else if (event.getDeltaY() < 0) {
+                zoom_slider.setValue(Math.max(zoom_slider.getMin(), valorActual - sensibilidad));
+            }
+            event.consume();
+        }
     }
 
     // =========================================================
@@ -480,6 +494,24 @@ public class FXMLDocumentController implements Initializable {
         buildMap(archivoMapa, null);
         
         setupUser();
+
+        map_scrollpane.addEventFilter(javafx.scene.input.ScrollEvent.SCROLL, event -> {
+            if (event.getDeltaY() == 0) return;
+
+            if (event.isControlDown()) {
+                double paso = 0.05; 
+                double valorActual = zoom_slider.getValue();
+
+                if (event.getDeltaY() > 0) {
+                    double nuevoValor = Math.min(zoom_slider.getMax(), valorActual + paso);
+                    zoom_slider.setValue(nuevoValor);
+                } else {
+                    double nuevoValor = Math.max(zoom_slider.getMin(), valorActual - paso);
+                    zoom_slider.setValue(nuevoValor);
+                }
+                event.consume();
+            }
+        });
     }
 
     // =========================================================
