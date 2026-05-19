@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="gridBase" minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
+<GridPane fx:id="gridBase" minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -74,6 +74,7 @@
                       </Menu>
                     </menus>
                   </MenuBar>
+                  <Button mnemonicParsing="false" onAction="#abrirMenuAnadirMapa" text="Añadir Mapa" />
                   <Button mnemonicParsing="false" onAction="#cambiarMapa" text="Cambiar mapa" />
                   <Button mnemonicParsing="false" onAction="#importarGPX" text="Importar Carrera" />
                   <Button mnemonicParsing="false" onAction="#verActividades" text="Ver Actividades" />
@@ -117,7 +118,7 @@
       <Separator prefWidth="200.0" GridPane.rowIndex="1" />
       <HBox alignment="CENTER" maxHeight="70.0" minHeight="70.0" prefHeight="70.0" prefWidth="900.0" spacing="10.0" GridPane.halignment="RIGHT" GridPane.vgrow="NEVER">
          <GridPane.margin>
-            <Insets right="5.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </GridPane.margin>
          <children>
             <Button mnemonicParsing="false" onAction="#logOut" text="Log Out" />
