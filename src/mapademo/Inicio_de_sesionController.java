@@ -43,6 +43,7 @@ public class Inicio_de_sesionController implements Initializable{
         Pass_reg.textProperty().bindBidirectional(Pass_shown.textProperty());
         NickName_ini.setOnKeyTyped(e -> Nick = NickName_ini.getText());
         Pass_reg.setOnKeyTyped(e -> Pass = Pass_reg.getText());
+        
     }    
     
     /**
