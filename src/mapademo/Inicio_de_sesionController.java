@@ -60,6 +60,7 @@ public class Inicio_de_sesionController implements Initializable{
         if(LaSaforApp.app.login(Nick,Pass)){  
             Err_nick_ini.setVisible(false);
             Err_pass_ini.setVisible(false);
+            LaSaforApp.abrirActividades();
             
         }else{
             Err_nick_ini.setVisible(true);
@@ -85,22 +86,7 @@ public class Inicio_de_sesionController implements Initializable{
      */
     @FXML
     private void Reg_ses(ActionEvent event) {
-        try {
-        FXMLLoader loader = new FXMLLoader(
-            getClass().getResource("Registro_usuario.fxml")
-        );
-
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource())
-            .getScene()
-            .getWindow();
-
-        stage.setScene(new Scene(root));
-        stage.setTitle("Registro");
-        stage.show();
-
-        } catch (IOException e) {}
+        LaSaforApp.abrirReg();
     }
 
      /**
@@ -148,8 +134,5 @@ public class Inicio_de_sesionController implements Initializable{
         Pass_reg.setDisable(false);
         Pass_reg.setVisible(true);
     }
-
-    
-
 
 }

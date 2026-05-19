@@ -147,20 +147,17 @@ public class FXMLDocumentController implements Initializable {
     // =========================================================
 
     /** Lista lateral que muestra todos los POIs añadidos al mapa. */
-    @FXML
-    private ListView<Poi> map_listview;
+    @FXML private ListView<Poi> map_listview;
 
     /** ScrollPane que envuelve el mapa y permite desplazarlo. */
-    @FXML
-    private ScrollPane map_scrollpane;
+    @FXML private ScrollPane map_scrollpane;
 
     /**
      * Slider de zoom.
      * Rango: [0.5 – 1.5]. Valor inicial: 1.0 (sin zoom).
      * Cada cambio de valor llama al método zoom().
      */
-    @FXML
-    private Slider zoom_slider;
+    @FXML private Slider zoom_slider;
 
     /**
      * Botón de pin visible sobre el mapa.
@@ -173,19 +170,12 @@ public class FXMLDocumentController implements Initializable {
     //   · 'pin_info'       (inyectada pero nunca actualizada)
 
     /** Etiqueta en la barra de estado que muestra las coordenadas del ratón. */
-    @FXML
-    private Label mousePosition;
-    
-    @FXML
-    private SplitPane splitPane;
-    @FXML
-    private ListView<Activity> activityList;
-    @FXML
-    private ImageView userAvatar;
-    @FXML
-    private GridPane gridBase;
-    @FXML
-    private Label username;
+    @FXML private Label mousePosition;
+    @FXML private SplitPane splitPane;
+    @FXML private ListView<Activity> activityList;
+    @FXML private ImageView userAvatar;
+    @FXML private GridPane gridBase;
+    @FXML private Label username;
  
 
     // =========================================================
@@ -495,7 +485,7 @@ public class FXMLDocumentController implements Initializable {
         }
         buildMap(archivoMapa, null);
         
-//        setupUser();
+        setupUser();
     }
 
     // =========================================================
@@ -977,6 +967,7 @@ public class FXMLDocumentController implements Initializable {
             e.printStackTrace(); // saber fallo exacto en la consola
         }
     }
+    
     /*private void dibujarRutaPorVelocidad() {
     // 1. Validaciones defensivas
     if (actividadActual == null || projection == null) {

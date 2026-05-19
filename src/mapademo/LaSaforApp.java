@@ -87,7 +87,7 @@ public class LaSaforApp extends Application {
      * Metodo para cambiar a la pantalla de actividades y inicia su tamaño de ventana por defecto.
      */
     public static void abrirActividades() {
-        abrirActividades(1000, 800);
+        abrirActividades(1200, 800);
     }
     /**
      * Metodo para cambiar a la pantalla de actividades y inicia su tamaño de ventana.

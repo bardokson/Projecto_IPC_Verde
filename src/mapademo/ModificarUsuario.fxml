@@ -39,8 +39,7 @@
           <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="-Infinity" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
@@ -140,7 +139,7 @@
                      </font></Label>
                </children>
             </VBox>
-            <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="47.0" prefWidth="250.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="8">
+            <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="47.0" prefWidth="250.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="7">
                <children>
                   <Button mnemonicParsing="false" onAction="#saveChange" text="Guardar">
                      <HBox.margin>
@@ -158,7 +157,6 @@
                </GridPane.margin>
             </HBox>
             <Separator prefWidth="200.0" GridPane.columnSpan="2" />
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="6" />
             <HBox maxWidth="-Infinity" prefHeight="60.0" prefWidth="73.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                <children>
                   <Button fx:id="Pass_show" mnemonicParsing="false" onAction="#Pass_show" prefHeight="25.0" prefWidth="28.0">
@@ -186,7 +184,7 @@
                   </ImageView>
                </children>
             </HBox>
-            <Label fx:id="Err_tot" text="Algún campo es incorrecto, o falta por ser rellenado" textFill="RED" visible="false" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="7">
+            <Label fx:id="Err_tot" text="Algún campo es incorrecto, o falta por ser rellenado" textFill="RED" visible="false" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="6">
                <font>
                   <Font size="10.0" />
                </font>
