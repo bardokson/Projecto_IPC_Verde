@@ -87,18 +87,16 @@ public class Registro_usuarioController implements Initializable {
     
     /**
      * Comprueba si todos son cerrectos y cambia la escena a la de actividades
-     * @param event
      * @throws IOException 
      */
     @FXML
-    private void Acept_reg(ActionEvent event) throws IOException {
+    private void Acept_reg() throws IOException {
         
         if(Nick_ok && Email_ok && Pass_ok && Birth_ok){
             Err_tot.setVisible(false);
             boolean ok = LaSaforApp.app.registerUser(Nick, Email, Pass, Birth, Avatar_Path);
             boolean logged = LaSaforApp.app.login(Nick, Pass);
-            
-            //Cambiar a la escena de actividades
+
             if (ok && logged) {
                 LaSaforApp.abrirActividades();
                 LaSaforApp.setRoot("actividades");
@@ -126,12 +124,11 @@ public class Registro_usuarioController implements Initializable {
     }
     /**
      * HyperLink para pasar a la escena de inicio de sesion
-     * @param event
      * @throws IOException 
      */
     @FXML
-    private void Ini_ses(ActionEvent event) throws IOException {
-        LaSaforApp.setRoot("inicio_sesion");
+    private void Ini_ses() throws IOException {
+        LaSaforApp.abrirSignIn();
     }
     
     /**
@@ -202,7 +199,7 @@ public class Registro_usuarioController implements Initializable {
     }
     
     @FXML
-    private void Avatar_reg(ActionEvent event) throws IOException {
+    private void Avatar_reg() throws IOException {
         FileChooser fc = new FileChooser();
         fc.setTitle("Seleccionar mapa JPG");
         fc.setInitialDirectory(new File("."));
@@ -230,7 +227,8 @@ public class Registro_usuarioController implements Initializable {
             Avatar_reg.setClip(cut);
         }
     }
-  /**
+    
+    /**
      * Muestra la contraseña
      * @param event 
      */

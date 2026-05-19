@@ -44,19 +44,24 @@ public class Inicio_de_sesionController implements Initializable{
         
     }    
 
+    /**
+     * Acepta el login si los datos entrados son correctos y usa el metodo abrirActividades() para pasar a la pantalla principal.
+     */
     @FXML
-    private void Acept_reg(ActionEvent event) {
+    private void Acept_reg() {
         if(app.login(Nick,Pass)){  
-            LaSaforApp.setRoot("registro");
+            LaSaforApp.abrirActividades();
         }else{
             Err_nick_ini.setText("El Nick name o la contraseña son incorrectos");
             Err_pass_ini.setText("El Nick name o la contraseña son incorrectos");
         }
         
     }
-
+    /**
+     * Cancela el registro saliendo de la aplicacion.
+     */
     @FXML
-    private void Cancel_reg(ActionEvent event) {
+    private void Cancel_reg() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Saliendo de la app");
         alert.setHeaderText("¿Quiere salir de la app?");
@@ -70,7 +75,7 @@ public class Inicio_de_sesionController implements Initializable{
 
     @FXML
     private void Reg_ses(ActionEvent event) {
-        LaSaforApp.setRoot("registro");
+        LaSaforApp.abrirReg();
     }
 
 }
