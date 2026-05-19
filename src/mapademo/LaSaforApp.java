@@ -97,7 +97,7 @@ public class LaSaforApp extends Application {
      * @param w anchura de la ventana.
      * @param h altura de la ventana,
      */
-    private static void abrirActividades(int w, int h) {
+    public static void abrirActividades(int w, int h) {
         try {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("FXMLDocument.fxml"));
             Parent actividadesRoot = loader.load();
