@@ -7,6 +7,8 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -14,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="382.0" prefWidth="471.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.Inicio_de_sesionController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="309.0" prefWidth="471.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.Inicio_de_sesionController">
    <children>
       <HBox alignment="CENTER" prefHeight="50.0" prefWidth="471.0" style="-fx-background-color: orange;">
          <children>
@@ -25,24 +27,27 @@
             </Label>
          </children>
       </HBox>
-      <GridPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="341.0" prefWidth="471.0">
+      <GridPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="259.0" prefWidth="471.0">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="237.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="234.0" minWidth="10.0" prefWidth="234.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="161.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="313.0" minWidth="10.0" prefWidth="311.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="-Infinity" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="358.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <TextField fx:id="NickName_ini" maxWidth="-Infinity" prefHeight="26.0" prefWidth="167.0" />
-                  <Label fx:id="Err_nick_ini" prefHeight="18.0" prefWidth="226.0" textFill="RED" visible="false" />
+                  <TextField fx:id="NickName_ini" maxWidth="-Infinity" prefHeight="26.0" prefWidth="221.0" />
+                  <Label fx:id="Err_nick_ini" prefHeight="18.0" prefWidth="226.0" textFill="RED" visible="false">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Label>
                </children>
             </VBox>
             <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="100.0" prefWidth="265.0" GridPane.rowIndex="2">
@@ -65,27 +70,21 @@
                   <Label text="Label" visible="false" />
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="170.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <children>
-                  <PasswordField fx:id="Pass_reg" />
-                  <Label fx:id="Err_pass_ini" prefHeight="18.0" prefWidth="226.0" textFill="RED" visible="false" />
-               </children>
-            </VBox>
             <HBox alignment="CENTER" prefHeight="91.0" prefWidth="383.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
                <children>
-                  <Button mnemonicParsing="false" onAction="#Acept_reg" text="Iniciar sesion">
+                  <Button mnemonicParsing="false" onAction="#Ini_ses" text="Iniciar sesion">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#Cancel_reg" text="Cancelar">
+                  <Button mnemonicParsing="false" onAction="#Cancel_reg" text="Salir">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Button>
                </children>
                <GridPane.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" />
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </GridPane.margin>
             </HBox>
             <Separator prefWidth="200.0" GridPane.columnSpan="2" />
@@ -94,6 +93,43 @@
                   <Label alignment="CENTER" text="Si no tienes una cuenta puedes" />
                   <Hyperlink maxWidth="-Infinity" minWidth="-Infinity" onAction="#Reg_ses" prefHeight="24.0" prefWidth="74.0" text="registrarte" />
                   <Label text="aqui." />
+               </children>
+            </HBox>
+            <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <children>
+                  <TextField fx:id="Pass_shown" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="167.0" visible="false">
+                     <VBox.margin>
+                        <Insets bottom="16.0" />
+                     </VBox.margin>
+                  </TextField>
+               </children>
+            </VBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="70.0" prefWidth="220.0">
+                     <children>
+                        <PasswordField fx:id="Pass_reg" prefHeight="26.0" prefWidth="221.0" />
+                        <Label fx:id="Err_pass_ini" maxWidth="-Infinity" prefHeight="18.0" prefWidth="237.0" textFill="RED" visible="false">
+                           <font>
+                              <Font size="10.0" />
+                           </font></Label>
+                     </children>
+                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#Pass_show" prefHeight="25.0" prefWidth="28.0">
+                     <padding>
+                        <Insets bottom="-10.0" left="-22.0" right="-21.0" top="-10.0" />
+                     </padding>
+                     <graphic>
+                        <ImageView fx:id="Img_pass" fitHeight="15.0" fitWidth="24.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@../resources/ojo_cerrado.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="-9.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
             </HBox>
          </children>
