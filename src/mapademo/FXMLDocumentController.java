@@ -665,8 +665,12 @@ public class FXMLDocumentController implements Initializable {
         circle.setCenterY(y);
         mapPane.getChildren().add(circle); // Se añade sobre el mapa como cualquier nodo
     }
+    
+    /**
+     * Abre un filechooser para importar un archivo gpx y la añade a la lista de actividades.
+     */
     @FXML
-    private void importarGPX(ActionEvent event) {
+    private void importarGPX() {
         SportActivityApp app = LaSaforApp.app;
         FileChooser fc = new FileChooser();
         fc.setTitle("Seleccionar carrera GPX");
@@ -682,22 +686,21 @@ public class FXMLDocumentController implements Initializable {
             alerta.setContentText("Actividad: " + nombre + "\nTotal de puntos GPS: " + numPuntos);
             alerta.show();
             
-            //Poner actividad importada como mapa
             MapRegion reco = app.findMapForActivity(actividadActual);
             File mapFile = new File(reco.getImagePath());
             buildMap(mapFile, reco);
             verActividades();
+            
+            //Desaparecio lo de hector? Para dibujar la ruta
+            
             }
     }
 
     /**
-     * Metodo FXML
+     * Actualiza la lista de actividades cada vez que se añaden.
      */
     @FXML
-    /*private void verActividades(ActionEvent event) {
-        verActividades();
-    }*/
-    
+    //tal vez podemos borrar el boton de ver actividades, este lo hace sin tener que darle
     private void verActividades() {
         
         User currentUser = LaSaforApp.app.getCurrentUser();

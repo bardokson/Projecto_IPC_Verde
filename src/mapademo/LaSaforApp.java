@@ -85,14 +85,22 @@ public class LaSaforApp extends Application {
     }
    
     /**
-     * Metodo para cambiar a la pantalla de actividades y inicia su tamaño de ventana.
+     * Metodo para cambiar a la pantalla de actividades y inicia su tamaño de ventana por defecto.
      */
     public static void abrirActividades() {
+        abrirActividades(1000, 700);
+    }
+    /**
+     * Metodo para cambiar a la pantalla de actividades y inicia su tamaño de ventana.
+     * @param w anchura de la ventana.
+     * @param h altura de la ventana,
+     */
+    public static void abrirActividades(int w, int h) {
         try {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("FXMLDocument.fxml"));
             Parent actividadesRoot = loader.load();
             LaSaforApp.roots.put("actividades", actividadesRoot);
-            setRoot(actividadesRoot, 1000, 700);
+            setRoot(actividadesRoot, w, h);
         } catch (Exception e) {e.printStackTrace();}
     }
     
