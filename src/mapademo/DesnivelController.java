@@ -33,6 +33,9 @@ public class DesnivelController {
     private Pane mapPane;
     private MapProjection projection;
     private Circle puntoRastreador; // El punto flotante que viaja por el mapa
+    private javafx.scene.text.Text textoInfoRastreador; // El texto que acompañará a la bolita
+    
+    
 
     @FXML
     public void initialize() {
@@ -47,12 +50,14 @@ public class DesnivelController {
         // Escuchamos el movimiento del ratón sobre nuestra gráfica
         graficaDesnivel.setOnMouseMoved(this::onMouseMovedGraph);
         
-        // Escondemos el punto si sacamos el ratón de la gráfica
+        
+        // Esconder el punto y texto si sacas el ratón de la gráfica
         graficaDesnivel.setOnMouseExited(e -> {
-            if (puntoRastreador != null) {
-                puntoRastreador.setVisible(false);
-            }
+            if (puntoRastreador != null) puntoRastreador.setVisible(false);
+            if (textoInfoRastreador != null) textoInfoRastreador.setVisible(false);
         });
+        
+        
     }
     
     
@@ -70,9 +75,18 @@ public class DesnivelController {
         this.puntoRastreador.setMouseTransparent(true); // Para que no bloquee clics
         this.puntoRastreador.setVisible(false);
         
-        // Añadimos al lienzo del mapa
-        this.mapPane.getChildren().add(puntoRastreador);
+        // NUEVA MEJORA: Inicializamos nuestro texto flotante
+        this.textoInfoRastreador = new javafx.scene.text.Text();
+        this.textoInfoRastreador.setStyle("-fx-font-weight: bold; -fx-fill: #191970;"); // Color azul oscuro
+        this.textoInfoRastreador.setVisible(false);
+        this.textoInfoRastreador.setMouseTransparent(true);
+        
+        // Añadimos la bolita y el texto al lienzo del mapa
+        this.mapPane.getChildren().addAll(puntoRastreador, textoInfoRastreador);
+        
     }
+    
+    
 
     public void setActivity(Activity actividad) {
         this.actividadActual = actividad;
@@ -139,6 +153,16 @@ public class DesnivelController {
         puntoRastreador.setCenterY(pixelPos.getY());
         puntoRastreador.setVisible(true);
         puntoRastreador.toFront(); // Poner siempre encima de todo
+        
+        
+        // NUEVA MEJORA: Movemos el texto junto a la bolita y le ponemos los datos
+        textoInfoRastreador.setText(String.format("%.2f km | %.0f m", distanciaRaton, puntoGPS.getElevation()));
+        // Lo ponemos un poco desplazado para que el ratón o la bolita no lo tapen
+        textoInfoRastreador.setX(pixelPos.getX() + 12);
+        textoInfoRastreador.setY(pixelPos.getY() - 12);
+        textoInfoRastreador.setVisible(true);
+        textoInfoRastreador.toFront();
+        
     }
 }
 
