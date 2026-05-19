@@ -1,11 +1,15 @@
 package mapademo;
 
 import java.io.File;
+import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 // Importamos las clases de la librería de la práctica
 import upv.ipc.sportlib.MapRegion;
 import upv.ipc.sportlib.SportActivityApp;
@@ -21,6 +25,10 @@ public class AnadirMapaController {
 
     // Guardaremos el archivo de imagen que seleccione el usuario
     private File imagenSeleccionada;
+    @FXML
+    private Button btnGuardar;
+    @FXML
+    private Button btnCancelar;
 
     @FXML
     void seleccionarImagen(ActionEvent event) {
@@ -48,24 +56,25 @@ public class AnadirMapaController {
         }
 
         try {
-            // Leemos los textos de los cajones y los convertimos a números decimales (double)
             double latMin = Double.parseDouble(latMinField.getText());
             double latMax = Double.parseDouble(latMaxField.getText());
             double lonMin = Double.parseDouble(lonMinField.getText());
             double lonMax = Double.parseDouble(lonMaxField.getText());
 
-            // Sacamos el nombre del archivo sin la extensión .jpg para usarlo como nombre de la región
             String nombreMapa = imagenSeleccionada.getName().replaceFirst("[.][^.]+$", "");
 
-            // Obtenemos la instancia de la base de datos de la librería
             SportActivityApp app = SportActivityApp.getInstance();
             
-            // Registramos la nueva región en el sistema
             MapRegion nuevaRegion = app.addMapRegion(nombreMapa, imagenSeleccionada, latMin, latMax, lonMin, lonMax);
 
             if (nuevaRegion != null) {
                 mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "El mapa se ha añadido correctamente a la base de datos.");
-                cerrarFormulario(null); // Limpiamos todo
+                
+                // Cierra la ventana actual tras guardar con éxito
+                javafx.scene.Node source = (javafx.scene.Node) event.getSource();
+                Stage stage = (Stage) source.getScene().getWindow();
+                stage.close();
+                
             } else {
                 mostrarAlerta(Alert.AlertType.ERROR, "Error", "La librería no pudo añadir el mapa. Revisa las coordenadas.");
             }
@@ -75,16 +84,9 @@ public class AnadirMapaController {
         }
     }
 
-    @FXML
-    void cerrarFormulario(ActionEvent event) {
-        // Limpiamos todos los campos para dejar el formulario como nuevo
-        rutaImagenField.clear();
-        latMinField.clear();
-        latMaxField.clear();
-        lonMinField.clear();
-        lonMaxField.clear();
-        imagenSeleccionada = null;
-    }
+    
+    
+    
 
     // Método de apoyo para mostrar ventanitas emergentes bonitas
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
@@ -93,5 +95,44 @@ public class AnadirMapaController {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+    
+    
+    @FXML
+    private void accCancelar(ActionEvent event) {
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("Confirmar cancelación");
+        alerta.setHeaderText(null);
+        alerta.setContentText("¿Estás seguro de que deseas cancelar? Los datos no guardados se perderán.");
+
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        
+        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+            // Obtiene la referencia a la ventana actual a través del evento y la cierra
+            javafx.scene.Node source = (javafx.scene.Node) event.getSource();
+            Stage stage = (Stage) source.getScene().getWindow();
+            stage.close();
+        }
+    }
+    
+    
+    
+    @FXML
+    public void initialize() {
+        configurarFiltroNumerico(latMinField);
+        configurarFiltroNumerico(latMaxField);
+        configurarFiltroNumerico(lonMinField);
+        configurarFiltroNumerico(lonMaxField);
+    }
+
+    /*
+     * permitir unicamente la entrada de caracteres numericos, el punto decimal y el signo negativo.
+     */
+    private void configurarFiltroNumerico(TextField campoTexto) {
+        campoTexto.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("^-?\\d*(\\.\\d*)?$")) {
+                campoTexto.setText(oldValue);
+            }
+        });
     }
 }
