@@ -60,6 +60,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -222,6 +223,19 @@ public class FXMLDocumentController implements Initializable {
         // permanezca estable durante el zoom
         map_scrollpane.setHvalue(scrollH);
         map_scrollpane.setVvalue(scrollV);
+    }
+    @FXML
+    private void ZoomCtrl(ScrollEvent event) {
+        if (event.isControlDown()) {
+            double valorActual = zoom_slider.getValue();
+            double sensibilidad = 0.05; 
+            if (event.getDeltaY() > 0) {
+                zoom_slider.setValue(Math.min(zoom_slider.getMax(), valorActual + sensibilidad));
+            } else if (event.getDeltaY() < 0) {
+                zoom_slider.setValue(Math.max(zoom_slider.getMin(), valorActual - sensibilidad));
+            }
+            event.consume();
+        }
     }
 
     // =========================================================
@@ -440,11 +454,10 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        // ── Configuración del slider de zoom ──────────────────────────
-        zoom_slider.setMin(0.5);   // zoom mínimo: 50 %
-        zoom_slider.setMax(1.5);   // zoom máximo: 150 %
-        zoom_slider.setValue(1.0); // valor inicial: 100 %
 
+        zoom_slider.setMin(0.5);   
+        zoom_slider.setMax(1.5);   
+        zoom_slider.setValue(1.0);
         // Listener que invoca zoom() cada vez que el slider cambia de valor.
         // Usamos una expresión lambda en lugar de una clase anónima por brevedad.
         zoom_slider.valueProperty().addListener(
@@ -480,6 +493,23 @@ public class FXMLDocumentController implements Initializable {
         buildMap(archivoMapa, null);
         
         setupUser();
+        map_scrollpane.addEventFilter(javafx.scene.input.ScrollEvent.SCROLL, event -> {
+            if (event.getDeltaY() == 0) return;
+
+            if (event.isControlDown()) {
+                double paso = 0.05; 
+                double valorActual = zoom_slider.getValue();
+
+                if (event.getDeltaY() > 0) {
+                    double nuevoValor = Math.min(zoom_slider.getMax(), valorActual + paso);
+                    zoom_slider.setValue(nuevoValor);
+                } else {
+                    double nuevoValor = Math.max(zoom_slider.getMin(), valorActual - paso);
+                    zoom_slider.setValue(nuevoValor);
+                }
+                event.consume();
+            }
+        });
     }
 
     // =========================================================
@@ -659,23 +689,22 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     private void importarGPX() {
-
         SportActivityApp app = LaSaforApp.app;
         FileChooser fc = new FileChooser();
         fc.setTitle("Seleccionar carrera GPX");
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos GPX", "*.gpx"));
         File seleccionado = fc.showOpenDialog(mapPane.getScene().getWindow());
-            
+
         if (seleccionado != null) {
             actividadActual = app.importActivity(seleccionado);
             int numPuntos = actividadActual.getTrackPoints().size();
             String nombre = actividadActual.getName();
-            
+
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
             alerta.setTitle("Éxito");
             alerta.setHeaderText("Datos cargados correctamente");
             alerta.setContentText("Actividad: " + nombre + "\nTotal de puntos GPS: " + numPuntos);
-            
+
             Window ventanaActual = mapPane.getScene().getWindow();
             alerta.initOwner(ventanaActual);
             alerta.showAndWait();
@@ -691,10 +720,26 @@ public class FXMLDocumentController implements Initializable {
             //dibujarRutaPorVelocidad();
             
 
+            // 1. Construimos el mapa primero
             buildMap(mapFile, region);
+
+            // 🌟 FIX: Forzamos a JavaFX a renderizar internamente el mapa para que su ancho y alto dejen de ser 0
+            mapPane.layout(); 
+
+            // Guardamos las dimensiones reales calculadas por el contenedor
+            double anchoReal = mapPane.getWidth();
+            double altoReal = mapPane.getHeight();
+
+            System.out.println("[Importar] Dimensiones reales detectadas en mapPane: " + anchoReal + "x" + altoReal);
+
+            // 2. Inicializamos la proyección con las medidas reales geométricas del panel
+            this.projection = new MapProjection(region, anchoReal, altoReal);
+
+            // 3. Limpiamos y dibujamos
+            mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
+            dibujarRutaPorVelocidad();
             verActividades();
-            }
-            //activityList.getSelectionModel().select(actividadActual);
+        }
     }
     
 
@@ -727,99 +772,80 @@ public class FXMLDocumentController implements Initializable {
     /**
      * Abre y mueve el mapa a la zona de inicio de la actividad seleccionada de la lista.
      */
-       @FXML
-     private void activitySelected(MouseEvent event) {
+    @FXML
+    private void activitySelected(MouseEvent event) {
         Activity itemSelected = activityList.getSelectionModel().getSelectedItem();
-        
+
         if (itemSelected == null) return;
-        
+
         SportActivityApp app = LaSaforApp.app;
         MapRegion region = app.findMapForActivity(itemSelected);
         File mapFile = new File(region.getImagePath());
+
+        // 1. Reconstruimos el mapa base
         buildMap(mapFile, region); 
+
+        // 🌟 FIX: Forzamos a JavaFX a procesar el rediseño para actualizar dimensiones geométricas
+        mapPane.layout();
+
+        double anchoReal = mapPane.getWidth();
+        double altoReal = mapPane.getHeight();
+
+        System.out.println("[Selección] Dimensiones reales detectadas en mapPane: " + anchoReal + "x" + altoReal);
+
+        this.projection = new MapProjection(region, anchoReal, altoReal);
         mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
-        
-        
+
+        this.actividadActual = itemSelected;
+
+        // 2. Pintamos la ruta al frente
+        dibujarRutaPorVelocidad();
+
         try {
-
-            //System.out.println("Intentando cargar Velocidad...");
-            javafx.fxml.FXMLLoader velLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Velocidad.fxml"));
-            velLoader.load(); 
-            VelocidadController velControl = velLoader.getController();
-            javafx.scene.Group rutaColores = velControl.generarTrazadoVelocidad(itemSelected, projection);
-            mapPane.getChildren().add(rutaColores); 
-            //System.out.println("Velocidad cargada OK.");
-
-            //System.out.println("Intentando cargar Desnivel...");
+            // Cargamos la gráfica de Desnivel para el panel lateral derecho
             javafx.fxml.FXMLLoader desLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Desnivel.fxml"));
             javafx.scene.Parent desRoot = desLoader.load();
             DesnivelController desControl = desLoader.getController();
             desControl.setActivity(itemSelected);
-            desControl.setMapContext(mapPane, projection);
-            
+            desControl.setMapContext(mapPane, projection);           
             javafx.scene.layout.Region chartRegion = (javafx.scene.layout.Region) desRoot;
             chartRegion.setMinWidth(320);
             chartRegion.setMaxWidth(320);
-            
             if (splitPane.getItems().size() == 2) {
                 splitPane.getItems().add(desRoot);
             } else if (splitPane.getItems().size() > 2) {
                 splitPane.getItems().set(2, desRoot);
-            }
-            
+            }            
             javafx.scene.control.SplitPane.setResizableWithParent(desRoot, false);
             javafx.stage.Stage stage = (javafx.stage.Stage) splitPane.getScene().getWindow();
             stage.sizeToScene();
             stage.setWidth(stage.getWidth() + 350);
             stage.setMinWidth(1200);
-            //System.out.println("Gráfica insertada OK (como panel lateral coquetón).");
-            // Buscar el panel blanco del centro (índice 1 del SplitPane)
-            if (splitPane.getItems().size() > 1) {
-                javafx.scene.Node panelCentro = splitPane.getItems().get(1); 
-                if (panelCentro instanceof javafx.scene.layout.Pane) {
-                    javafx.scene.layout.Pane whitePane = (javafx.scene.layout.Pane) panelCentro;
-                    whitePane.getChildren().clear(); // Limpiamos lo que haya
-                    whitePane.getChildren().add(desRoot); // Metemos la gráfica
-                    //System.out.println("Gráfica insertada OK.");
-                }
-            }
         } catch (Exception e) {
-            //System.out.println("--- ERROR CARGANDO GRÁFICAS ---");
+            System.out.println("Error cargando el panel de desnivel:");
             e.printStackTrace();
         }
-        
+
         double mapWidth  = mapPane.getWidth()  * zoomGroup.getScaleX();
         double mapHeight = mapPane.getHeight() * zoomGroup.getScaleY();
-        
+
         TrackPoint p = itemSelected.getStartPoint();
+        if (p != null) {
+            Point2D pixelInicio = projection.project(p.getLatitude(), p.getLongitude());
+            double posX = pixelInicio.getX();
+            double posY = pixelInicio.getY();
+            double viewW = map_scrollpane.getViewportBounds().getWidth();
+            double viewH = map_scrollpane.getViewportBounds().getHeight();
+            double scrollH = (posX - viewW / 2) / (mapWidth  - viewW);
+            double scrollV = (posY - viewH / 2) / (mapHeight - viewH);
 
-        double lat = p.getLatitude();
-        double lon = p.getLongitude();
-
-        double xNorm = (lon - region.getLonMin()) / (region.getLonMax() - region.getLonMin());
-        double yNorm = (region.getLatMax() - lat) / (region.getLatMax() - region.getLatMin());
-
-        // ── Tamaño visible del ScrollPane (viewport) ───────────────────
-        double viewW = map_scrollpane.getViewportBounds().getWidth();
-        double viewH = map_scrollpane.getViewportBounds().getHeight();
-
-        // ── Cálculo del scroll normalizado [0, 1] ─────────────────────
-        // Restamos la mitad del viewport para que el POI quede centrado
-        // y no en la esquina superior-izquierda del área visible.
-        double scrollH = (lon - viewW / 2) / (mapWidth  - viewW);
-        double scrollV = (lat - viewH / 2) / (mapHeight - viewH);
-
-        // Garantizamos que el valor esté dentro del rango válido [0, 1]
-        scrollH = Math.max(0, Math.min(1, scrollH));
-        scrollV = Math.max(0, Math.min(1, scrollV));
-
-        // ── Animación suave con Timeline ──────────────────────────────
-        final Timeline timeline = new Timeline();
-        final KeyValue kv1 = new KeyValue(map_scrollpane.hvalueProperty(), scrollH);
-        final KeyValue kv2 = new KeyValue(map_scrollpane.vvalueProperty(), scrollV);
-        final KeyFrame kf  = new KeyFrame(Duration.millis(500), kv1, kv2);
-        timeline.getKeyFrames().add(kf);
-        timeline.play();
+            final Timeline timeline = new Timeline();
+            final KeyValue kv1 = new KeyValue(map_scrollpane.hvalueProperty(), scrollH);
+            final KeyValue kv2 = new KeyValue(map_scrollpane.vvalueProperty(), scrollV);
+            final KeyFrame kf  = new KeyFrame(Duration.millis(500), kv1, kv2);
+            timeline.getKeyFrames().add(kf);
+            timeline.play();
+        }
     }
 
     /**
@@ -951,65 +977,117 @@ public class FXMLDocumentController implements Initializable {
     }
     
     //  INTEGRACIÓN: CATEGORÍA 5 - AÑADIR MAPA 
-    @FXML
-    private void abrirMenuAnadirMapa(ActionEvent event) { 
-        try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("AnadirMapa.fxml"));
-            javafx.scene.Parent root = loader.load();
-            javafx.stage.Stage stage = new javafx.stage.Stage();
-            stage.setTitle("Añadir Nuevo Mapa al Sistema");
-            stage.setScene(new javafx.scene.Scene(root));
-            stage.show();
-        } catch (Exception e) {
-            System.out.println("--- ERROR ABRIENDO AÑADIR MAPA ---");
-            e.printStackTrace(); // saber fallo exacto en la consola
+        @FXML
+        private void abrirMenuAnadirMapa(ActionEvent event) { 
+            try {
+                javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("AnadirMapa.fxml"));
+                javafx.scene.Parent root = loader.load();
+                javafx.stage.Stage stage = new javafx.stage.Stage();
+                stage.setTitle("Añadir Nuevo Mapa al Sistema");
+                stage.setScene(new javafx.scene.Scene(root));
+                stage.show();
+            } catch (Exception e) {
+                System.out.println("--- ERROR ABRIENDO AÑADIR MAPA ---");
+                e.printStackTrace(); // saber fallo exacto en la consola
+            }
         }
-    }
-    
-    /*private void dibujarRutaPorVelocidad() {
-    // 1. Validaciones defensivas
-    if (actividadActual == null || projection == null) {
-        System.out.println("Error: No hay actividad o proyección cargada para dibujar la ruta.");
-        return;
-    }
+    private void dibujarRutaPorVelocidad() {
+       if (actividadActual == null || projection == null) return;
 
-    java.util.List<TrackPoint> puntos = actividadActual.getTrackPoints();
-    if (puntos == null || puntos.size() < 2) return;
+       java.util.List<TrackPoint> puntos = actividadActual.getTrackPoints();
+       if (puntos == null || puntos.size() < 2) return;
 
-    // 2. Recorremos los puntos de dos en dos para trazar segmentos de línea
-    for (int i = 0; i < puntos.size() - 1; i++) {
-        TrackPoint p1 = puntos.get(i);
-        TrackPoint p2 = puntos.get(i + 1);
+       javafx.scene.layout.Pane contenedorRuta = new javafx.scene.layout.Pane();
+       contenedorRuta.setId("capaRutaGPX");
+       contenedorRuta.setMinWidth(mapPane.getWidth());
+       contenedorRuta.setMinHeight(mapPane.getHeight());
+       contenedorRuta.setPrefSize(mapPane.getWidth(), mapPane.getHeight());
+       contenedorRuta.setMouseTransparent(true);
 
-        // Transformamos las coordenadas GPS (Lat, Lon) a píxeles del plano (X, Y)
-        Point2D pixel1 = projection.project(p1.getLatitude(), p1.getLongitude());
-        Point2D pixel2 = projection.project(p2.getLatitude(), p2.getLongitude());
+       mapPane.getChildren().add(contenedorRuta);
 
-        // Creamos el segmento visual
-        javafx.scene.shape.Line segmento = new javafx.scene.shape.Line(
-            pixel1.getX(), pixel1.getY(), 
-            pixel2.getX(), pixel2.getY()
-        );
+       double distanciaTotalMetros = 0;
 
-        // 3. Lógica de color según velocidad (puedes ajustar los umbrales según tu práctica)
-        // Obtenemos la velocidad media del punto (normalmente p1.getSpeed())
-        double velocidad = p1.get(); 
+       for (int i = 0; i < puntos.size() - 1; i++) {
+           TrackPoint p1 = puntos.get(i);
+           TrackPoint p2 = puntos.get(i + 1);
 
-        if (velocidad < 5.0) {
-            segmento.setStroke(Color.BLUE);     // Velocidad lenta (ej. subida o andando)
-        } else if (velocidad < 15.0) {
-            segmento.setStroke(Color.GREEN);    // Velocidad media
-        } else {
-            segmento.setStroke(Color.RED);      // Velocidad rápida (ej. bajadas)
-        }
+           double distMetros = p1.distanceTo(p2);
+           distanciaTotalMetros += distMetros; 
 
-        // Configuración estética de la línea
-        segmento.setStrokeWidth(3.0); 
+           Point2D pixel1 = projection.project(p1.getLatitude(), p1.getLongitude());
+           Point2D pixel2 = projection.project(p2.getLatitude(), p2.getLongitude());
 
-        // Añadimos el segmento directamente sobre el lienzo del mapa
-        mapPane.getChildren().add(segmento);
-    }
-    }*/
+           if (Double.isNaN(pixel1.getX()) || Double.isNaN(pixel1.getY()) ||
+               Double.isNaN(pixel2.getX()) || Double.isNaN(pixel2.getY())) {
+               continue; 
+           }
+
+           javafx.scene.shape.Line segmento = new javafx.scene.shape.Line(
+               pixel1.getX(), pixel1.getY(), 
+               pixel2.getX(), pixel2.getY()
+           );
+
+           double velocidadKmH = 0.0;
+           try {
+               long segundosTramo = java.time.Duration.between(p1.getTime(), p2.getTime()).getSeconds();
+               if (segundosTramo > 0) {
+                   double distKm = distMetros / 1000.0;
+                   double horasTramo = segundosTramo / 3600.0;
+                   velocidadKmH = distKm / horasTramo;
+               }
+           } catch (Exception e) {
+               velocidadKmH = 25.0; 
+           }
+
+           if (velocidadKmH < 35.0) {
+            segmento.setStroke(Color.BLUE);   
+            } else if (velocidadKmH <= 40.0) {
+                segmento.setStroke(Color.GREEN);  
+            } else {
+                segmento.setStroke(Color.RED);    
+            }
+
+           segmento.setStrokeWidth(5.0);
+           contenedorRuta.getChildren().add(segmento);
+       }
+
+       TrackPoint inicio = puntos.get(0);
+       Point2D pixelInicio = projection.project(inicio.getLatitude(), inicio.getLongitude());
+       javafx.scene.shape.Circle nodoInicio = new javafx.scene.shape.Circle(pixelInicio.getX(), pixelInicio.getY(), 12);
+       nodoInicio.setFill(Color.LIME); 
+       nodoInicio.setStroke(Color.WHITE);
+       nodoInicio.setStrokeWidth(3.0);
+
+       TrackPoint fin = puntos.get(puntos.size() - 1);
+       Point2D pixelFin = projection.project(fin.getLatitude(), fin.getLongitude());
+       javafx.scene.shape.Circle nodoFin = new javafx.scene.shape.Circle(pixelFin.getX(), pixelFin.getY(), 12);
+       nodoFin.setFill(Color.RED); 
+       nodoFin.setStroke(Color.WHITE);
+       nodoFin.setStrokeWidth(3.0);
+
+       contenedorRuta.getChildren().addAll(nodoInicio, nodoFin);
+       contenedorRuta.toFront();
+
+       mostrarEstadisticas(distanciaTotalMetros, puntos);
+   }
+    private void mostrarEstadisticas(double distanciaMetros, java.util.List<TrackPoint> puntos) {
+       if (puntos == null || puntos.size() < 2) return;
+       double distanciaKm = distanciaMetros / 1000.0;
+       TrackPoint pInicio = puntos.get(0);
+       TrackPoint pFin = puntos.get(puntos.size() - 1);
+       long segundosTotales = java.time.Duration.between(pInicio.getTime(), pFin.getTime()).getSeconds();
+       long horas = segundosTotales / 3600;
+       long minutos = (segundosTotales % 3600) / 60;
+       long segundos = segundosTotales % 60;
+       String tiempoFormateado = String.format("%02d:%02d:%02d", horas, minutos, segundos);
+       double velocidadMedia = 0.0;
+       if (segundosTotales > 0) {
+           velocidadMedia = (distanciaKm / (segundosTotales / 3600.0));
+       }
+       System.out.println("\n📊 --- ESTADÍSTICAS DE LA ACTIVIDAD ---");
+       System.out.println("Distancia: " + String.format("%.2f", distanciaKm) + " Km");
+       System.out.println("Duración: " + tiempoFormateado);
+       System.out.println("Velocidad Media: " + String.format("%.2f", velocidadMedia) + " Km/h\n");
+   }
 }
-    
-  
