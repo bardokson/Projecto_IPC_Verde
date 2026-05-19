@@ -38,7 +38,6 @@ public class LaSaforApp extends Application {
         }
     }
     
-   
     @Override
     public void start(Stage stage) throws Exception {
         Parent root;
@@ -48,8 +47,9 @@ public class LaSaforApp extends Application {
         roots.put("registro", root);
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
         scene = new Scene(root);
-        stage.setTitle("Running la Safor - Equipo verde");
+        stage.setTitle("Registro");
         stage.setScene(scene);
+        stage.sizeToScene();
         stage.show();
         loader = new FXMLLoader(getClass().getResource("Inicio_de_sesion.fxml"));
         root = loader.load();
