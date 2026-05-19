@@ -489,7 +489,7 @@ public class FXMLDocumentController implements Initializable {
         }
         buildMap(archivoMapa, null);
         
-//        setupUser();
+        setupUser();
     }
 
     // =========================================================

@@ -6,6 +6,7 @@ package mapademo;
 
 import java.io.File;
 import java.io.IOException;
+import static java.lang.Thread.sleep;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -15,10 +16,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
@@ -77,7 +80,18 @@ public class Registro_usuarioController implements Initializable {
                 + "  con al menos una mayúscula, una minúscula, un   \n"
                 + "             dígito y un símbolo (!@#$%&*()-+=)"));
         Info_pass.setOnMouseEntered(e -> popover.show(Info_pass)); 
-    }    
+        
+        Pass_shown.setOnKeyTyped(e ->{Pass = Pass_shown.getText();
+            if(!User.checkPassword(Pass)){
+            if(!popover.isShowing()) popover.show(Info_pass);
+            Err_pass.setVisible(true);
+            Pass_ok = false;
+            } else {
+            popover.hide();
+            Err_pass.setVisible(false);
+            Pass_ok = true;
+        }});
+        }    
     
     /**
      * Comprueba si todos los campos son cerrectos y cambia la escena a la de actividades
@@ -154,8 +168,8 @@ public class Registro_usuarioController implements Initializable {
      * @param event 
      */
     @FXML
-    private void Entering_pass(KeyEvent event) {
-        Pass = Pass_reg.getText();
+    private void Entering_pass(KeyEvent event)  {
+        Pass = Pass_shown.getText();
         if(!User.checkPassword(Pass)){
             if(!popover.isShowing()) popover.show(Info_pass);
             Err_pass.setVisible(true);
@@ -252,16 +266,14 @@ public class Registro_usuarioController implements Initializable {
         Pass_shown.setVisible(false);
     }
     private void disableReg(){
-        V_box.setDisable(true);
         Pass_reg.setDisable(true);
-        Pass_reg.setVisible(false);
+        Pass_reg.setVisible(false);       
     }
     private void enableShown(){
         Pass_shown.setDisable(false);
         Pass_shown.setVisible(true);
     }
     private void enableReg(){
-        V_box.setDisable(false);
         Pass_reg.setDisable(false);
         Pass_reg.setVisible(true);
     }

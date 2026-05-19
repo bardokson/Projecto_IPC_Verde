@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -89,10 +90,13 @@
             </VBox>
             <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="59.0" prefWidth="237.0" GridPane.rowIndex="4">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="Fecha nacimiento" textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="Fecha nacimiento:" textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets right="9.0" />
+                     </VBox.margin>
                   </Label>
                   <Label text="Label" visible="false" />
                </children>
@@ -110,18 +114,14 @@
                      </font></Label>
                </children>
             </VBox>
-            <VBox maxWidth="-Infinity" prefHeight="200.0" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <children>
-                  <TextField fx:id="Pass_shown" disable="true" maxWidth="-Infinity" prefWidth="236.0" visible="false">
-                     <VBox.margin>
-                        <Insets top="8.0" />
-                     </VBox.margin>
-                  </TextField>
-               </children>
-            </VBox>
             <VBox fx:id="V_box" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
-                  <PasswordField fx:id="Pass_reg" maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#Entering_pass" prefHeight="26.0" prefWidth="236.0" />
+                  <StackPane maxWidth="-Infinity" prefHeight="45.0" prefWidth="236.0">
+                     <children>
+                        <PasswordField fx:id="Pass_reg" maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#Entering_pass" prefHeight="26.0" prefWidth="236.0" />
+                        <TextField fx:id="Pass_shown" disable="true" maxWidth="-Infinity" prefWidth="236.0" visible="false" />
+                     </children>
+                  </StackPane>
                   <Label fx:id="Err_pass" prefHeight="18.0" prefWidth="338.0" text="El formato de la contraseña es incorecto" textFill="RED" visible="false">
                      <font>
                         <Font size="10.0" />
