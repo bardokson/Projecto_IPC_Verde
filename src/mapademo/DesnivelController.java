@@ -40,16 +40,23 @@ public class DesnivelController {
         graficaDesnivel.setCreateSymbols(false); 
         graficaDesnivel.setAnimated(false); 
 
-        // Escuchar movimiento del ratón sobre la gráfica
+        // Hacemos que el eje Y se ajuste a las altitudes reales 
+        // y no nos obligue a empezar siempre desde 0 metros.
+        ejeY.setForceZeroInRange(false);
+
+        // Escuchamos el movimiento del ratón sobre nuestra gráfica
         graficaDesnivel.setOnMouseMoved(this::onMouseMovedGraph);
         
-        // Esconder el punto si sacas el ratón de la gráfica
+        // Escondemos el punto si sacamos el ratón de la gráfica
         graficaDesnivel.setOnMouseExited(e -> {
             if (puntoRastreador != null) {
                 puntoRastreador.setVisible(false);
             }
         });
     }
+    
+    
+    
 
     
     public void setMapContext(Pane mapPane, MapProjection projection) {

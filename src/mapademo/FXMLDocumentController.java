@@ -684,7 +684,7 @@ public class FXMLDocumentController implements Initializable {
             File mapFile = new File(region.getImagePath());
             buildMap(mapFile, region);
             
-            this.projection = new MapProjection(region, this.mapaAnchoActual, this.mapaAltoActual);
+            
             mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
             
             // Pintamos la ruta en el mapa recién cambiado
@@ -737,8 +737,8 @@ public class FXMLDocumentController implements Initializable {
         MapRegion region = app.findMapForActivity(itemSelected);
         File mapFile = new File(region.getImagePath());
         buildMap(mapFile, region); 
-        this.projection = new MapProjection(region, this.mapaAnchoActual, this.mapaAltoActual);
         mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
+        
         
         try {
 
