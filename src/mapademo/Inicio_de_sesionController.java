@@ -4,32 +4,19 @@
  */
 package mapademo;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import upv.ipc.sportlib.SportActivityApp;
 
 /**
- * FXML Controller class
+ * Controlador del inicio de sesion
  *
  * @author bardokson
  */
@@ -49,7 +36,7 @@ public class Inicio_de_sesionController implements Initializable{
     
     
     /**
-     * Initializes the controller class.
+     * Inicializa el controlador
      */    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -57,8 +44,10 @@ public class Inicio_de_sesionController implements Initializable{
         NickName_ini.setOnKeyTyped(e -> Nick = NickName_ini.getText());
         Pass_reg.setOnKeyTyped(e -> Pass = Pass_reg.getText());
     }    
+    
     /**
-     * Inicio de sesion si el nick y el pass son correctos
+     * Inicio de sesion si el nick y la contraseña son correctos
+     * Si no avisa al usuario que uno de los dos es incorrecto por seguridad
      * @param event 
      */
     @FXML
@@ -66,21 +55,8 @@ public class Inicio_de_sesionController implements Initializable{
         if(LaSaforApp.app.login(Nick,Pass)){  
             Err_nick_ini.setVisible(false);
             Err_pass_ini.setVisible(false);
-            try {
-            FXMLLoader loader = new FXMLLoader(
-            getClass().getResource("FXMLDocument.fxml")
-            );
-
-            Parent root = loader.load();
-
-            Stage stage = (Stage) ((Node) event.getSource())
-                .getScene()
-                .getWindow();
-
-            stage.setScene(new Scene(root));
-            stage.setTitle("LaSaforApp");
-            stage.show();
-            } catch (IOException e) {}
+            LaSaforApp.abrirActividades();
+            
         }else{
             Err_nick_ini.setVisible(true);
             Err_pass_ini.setVisible(true);
@@ -91,44 +67,26 @@ public class Inicio_de_sesionController implements Initializable{
    
     /**
      * Saca al usuario de la app
-     * @param event 
      */
     @FXML
-    private void Cancel_reg(ActionEvent event) {         
+    private void Cancel_reg() {         
             Platform.exit();
             System.exit(0);        
     }
     
     /**
      * Cambia la escena a la de "Registro de usuario" mediante un hyperlink
-     * @param event 
      */
     @FXML
-    private void Reg_ses(ActionEvent event) {
-        try {
-        FXMLLoader loader = new FXMLLoader(
-            getClass().getResource("Registro_usuario.fxml")
-        );
-
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource())
-            .getScene()
-            .getWindow();
-
-        stage.setScene(new Scene(root));
-        stage.setTitle("Registro");
-        stage.show();
-
-        } catch (IOException e) {}
+    private void Reg_ses() {
+        LaSaforApp.abrirReg();
     }
 
      /**
      * Muestra la contraseña
-     * @param event 
      */
     @FXML
-    private void Pass_show(ActionEvent event) {
+    private void Pass_show() {
         if(getPressed()){
             disableShown();
             enableReg();            
@@ -148,7 +106,6 @@ public class Inicio_de_sesionController implements Initializable{
     }
     
     private static boolean getPressed(){
-        
         return pressed;
     }
     
@@ -168,8 +125,5 @@ public class Inicio_de_sesionController implements Initializable{
         Pass_reg.setDisable(false);
         Pass_reg.setVisible(true);
     }
-
-    
-
 
 }
