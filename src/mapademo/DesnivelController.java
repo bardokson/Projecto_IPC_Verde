@@ -34,7 +34,6 @@ public class DesnivelController {
     private MapProjection projection;
     private Circle puntoRastreador; // El punto flotante que viaja por el mapa
 
-    @FXML
     public void initialize() {
         graficaDesnivel.setLegendVisible(false); 
         graficaDesnivel.setCreateSymbols(false); 
