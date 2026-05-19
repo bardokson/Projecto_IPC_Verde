@@ -126,7 +126,4 @@ public class Inicio_de_sesionController implements Initializable{
         Pass_reg.setVisible(true);
     }
 
-    
-
-
 }
