@@ -6,6 +6,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -71,19 +73,19 @@
             </VBox>
             <HBox alignment="CENTER" prefHeight="91.0" prefWidth="383.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
                <children>
-                  <Button mnemonicParsing="false" onAction="#Acept_reg" text="Iniciar sesion">
+                  <Button mnemonicParsing="false" onAction="#Ini_ses" text="Iniciar sesion">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#Cancel_reg" text="Cancelar">
+                  <Button mnemonicParsing="false" onAction="#Cancel_reg" text="Salir">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Button>
                </children>
                <GridPane.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" />
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </GridPane.margin>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
@@ -91,6 +93,43 @@
                   <Label alignment="CENTER" text="Si no tienes una cuenta puedes" />
                   <Hyperlink maxWidth="-Infinity" minWidth="-Infinity" onAction="#Reg_ses" prefHeight="24.0" prefWidth="74.0" text="registrarte" />
                   <Label text="aqui." />
+               </children>
+            </HBox>
+            <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <children>
+                  <TextField fx:id="Pass_shown" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="167.0" visible="false">
+                     <VBox.margin>
+                        <Insets bottom="16.0" />
+                     </VBox.margin>
+                  </TextField>
+               </children>
+            </VBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="70.0" prefWidth="220.0">
+                     <children>
+                        <PasswordField fx:id="Pass_reg" prefHeight="26.0" prefWidth="221.0" />
+                        <Label fx:id="Err_pass_ini" maxWidth="-Infinity" prefHeight="18.0" prefWidth="237.0" textFill="RED" visible="false">
+                           <font>
+                              <Font size="10.0" />
+                           </font></Label>
+                     </children>
+                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#Pass_show" prefHeight="25.0" prefWidth="28.0">
+                     <padding>
+                        <Insets bottom="-10.0" left="-22.0" right="-21.0" top="-10.0" />
+                     </padding>
+                     <graphic>
+                        <ImageView fx:id="Img_pass" fitHeight="15.0" fitWidth="24.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@../resources/ojo_cerrado.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="-9.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
             </HBox>
          </children>

@@ -28,7 +28,7 @@
             </Label>
          </children>
       </HBox>
-      <GridPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="398.0" prefWidth="471.0">
+      <GridPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="413.0" prefWidth="471.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="161.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="310.0" minWidth="10.0" prefWidth="310.0" />
@@ -110,7 +110,7 @@
                      </font></Label>
                </children>
             </VBox>
-            <VBox fx:id="Vbox_pass" maxWidth="-Infinity" prefHeight="200.0" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <VBox maxWidth="-Infinity" prefHeight="200.0" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
                   <TextField fx:id="Pass_shown" disable="true" maxWidth="-Infinity" prefWidth="236.0" visible="false">
                      <VBox.margin>
@@ -119,9 +119,9 @@
                   </TextField>
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <VBox fx:id="V_box" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
-                  <PasswordField fx:id="Pass_reg" maxWidth="-Infinity" onKeyPressed="#Entering_pass" prefHeight="26.0" prefWidth="236.0" />
+                  <PasswordField fx:id="Pass_reg" maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#Entering_pass" prefHeight="26.0" prefWidth="236.0" />
                   <Label fx:id="Err_pass" prefHeight="18.0" prefWidth="338.0" text="El formato de la contraseña es incorecto" textFill="RED" visible="false">
                      <font>
                         <Font size="10.0" />
@@ -170,9 +170,9 @@
             </HBox>
             <HBox maxWidth="-Infinity" prefHeight="60.0" prefWidth="73.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                <children>
-                  <Button fx:id="Pass_show" mnemonicParsing="false" onAction="#Pass_show" prefHeight="25.0" prefWidth="28.0">
+                  <Button mnemonicParsing="false" onAction="#Pass_show" prefHeight="25.0" prefWidth="28.0">
                      <HBox.margin>
-                        <Insets left="3.0" top="10.0" />
+                        <Insets left="3.0" top="8.0" />
                      </HBox.margin>
                      <padding>
                         <Insets bottom="-10.0" left="-22.0" right="-21.0" top="-10.0" />
@@ -199,6 +199,9 @@
                <font>
                   <Font size="10.0" />
                </font>
+               <GridPane.margin>
+                  <Insets bottom="10.0" />
+               </GridPane.margin>
             </Label>
             <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="Avatar:  " textAlignment="RIGHT" GridPane.rowIndex="5">
                <font>
