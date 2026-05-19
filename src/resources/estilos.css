@@ -66,3 +66,71 @@ S17.642,20.762,13.558,20.762z";
 .map-pin .arrow-button .arrow {
     -fx-padding: 0;
 }
+
+
+
+
+
+
+
+/* ========================================================= */
+/* ESTILOS PARA AÑADIR MAPA                                  */
+/* ========================================================= */
+
+/* Contenedor principal (tu VBox raíz) - Crea los márgenes para no tocar los bordes */
+.panel-formulario {
+    -fx-background-color: #F4F4F4;
+    -fx-padding: 0px 50px 30px 50px; /* Le da el margen a los lados que querías */
+    -fx-spacing: 20px; 
+}
+
+/* La franja naranja de arriba */
+.cabecera-naranja {
+    -fx-background-color: #FFAA00; 
+    -fx-padding: 15px;
+    -fx-alignment: center;
+}
+
+/* Letras del título */
+.titulo-blanco {
+    -fx-font-size: 24px;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+}
+
+/* Botones chulos */
+.boton-naranja {
+    -fx-background-color: #FFAA00;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.boton-naranja:hover {
+    -fx-background-color: #CC8800; 
+}
+
+/* Cajas de texto redonditas */
+.campo-texto {
+    -fx-padding: 5px;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 3px;
+}
+
+/* Botón secundario (Cancelar) */
+.boton-cancelar {
+    -fx-background-color: transparent; /* Fondo transparente */
+    -fx-border-color: #cccccc; /* Borde gris sutil */
+    -fx-border-radius: 5px;
+    -fx-text-fill: #666666; /* Texto gris oscuro */
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.boton-cancelar:hover {
+    -fx-background-color: #e6e6e6; /* Un gris muy clarito al pasar el ratón */
+    -fx-text-fill: black;
+}
+
+/* ========================================================= */
+/* ========================================================= */
