@@ -711,6 +711,14 @@ public class FXMLDocumentController implements Initializable {
 
             MapRegion region = app.findMapForActivity(actividadActual);
             File mapFile = new File(region.getImagePath());
+            buildMap(mapFile, region);
+            
+            
+            mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
+            
+            // Pintamos la ruta en el mapa recién cambiado
+            //dibujarRutaPorVelocidad();
+            
 
             // 1. Construimos el mapa primero
             buildMap(mapFile, region);
