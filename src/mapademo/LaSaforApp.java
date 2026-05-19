@@ -70,7 +70,7 @@ public class LaSaforApp extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Registro_usuario.fxml"));
         Parent root = loader.load();
         roots.put("registro", root);
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/coconut.jpg")));
         
         scene = new Scene(root);
         stage.setTitle("Registro");
@@ -135,7 +135,7 @@ public class LaSaforApp extends Application {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("Inicio_de_sesion.fxml"));
             Parent signRoot = loader.load();
             LaSaforApp.roots.put("signin", signRoot);
-            setRoot(signRoot, 400, 350);
+            setRoot(signRoot, 456, 300);
         } catch (Exception e) {e.printStackTrace();}
     }
     /**
