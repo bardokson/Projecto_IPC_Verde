@@ -5,20 +5,18 @@
 package mapademo;
 
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import upv.ipc.sportlib.SportActivityApp;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
- * FXML Controller class
+ * Controlador del inicio de sesion
  *
  * @author bardokson
  */
@@ -28,49 +26,104 @@ public class Inicio_de_sesionController implements Initializable{
     @FXML private Label Err_nick_ini;
     @FXML private TextField Pass_reg;
     @FXML private Label Err_pass_ini;
+    @FXML private ImageView Img_pass;
+    @FXML private TextField Pass_shown;
     
-    private String Nick;    
+    private static boolean pressed = false;  
     private String Pass;
-    SportActivityApp app = SportActivityApp.getInstance();
+    private String Nick;
+   
+    
     
     /**
-     * Initializes the controller class.
+     * Inicializa el controlador
      */    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        Pass_reg.textProperty().bindBidirectional(Pass_shown.textProperty());
         NickName_ini.setOnKeyTyped(e -> Nick = NickName_ini.getText());
         Pass_reg.setOnKeyTyped(e -> Pass = Pass_reg.getText());
-        
     }    
-
+    
+    /**
+     * Inicio de sesion si el nick y la contraseña son correctos
+     * Si no avisa al usuario que uno de los dos es incorrecto por seguridad
+     * @param event 
+     */
     @FXML
-    private void Acept_reg(ActionEvent event) {
-        if(app.login(Nick,Pass)){  
-            LaSaforApp.setRoot("registro");
+    private void Ini_ses(ActionEvent event) {
+        if(LaSaforApp.app.login(Nick,Pass)){  
+            Err_nick_ini.setVisible(false);
+            Err_pass_ini.setVisible(false);
+            LaSaforApp.abrirActividades();
+            
         }else{
+            Err_nick_ini.setVisible(true);
+            Err_pass_ini.setVisible(true);
             Err_nick_ini.setText("El Nick name o la contraseña son incorrectos");
             Err_pass_ini.setText("El Nick name o la contraseña son incorrectos");
         }
+    }
+   
+    /**
+     * Saca al usuario de la app
+     */
+    @FXML
+    private void Cancel_reg() {         
+            Platform.exit();
+            System.exit(0);        
+    }
+    
+    /**
+     * Cambia la escena a la de "Registro de usuario" mediante un hyperlink
+     */
+    @FXML
+    private void Reg_ses() {
+        LaSaforApp.abrirReg();
+    }
+
+     /**
+     * Muestra la contraseña
+     */
+    @FXML
+    private void Pass_show() {
+        if(getPressed()){
+            disableShown();
+            enableReg();            
+            Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_cerrado.png")));
+            cyclePressed();
+        }else{
+            enableShown();
+            disableReg();            
+            Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_abierto.png")));
+            cyclePressed();
+        }
         
     }
-
-    @FXML
-    private void Cancel_reg(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Saliendo de la app");
-        alert.setHeaderText("¿Quiere salir de la app?");
-        alert.setContentText("Para acceder a la app debe registrarse o iniciar sesión");
-        Optional<ButtonType> result= alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK){                        
-            Platform.exit();
-            System.exit(0);
-        }
+    
+    private static void cyclePressed(){
+        pressed = !pressed;
     }
-
-    @FXML
-    private void Reg_ses(ActionEvent event) {
-        LaSaforApp.setRoot("registro");
+    
+    private static boolean getPressed(){
+        return pressed;
+    }
+    
+    private void disableShown(){
+        Pass_shown.setDisable(true);
+        Pass_shown.setVisible(false);
+    }
+    private void disableReg(){
+        Pass_reg.setDisable(true);
+        Pass_reg.setVisible(false);    
+    }
+    private void enableShown(){
+        Pass_shown.setDisable(false);
+        Pass_shown.setVisible(true);
+    }
+    private void enableReg(){        
+        Pass_reg.setDisable(false);
+        Pass_reg.setVisible(true);
     }
 
 }
