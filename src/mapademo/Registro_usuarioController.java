@@ -13,7 +13,11 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -27,6 +31,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.controlsfx.control.PopOver;
 import upv.ipc.sportlib.User;
 
@@ -52,6 +57,7 @@ public class Registro_usuarioController implements Initializable {
     @FXML private TextField Pass_shown;
     @FXML private VBox Vbox_pass;
     @FXML private ImageView Img_pass;
+    @FXML private VBox V_box;
     
     private static boolean pressed = false;
     public User user;
@@ -68,6 +74,7 @@ public class Registro_usuarioController implements Initializable {
     private File Avatar_file;
     private Image Avatar;
     private String Avatar_Path;
+    
     //private SportActivityApp app = SportActivityApp.getInstance();
     /**
      * Initializes the controller class.
@@ -83,11 +90,11 @@ public class Registro_usuarioController implements Initializable {
                 + "  con al menos una mayúscula, una minúscula, un   \n"
                 + "             dígito y un símbolo (!@#$%&*()-+=)"));
         Info_pass.setOnMouseEntered(e -> popover.show(Info_pass));  
+        ;
     }    
     
     /**
      * Comprueba si todos son cerrectos y cambia la escena a la de actividades
-     * @param event
      * @throws IOException 
      */
     @FXML
@@ -97,9 +104,9 @@ public class Registro_usuarioController implements Initializable {
             Err_tot.setVisible(false);
             boolean ok = LaSaforApp.app.registerUser(Nick, Email, Pass, Birth, Avatar_Path);
             boolean logged = LaSaforApp.app.login(Nick, Pass);
-            
-            //Cambiar a la escena de actividades
-            if (ok && logged) LaSaforApp.setRoot("actividades");
+            //Cambiar a la escena de  actividades
+            if (ok && logged) LaSaforApp.abrirActividades();
+                
         }else{
             Err_tot.setVisible(true);
         }
@@ -110,25 +117,17 @@ public class Registro_usuarioController implements Initializable {
      * @param event 
      */
     @FXML
-    private void Cancel_reg(ActionEvent event) {
-            Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("Saliendo de la app");
-            alert.setHeaderText("¿Quiere salir de la app?");
-            alert.setContentText("Para acceder a la app debe registrarse o iniciar sesión");
-            Optional<ButtonType> result= alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK){                        
+    private void Cancel_reg(ActionEvent event) {                 
                 Platform.exit();
-                System.exit(0);}
-            
+                System.exit(0);
     }
     /**
      * HyperLink para pasar a la escena de inicio de sesion
-     * @param event
      * @throws IOException 
      */
     @FXML
     private void Ini_ses(ActionEvent event) throws IOException {
-        LaSaforApp.setRoot("inicio_sesion");
+        LaSaforApp.abrirSignIn();
     }
     
     /**
@@ -199,7 +198,7 @@ public class Registro_usuarioController implements Initializable {
     }
     
     @FXML
-    private void Avatar_reg(ActionEvent event) throws IOException {
+    private void Avatar_reg() throws IOException {
         FileChooser fc = new FileChooser();
         fc.setTitle("Seleccionar mapa JPG");
         fc.setInitialDirectory(new File("."));
@@ -227,7 +226,8 @@ public class Registro_usuarioController implements Initializable {
             Avatar_reg.setClip(cut);
         }
     }
-  /**
+    
+    /**
      * Muestra la contraseña
      * @param event 
      */
@@ -261,6 +261,7 @@ public class Registro_usuarioController implements Initializable {
         Pass_shown.setVisible(false);
     }
     private void disableReg(){
+        V_box.setDisable(true);
         Pass_reg.setDisable(true);
         Pass_reg.setVisible(false);
     }
@@ -269,6 +270,7 @@ public class Registro_usuarioController implements Initializable {
         Pass_shown.setVisible(true);
     }
     private void enableReg(){
+        V_box.setDisable(false);
         Pass_reg.setDisable(false);
         Pass_reg.setVisible(true);
     }
