@@ -37,7 +37,6 @@ public class DesnivelController {
     
     
 
-    @FXML
     public void initialize() {
         graficaDesnivel.setLegendVisible(false); 
         graficaDesnivel.setCreateSymbols(false); 
