@@ -4,17 +4,28 @@
  */
 package mapademo;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import upv.ipc.sportlib.SportActivityApp;
 
 /**
@@ -28,54 +39,137 @@ public class Inicio_de_sesionController implements Initializable{
     @FXML private Label Err_nick_ini;
     @FXML private TextField Pass_reg;
     @FXML private Label Err_pass_ini;
+    @FXML private ImageView Img_pass;
+    @FXML private TextField Pass_shown;
     
-    private String Nick;    
+    private static boolean pressed = false;  
     private String Pass;
-    SportActivityApp app = SportActivityApp.getInstance();
+    private String Nick;
+   
+    
     
     /**
      * Initializes the controller class.
      */    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        Pass_reg.textProperty().bindBidirectional(Pass_shown.textProperty());
         NickName_ini.setOnKeyTyped(e -> Nick = NickName_ini.getText());
         Pass_reg.setOnKeyTyped(e -> Pass = Pass_reg.getText());
-        
     }    
-
     /**
-     * Acepta el login si los datos entrados son correctos y usa el metodo abrirActividades() para pasar a la pantalla principal.
+     * Inicio de sesion si el nick y el pass son correctos
+     * @param event 
      */
     @FXML
-    private void Acept_reg() {
-        if(app.login(Nick,Pass)){  
-            LaSaforApp.abrirActividades();
+    private void Ini_ses(ActionEvent event) {
+        if(LaSaforApp.app.login(Nick,Pass)){  
+            Err_nick_ini.setVisible(false);
+            Err_pass_ini.setVisible(false);
+            try {
+            FXMLLoader loader = new FXMLLoader(
+            getClass().getResource("FXMLDocument.fxml")
+            );
+
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource())
+                .getScene()
+                .getWindow();
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("LaSaforApp");
+            stage.show();
+            } catch (IOException e) {}
         }else{
+            Err_nick_ini.setVisible(true);
+            Err_pass_ini.setVisible(true);
             Err_nick_ini.setText("El Nick name o la contraseña son incorrectos");
             Err_pass_ini.setText("El Nick name o la contraseña son incorrectos");
         }
-        
     }
+   
     /**
-     * Cancela el registro saliendo de la aplicacion.
+     * Saca al usuario de la app
+     * @param event 
      */
     @FXML
-    private void Cancel_reg() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Saliendo de la app");
-        alert.setHeaderText("¿Quiere salir de la app?");
-        alert.setContentText("Para acceder a la app debe registrarse o iniciar sesión");
-        Optional<ButtonType> result= alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK){                        
+    private void Cancel_reg(ActionEvent event) {         
             Platform.exit();
-            System.exit(0);
-        }
+            System.exit(0);        
     }
-
+    
+    /**
+     * Cambia la escena a la de "Registro de usuario" mediante un hyperlink
+     * @param event 
+     */
     @FXML
     private void Reg_ses(ActionEvent event) {
-        LaSaforApp.abrirReg();
+        try {
+        FXMLLoader loader = new FXMLLoader(
+            getClass().getResource("Registro_usuario.fxml")
+        );
+
+        Parent root = loader.load();
+
+        Stage stage = (Stage) ((Node) event.getSource())
+            .getScene()
+            .getWindow();
+
+        stage.setScene(new Scene(root));
+        stage.setTitle("Registro");
+        stage.show();
+
+        } catch (IOException e) {}
     }
+
+     /**
+     * Muestra la contraseña
+     * @param event 
+     */
+    @FXML
+    private void Pass_show(ActionEvent event) {
+        if(getPressed()){
+            disableShown();
+            enableReg();            
+            Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_cerrado.png")));
+            cyclePressed();
+        }else{
+            enableShown();
+            disableReg();            
+            Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_abierto.png")));
+            cyclePressed();
+        }
+        
+    }
+    
+    private static void cyclePressed(){
+        pressed = !pressed;
+    }
+    
+    private static boolean getPressed(){
+        
+        return pressed;
+    }
+    
+    private void disableShown(){
+        Pass_shown.setDisable(true);
+        Pass_shown.setVisible(false);
+    }
+    private void disableReg(){
+        Pass_reg.setDisable(true);
+        Pass_reg.setVisible(false);    
+    }
+    private void enableShown(){
+        Pass_shown.setDisable(false);
+        Pass_shown.setVisible(true);
+    }
+    private void enableReg(){        
+        Pass_reg.setDisable(false);
+        Pass_reg.setVisible(true);
+    }
+
+    
+
 
 }
