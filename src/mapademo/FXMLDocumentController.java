@@ -75,6 +75,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
+import mapademo.LaSaforApp;
 import upv.ipc.sportlib.SportActivityApp;
 import upv.ipc.sportlib.Activity;
 import upv.ipc.sportlib.Annotation;
@@ -675,9 +676,6 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void importarGPX() {
 
-@FXML
-    private void importarGPX(ActionEvent event) {
-
         SportActivityApp app = LaSaforApp.app;
         FileChooser fc = new FileChooser();
         fc.setTitle("Seleccionar carrera GPX");
@@ -703,8 +701,6 @@ public class FXMLDocumentController implements Initializable {
             buildMap(mapFile, region);
             
             this.projection = new MapProjection(region, this.mapaAnchoActual, this.mapaAltoActual);
-            
-            // ── ¡FALTABA ESTO!: Limpiar las líneas de la ruta anterior antes de pintar la nueva ──
             mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
             
             // Pintamos la ruta en el mapa recién cambiado
@@ -713,16 +709,10 @@ public class FXMLDocumentController implements Initializable {
 
             buildMap(mapFile, region);
             verActividades();
-<<<<<<< HEAD
-            
-            //Desaparecio lo de hector? Para dibujar la ruta
-            
             }
-=======
-            activityList.getSelectionModel().select(actividadActual);
-        }
->>>>>>> 5756df7a06b9077a4168d82e7b8192b5d30d67c2
+            //activityList.getSelectionModel().select(actividadActual);
     }
+    
 
 
     /**
@@ -756,36 +746,36 @@ public class FXMLDocumentController implements Initializable {
        @FXML
      private void activitySelected(MouseEvent event) {
         Activity itemSelected = activityList.getSelectionModel().getSelectedItem();
+        
         if (itemSelected == null) return;
+        
         SportActivityApp app = LaSaforApp.app;
         MapRegion region = app.findMapForActivity(itemSelected);
         File mapFile = new File(region.getImagePath());
         buildMap(mapFile, region); 
+        this.projection = new MapProjection(region, this.mapaAnchoActual, this.mapaAltoActual);
+        mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
         
         try {
-            // 1. VELOCIDAD SOBRE TRAZADO
-            System.out.println("Intentando cargar Velocidad...");
+            //System.out.println("Intentando cargar Velocidad...");
             javafx.fxml.FXMLLoader velLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Velocidad.fxml"));
             velLoader.load(); 
             VelocidadController velControl = velLoader.getController();
             javafx.scene.Group rutaColores = velControl.generarTrazadoVelocidad(itemSelected, projection);
             mapPane.getChildren().add(rutaColores); 
-            System.out.println("Velocidad cargada OK.");
+            //System.out.println("Velocidad cargada OK.");
 
-            // 2. PERFIL DE DESNIVEL
-            System.out.println("Intentando cargar Desnivel...");
+            //System.out.println("Intentando cargar Desnivel...");
             javafx.fxml.FXMLLoader desLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Desnivel.fxml"));
             javafx.scene.Parent desRoot = desLoader.load();
             DesnivelController desControl = desLoader.getController();
             desControl.setActivity(itemSelected);
             desControl.setMapContext(mapPane, projection);
             
-           //Bloquear su anchura máxima y mínima a 320 píxeles
             javafx.scene.layout.Region chartRegion = (javafx.scene.layout.Region) desRoot;
             chartRegion.setMinWidth(320);
             chartRegion.setMaxWidth(320);
             
-            //(Lista | Mapa | Gráfica)
             if (splitPane.getItems().size() == 2) {
                 splitPane.getItems().add(desRoot);
             } else if (splitPane.getItems().size() > 2) {
@@ -794,7 +784,7 @@ public class FXMLDocumentController implements Initializable {
             
            javafx.scene.control.SplitPane.setResizableWithParent(desRoot, false);
             
-            System.out.println("Gráfica insertada OK (como panel lateral coquetón).");
+            //System.out.println("Gráfica insertada OK (como panel lateral coquetón).");
             // Buscar el panel blanco del centro (índice 1 del SplitPane)
             if (splitPane.getItems().size() > 1) {
                 javafx.scene.Node panelCentro = splitPane.getItems().get(1); 
@@ -802,11 +792,11 @@ public class FXMLDocumentController implements Initializable {
                     javafx.scene.layout.Pane whitePane = (javafx.scene.layout.Pane) panelCentro;
                     whitePane.getChildren().clear(); // Limpiamos lo que haya
                     whitePane.getChildren().add(desRoot); // Metemos la gráfica
-                    System.out.println("Gráfica insertada OK.");
+                    //System.out.println("Gráfica insertada OK.");
                 }
             }
         } catch (Exception e) {
-            System.out.println("--- ERROR CARGANDO GRÁFICAS ---");
+            //System.out.println("--- ERROR CARGANDO GRÁFICAS ---");
             e.printStackTrace();
         }
         
@@ -877,14 +867,11 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     private void removeActivity(ActionEvent event) {
-        // 1. Obtener la actividad seleccionada en la lista
         Activity activity = activityList.getSelectionModel().getSelectedItem();
-        if (activity == null) {
-            // Opcional: mostrar un aviso si pulsa borrar sin seleccionar nada
-            return;
-        }
+        if (activity == null) return;
+        
         MapRegion region = LaSaforApp.app.findMapForActivity(activity);
-        // 2. Pedir confirmación al usuario (Alerta Modal)
+        
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmar eliminación");
         alert.setHeaderText("¿Estás seguro de que deseas eliminar la actividad?");
@@ -894,30 +881,23 @@ public class FXMLDocumentController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
 
-            // 3. Eliminar del modelo lógico
             LaSaforApp.app.removeActivity(activity);
-
-            // 4. Actualizar la lista visualmente volviendo a cargar las actividades del usuario
             verActividades();
 
-            // 5. Limpieza de interfaz si borramos la actividad activa en pantalla
-            if (actividadActual != null && actividadActual.equals(activity)) {
+            /*if (actividadActual != null && actividadActual.equals(activity)) {
                 // Desvincular la actividad actual para que no cause errores
                 this.actividadActual = null;
-                this.projection = null;
+                this.projection = null;*/
 
-                // Cargar el mapa por defecto (el de la UPV) para limpiar la pantalla
-                File archivoMapa = new File("src/maps/upv.jpg");
-                if (!archivoMapa.exists()) {
-                    archivoMapa = new File("maps/upv.jpg");
-                }
-                buildMap(archivoMapa, region);
-
-                // Limpiar también los POIs antiguos de la lista lateral del mapa si los hubiera
-                map_listview.getItems().clear();
+            File archivoMapa = new File("src/maps/upv.jpg");
+            if (!archivoMapa.exists()) {
+                archivoMapa = new File("maps/upv.jpg");
             }
+            buildMap(archivoMapa, region);
+            map_listview.getItems().clear();
         }
     }
+    
     /**
      * Renombra la actividad seleccionada de la lista de actividades.
      */
