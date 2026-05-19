@@ -141,20 +141,17 @@ public class FXMLDocumentController implements Initializable {
     // =========================================================
 
     /** Lista lateral que muestra todos los POIs añadidos al mapa. */
-    @FXML
-    private ListView<Poi> map_listview;
+    @FXML private ListView<Poi> map_listview;
 
     /** ScrollPane que envuelve el mapa y permite desplazarlo. */
-    @FXML
-    private ScrollPane map_scrollpane;
+    @FXML private ScrollPane map_scrollpane;
 
     /**
      * Slider de zoom.
      * Rango: [0.5 – 1.5]. Valor inicial: 1.0 (sin zoom).
      * Cada cambio de valor llama al método zoom().
      */
-    @FXML
-    private Slider zoom_slider;
+    @FXML private Slider zoom_slider;
 
     /**
      * Botón de pin visible sobre el mapa.
@@ -167,19 +164,12 @@ public class FXMLDocumentController implements Initializable {
     //   · 'pin_info'       (inyectada pero nunca actualizada)
 
     /** Etiqueta en la barra de estado que muestra las coordenadas del ratón. */
-    @FXML
-    private Label mousePosition;
-    
-    @FXML
-    private SplitPane splitPane;
-    @FXML
-    private ListView<Activity> activityList;
-    @FXML
-    private ImageView userAvatar;
-    @FXML
-    private GridPane gridBase;
-    @FXML
-    private Label username;
+    @FXML private Label mousePosition;
+    @FXML private SplitPane splitPane;
+    @FXML private ListView<Activity> activityList;
+    @FXML private ImageView userAvatar;
+    @FXML private GridPane gridBase;
+    @FXML private Label username;
  
 
     // =========================================================
@@ -751,6 +741,7 @@ public class FXMLDocumentController implements Initializable {
         mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
         
         try {
+
             //System.out.println("Intentando cargar Velocidad...");
             javafx.fxml.FXMLLoader velLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Velocidad.fxml"));
             velLoader.load(); 
@@ -776,8 +767,11 @@ public class FXMLDocumentController implements Initializable {
                 splitPane.getItems().set(2, desRoot);
             }
             
-           javafx.scene.control.SplitPane.setResizableWithParent(desRoot, false);
-            
+            javafx.scene.control.SplitPane.setResizableWithParent(desRoot, false);
+            javafx.stage.Stage stage = (javafx.stage.Stage) splitPane.getScene().getWindow();
+            stage.sizeToScene();
+            stage.setWidth(stage.getWidth() + 350);
+            stage.setMinWidth(1200);
             //System.out.println("Gráfica insertada OK (como panel lateral coquetón).");
             // Buscar el panel blanco del centro (índice 1 del SplitPane)
             if (splitPane.getItems().size() > 1) {
@@ -958,7 +952,7 @@ public class FXMLDocumentController implements Initializable {
     
     //  INTEGRACIÓN: CATEGORÍA 5 - AÑADIR MAPA 
     @FXML
-    private void abrirMenuAnadirMapa(ActionEvent event) {
+    private void abrirMenuAnadirMapa(ActionEvent event) { 
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("AnadirMapa.fxml"));
             javafx.scene.Parent root = loader.load();
@@ -971,6 +965,7 @@ public class FXMLDocumentController implements Initializable {
             e.printStackTrace(); // saber fallo exacto en la consola
         }
     }
+    
     /*private void dibujarRutaPorVelocidad() {
     // 1. Validaciones defensivas
     if (actividadActual == null || projection == null) {

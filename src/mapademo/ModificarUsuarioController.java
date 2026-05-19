@@ -26,8 +26,25 @@ import upv.ipc.sportlib.User;
 
 public class ModificarUsuarioController implements Initializable {
 
-    private static boolean pressed = false;
+    @FXML private ImageView Avatar_mod;
+    @FXML private DatePicker Birth_mod;
+    @FXML private TextField Email_mod;
+    @FXML private Label Err_birth;
+    @FXML private Label Err_email;
+    @FXML private Label Err_nick;
+    @FXML private Label Err_pass;
+    @FXML private Label Err_tot;
+    @FXML private ImageView Img_pass;
+    @FXML private ImageView Info_pass;
+    @FXML private PasswordField Pass_mod;
+    @FXML private Button Pass_show;
+    @FXML private TextField Pass_shown;
+    @FXML private VBox Vbox_pass;
+    @FXML private Label name;
+    
     public User user;
+    
+    private static boolean pressed = false;  
     private boolean Nick_ok = false;
     private boolean Email_ok = false;
     private boolean Pass_ok = false;
@@ -37,58 +54,20 @@ public class ModificarUsuarioController implements Initializable {
     private String Email;
     private String Pass;
     private LocalDate Birth;
+    private String PrevEmail = LaSaforApp.app.getCurrentUser().getEmail();
+    private String PrevPass = LaSaforApp.app.getCurrentUser().getPassword();
+    private LocalDate PrevBirth = LaSaforApp.app.getCurrentUser().getBirthDate();
+    private Image PrevAvatar = LaSaforApp.app.getCurrentUser().getAvatar();
+    private String PrevAvatarPath = LaSaforApp.app.getCurrentUser().getAvatarPath();
     private File Avatar_file;
     private Image Avatar;
     private String Avatar_Path;
-    @FXML
-    private ImageView Avatar_mod;
-
-    @FXML
-    private DatePicker Birth_mod;
-
-    @FXML
-    private TextField Email_mod;
-
-    @FXML
-    private Label Err_birth;
-
-    @FXML
-    private Label Err_email;
-
-    @FXML
-    private Label Err_nick;
-
-    @FXML
-    private Label Err_pass;
-
-    @FXML
-    private Label Err_tot;
-
-    @FXML
-    private ImageView Img_pass;
-
-    @FXML
-    private ImageView Info_pass;
-
-    @FXML
-    private PasswordField Pass_mod;
-
-    @FXML
-    private Button Pass_show;
-
-    @FXML
-    private TextField Pass_shown;
-
-    @FXML
-    private VBox Vbox_pass;
-
-    @FXML
-    private Label name;
 
     /**Abre filechooser para elegir una imagen que poner como avatar
      */
     @FXML
     void Avatar_mod() throws Exception{
+        
         FileChooser fc = new FileChooser();
         fc.setTitle("Seleccionar mapa JPG");
         fc.setInitialDirectory(new File("."));
@@ -100,21 +79,15 @@ public class ModificarUsuarioController implements Initializable {
         
         if (file != null) {
             Avatar_file = file;
-            // Escribimos la ruta en el cajón de texto para que el usuario la vea
-            /*Avatar_reg.setImage(new Image(getClass().getResourceAsStream(Avatar_file.getAbsolutePath())));
-            Avatar = Avatar_reg.getImage();*/
-            
             Image image = new Image(file.toURI().toString());
-
             Avatar_mod.setImage(image);
-            //Avatar = image;
             Avatar_Path = Avatar_file.getCanonicalPath();
             Avatar_mod.setFitWidth(60);
             Avatar_mod.setFitHeight(60);
             Avatar_mod.setPreserveRatio(true);
             Rectangle cut = new Rectangle(60, 60);
             Avatar_mod.setClip(cut);
-        }
+        } else {Avatar_Path = PrevAvatarPath;}
     }
     
     /**
@@ -124,6 +97,9 @@ public class ModificarUsuarioController implements Initializable {
     @FXML
     void Entering_birth(ActionEvent event) {
         Birth = Birth_mod.getValue();
+        
+        if (Birth == null) Birth = PrevBirth;
+        
         if(!User.isOlderThan(Birth, 12)){
             Err_birth.setVisible(true);
             Birth_ok = false;
@@ -140,6 +116,9 @@ public class ModificarUsuarioController implements Initializable {
     @FXML
     void Entering_email(KeyEvent event) {
         Email = Email_mod.getText();
+        
+        if (Email == null) Email = PrevEmail;
+        
         if(!User.checkEmail(Email)){
             Err_email.setVisible(true);
             Email_ok = false;
@@ -157,6 +136,9 @@ public class ModificarUsuarioController implements Initializable {
     @FXML
     void Entering_pass(KeyEvent event) {
         Pass = Pass_mod.getText();
+        
+        if (Pass == null) Pass = PrevPass;
+        
         if(!User.checkPassword(Pass)){
             if(!popover.isShowing()) popover.show(Info_pass);
             Err_pass.setVisible(true);
@@ -223,12 +205,27 @@ public class ModificarUsuarioController implements Initializable {
      */
     @FXML
     public void saveChange() {
+        
+        String newEmail = Email_mod.getText().trim().isEmpty()
+            ? PrevEmail : Email_mod.getText().trim();
+
+        String newPass = Pass_mod.getText().trim().isEmpty()
+            ? PrevPass : Pass_mod.getText().trim();
+
+        LocalDate newBirth = Birth_mod.getValue() == null
+            ? PrevBirth : Birth_mod.getValue();
+
+        String newAvatarPath = Avatar_Path == null
+            ? PrevAvatarPath : Avatar_Path;
+        
+        Email_ok = User.checkEmail(newEmail);
+        Pass_ok = User.checkPassword(newPass);
+        Birth_ok = User.isOlderThan(newBirth, 12);
+        
         if(Email_ok && Pass_ok && Birth_ok){
             Err_tot.setVisible(false);
-            boolean ok = LaSaforApp.app.updateCurrentUser(Email, Pass, Birth, Avatar_Path);
-            if (ok) {
-                LaSaforApp.abrirActividades();
-            }
+            boolean ok = LaSaforApp.app.updateCurrentUser(newEmail, newPass, newBirth, newAvatarPath);
+            if (ok) LaSaforApp.abrirActividades();
         }else{
             Err_tot.setVisible(true);
         }
@@ -236,6 +233,11 @@ public class ModificarUsuarioController implements Initializable {
 
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
+        
+        Birth_mod.setValue(PrevBirth);
+        Email_mod.setText(PrevEmail);
+        Avatar_mod.setImage(PrevAvatar);
+
         Pass_mod.textProperty().bindBidirectional(Pass_shown.textProperty());
         //Se encarga de enseñar el popover sobre la contraseña
         popover = new PopOver(new Label("  La contraseña debe tener entre 8 y 20 caracteres,  \n " 
