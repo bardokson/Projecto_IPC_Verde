@@ -15,8 +15,11 @@ import javafx.stage.Stage;
 import upv.ipc.sportlib.SportActivityApp;
 
 /**
- *
- * @author jose
+ * App para el club La Safor de parte del equipo verde
+ * @author Erik Tzvetkov
+ * @author Jianxiang Liu
+ * @author Hector Saez
+ * @author Javi Blanch
  */
 public class LaSaforApp extends Application {
     
@@ -94,7 +97,7 @@ public class LaSaforApp extends Application {
      * @param w anchura de la ventana.
      * @param h altura de la ventana,
      */
-    public static void abrirActividades(int w, int h) {
+    private static void abrirActividades(int w, int h) {
         try {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("FXMLDocument.fxml"));
             Parent actividadesRoot = loader.load();

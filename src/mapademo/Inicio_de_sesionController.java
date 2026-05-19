@@ -4,25 +4,19 @@
  */
 package mapademo;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * Controlador del inicio de sesion
  *
  * @author bardokson
  */
@@ -42,7 +36,7 @@ public class Inicio_de_sesionController implements Initializable{
     
     
     /**
-     * Initializes the controller class.
+     * Inicializa el controlador
      */    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -52,7 +46,8 @@ public class Inicio_de_sesionController implements Initializable{
     }    
     
     /**
-     * Inicio de sesion si el nick y el pass son correctos
+     * Inicio de sesion si el nick y la contraseña son correctos
+     * Si no avisa al usuario que uno de los dos es incorrecto por seguridad
      * @param event 
      */
     @FXML
@@ -72,29 +67,26 @@ public class Inicio_de_sesionController implements Initializable{
    
     /**
      * Saca al usuario de la app
-     * @param event 
      */
     @FXML
-    private void Cancel_reg(ActionEvent event) {         
+    private void Cancel_reg() {         
             Platform.exit();
             System.exit(0);        
     }
     
     /**
      * Cambia la escena a la de "Registro de usuario" mediante un hyperlink
-     * @param event 
      */
     @FXML
-    private void Reg_ses(ActionEvent event) {
+    private void Reg_ses() {
         LaSaforApp.abrirReg();
     }
 
      /**
      * Muestra la contraseña
-     * @param event 
      */
     @FXML
-    private void Pass_show(ActionEvent event) {
+    private void Pass_show() {
         if(getPressed()){
             disableShown();
             enableReg();            
@@ -114,7 +106,6 @@ public class Inicio_de_sesionController implements Initializable{
     }
     
     private static boolean getPressed(){
-        
         return pressed;
     }
     
