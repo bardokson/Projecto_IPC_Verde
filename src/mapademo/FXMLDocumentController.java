@@ -224,7 +224,6 @@ public class FXMLDocumentController implements Initializable {
         map_scrollpane.setHvalue(scrollH);
         map_scrollpane.setVvalue(scrollV);
     }
-    @FXML
     private void ZoomCtrl(ScrollEvent event) {
         if (event.isControlDown()) {
             double valorActual = zoom_slider.getValue();
@@ -493,6 +492,8 @@ public class FXMLDocumentController implements Initializable {
         buildMap(archivoMapa, null);
         
         setupUser();
+        verActividades();
+        
         map_scrollpane.addEventFilter(javafx.scene.input.ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() == 0) return;
 
@@ -754,8 +755,6 @@ public class FXMLDocumentController implements Initializable {
     /**
      * Actualiza la lista de actividades cada vez que se añaden.
      */
-    @FXML
-    //tal vez podemos borrar el boton de ver actividades, este lo hace sin tener que darle
     private void verActividades() {
         
         User currentUser = LaSaforApp.app.getCurrentUser();
@@ -788,18 +787,11 @@ public class FXMLDocumentController implements Initializable {
         SportActivityApp app = LaSaforApp.app;
         MapRegion region = app.findMapForActivity(itemSelected);
         File mapFile = new File(region.getImagePath());
-
-        // 1. Reconstruimos el mapa base
         buildMap(mapFile, region); 
 
-        // 🌟 FIX: Forzamos a JavaFX a procesar el rediseño para actualizar dimensiones geométricas
         mapPane.layout();
-
         double anchoReal = mapPane.getWidth();
         double altoReal = mapPane.getHeight();
-
-        //System.out.println("[Selección] Dimensiones reales detectadas en mapPane: " + anchoReal + "x" + altoReal);
-
         this.projection = new MapProjection(region, anchoReal, altoReal);
         mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
 
@@ -809,7 +801,6 @@ public class FXMLDocumentController implements Initializable {
         dibujarRutaPorVelocidad();
 
         try {
-            // Cargamos la gráfica de Desnivel para el panel lateral derecho
             javafx.fxml.FXMLLoader desLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Desnivel.fxml"));
             javafx.scene.Parent desRoot = desLoader.load();
             DesnivelController desControl = desLoader.getController();
@@ -831,7 +822,6 @@ public class FXMLDocumentController implements Initializable {
                 stage.setMinWidth(1200);
             }           
         } catch (Exception e) {
-            //System.out.println("Error cargando el panel de desnivel:");
             e.printStackTrace();
         }
 
@@ -1096,4 +1086,9 @@ public class FXMLDocumentController implements Initializable {
        System.out.println("Duración: " + tiempoFormateado);
        System.out.println("Velocidad Media: " + String.format("%.2f", velocidadMedia) + " Km/h\n");
    }
+
+    @FXML
+    private void verSesiones() {
+        LaSaforApp.abrirHistorial();
+    }
 }

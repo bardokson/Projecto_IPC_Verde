@@ -141,6 +141,18 @@ public class LaSaforApp extends Application {
             setRoot(signRoot, 456, 300);
         } catch (Exception e) {e.printStackTrace();}
     }
+    
+    /**
+     * Metodo para cambiar a la pantalla de historial de sesiones y inicia su tamaño de ventana.
+     */
+    public static void abrirHistorial() {
+        try {
+            FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("Sessiones.fxml"));
+            Parent signRoot = loader.load();
+            LaSaforApp.roots.put("sessionHistory", signRoot);
+            setRoot(signRoot, 600, 600);
+        } catch (Exception e) {e.printStackTrace();}
+    }
     /**
      * @param args the command line arguments
      */
