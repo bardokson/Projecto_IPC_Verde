@@ -68,7 +68,7 @@
       <HBox alignment="BOTTOM_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="54.0" prefWidth="422.0" spacing="15.0">
          <children>
             <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#guardarMapa" styleClass="boton-naranja" text="Guardar Mapa" />
-            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#cerrarFormulario" styleClass="boton-cancelar" text="Cancelar" />
+            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#accCancelar" styleClass="boton-cancelar" text="Cancelar" />
          </children>
       </HBox>
    </children>
