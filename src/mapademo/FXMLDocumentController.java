@@ -1103,10 +1103,7 @@ public class FXMLDocumentController implements Initializable {
        if (segundosTotales > 0) {
            velocidadMedia = (distanciaKm / (segundosTotales / 3600.0));
        }
-       System.out.println("\n📊 --- ESTADÍSTICAS DE LA ACTIVIDAD ---");
-       System.out.println("Distancia: " + String.format("%.2f", distanciaKm) + " Km");
-       System.out.println("Duración: " + tiempoFormateado);
-       System.out.println("Velocidad Media: " + String.format("%.2f", velocidadMedia) + " Km/h\n");
+       
    }
 
     @FXML
