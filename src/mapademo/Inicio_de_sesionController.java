@@ -32,18 +32,37 @@ public class Inicio_de_sesionController implements Initializable{
     private static boolean pressed = false;  
     private String Pass;
     private String Nick;
+    private boolean shown = false;
    
     
     
     /**
-     * Inicializa el controlador
+     * Inicializa el controlador de inicio de sesion
      */    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Pass_reg.textProperty().bindBidirectional(Pass_shown.textProperty());
-        NickName_ini.setOnKeyTyped(e -> Nick = NickName_ini.getText());
-        Pass_reg.setOnKeyTyped(e -> Pass = Pass_reg.getText());
         
+        NickName_ini.setOnKeyTyped(e -> {
+            Nick = NickName_ini.getText();
+            if(shown){
+                Err_nick_ini.setVisible(false);
+                Err_pass_ini.setVisible(false);
+            }
+        });
+        Pass_reg.setOnKeyTyped(e -> {
+            Pass = Pass_reg.getText();  
+            if(shown){
+                Err_nick_ini.setVisible(false);
+                Err_pass_ini.setVisible(false);
+            }
+        });
+        Pass_shown.setOnKeyTyped(e->{
+            if(shown){
+                Err_nick_ini.setVisible(false);
+                Err_pass_ini.setVisible(false);
+            }
+        });
     }    
     
     /**
@@ -56,6 +75,7 @@ public class Inicio_de_sesionController implements Initializable{
         if(LaSaforApp.app.login(Nick,Pass)){  
             Err_nick_ini.setVisible(false);
             Err_pass_ini.setVisible(false);
+            shown = false;
             LaSaforApp.abrirActividades();
             
         }else{
@@ -63,6 +83,7 @@ public class Inicio_de_sesionController implements Initializable{
             Err_pass_ini.setVisible(true);
             Err_nick_ini.setText("El Nick name o la contraseña son incorrectos");
             Err_pass_ini.setText("El Nick name o la contraseña son incorrectos");
+            shown = true;
         }
     }
    

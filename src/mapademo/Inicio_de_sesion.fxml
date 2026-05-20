@@ -83,7 +83,7 @@
                <children>
                   <VBox alignment="CENTER" prefHeight="70.0" prefWidth="220.0">
                      <children>
-                        <StackPane prefHeight="150.0" prefWidth="200.0">
+                        <StackPane prefHeight="20.0" prefWidth="220.0">
                            <children>
                               <PasswordField fx:id="Pass_reg" prefHeight="26.0" prefWidth="221.0" styleClass="Field" />
                               <TextField fx:id="Pass_shown" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="219.0" styleClass="Field" visible="false" />
