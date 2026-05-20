@@ -41,7 +41,7 @@ public class SessionesController implements Initializable {
     private User user = LaSaforApp.app.getCurrentUser();
     private List<Session> sesList = LaSaforApp.app.getSessionsByUser(user);
     /**
-     * Initializes the controller class.
+     * Inicializa el controlador de sesiones
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -99,7 +99,10 @@ public class SessionesController implements Initializable {
             tablaTotal.setItems(filaTotal);
         }
     }    
-
+    
+    /**
+     * Retorna la escena a las actividades
+     */
     @FXML
     private void volver() {
         LaSaforApp.abrirActividades();

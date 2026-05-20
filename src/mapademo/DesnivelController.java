@@ -34,7 +34,11 @@ public class DesnivelController {
     private MapProjection projection;
     private Circle puntoRastreador; // El punto flotante que viaja por el mapa
     private javafx.scene.text.Text textoInfoRastreador; // El texto que acompañará a la bolita
-
+    
+    
+    /**
+     * Inicializa el controlador para mostrar el desnivel de una ruta
+     */
     public void initialize() {
         graficaDesnivel.setLegendVisible(false); 
         graficaDesnivel.setCreateSymbols(false); 

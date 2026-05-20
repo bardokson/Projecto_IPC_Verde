@@ -35,10 +35,6 @@ public class Poi {
         this.position = position;
     }
 
-
-
-
-
     /**
      * Get the value of code
      *
