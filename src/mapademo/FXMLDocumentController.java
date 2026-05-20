@@ -49,6 +49,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
@@ -62,6 +63,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -170,7 +172,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML private ListView<Activity> activityList;
     @FXML private ImageView userAvatar;
     @FXML private GridPane gridBase;
-    @FXML private Label username;
+    @FXML private Menu username;
+    @FXML
+    private HBox modActivity;
+    @FXML
+    private HBox modNotes;
  
 
     // =========================================================
@@ -494,6 +500,9 @@ public class FXMLDocumentController implements Initializable {
         setupUser();
         verActividades();
         
+        modActivity.disableProperty().bind(activityList.getSelectionModel().selectedItemProperty().isNull());
+        modNotes.disableProperty().bind(map_listview.getSelectionModel().selectedItemProperty().isNull());
+        
         map_scrollpane.addEventFilter(javafx.scene.input.ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() == 0) return;
 
@@ -747,6 +756,7 @@ public class FXMLDocumentController implements Initializable {
             mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
             dibujarRutaPorVelocidad();
             verActividades();
+            abrirActividad(actividadActual);
         }
     }
     
@@ -780,12 +790,14 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     private void activitySelected(MouseEvent event) {
-        Activity itemSelected = activityList.getSelectionModel().getSelectedItem();
+        Activity actividad = activityList.getSelectionModel().getSelectedItem();
+        if (actividad == null) return;
+        abrirActividad(actividad);
+    }
 
-        if (itemSelected == null) return;
-
+    private void abrirActividad(Activity actividad) {
         SportActivityApp app = LaSaforApp.app;
-        MapRegion region = app.findMapForActivity(itemSelected);
+        MapRegion region = app.findMapForActivity(actividad);
         File mapFile = new File(region.getImagePath());
         buildMap(mapFile, region); 
 
@@ -795,7 +807,7 @@ public class FXMLDocumentController implements Initializable {
         this.projection = new MapProjection(region, anchoReal, altoReal);
         mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
 
-        this.actividadActual = itemSelected;
+        this.actividadActual = actividad;
 
         // 2. Pintamos la ruta al frente
         dibujarRutaPorVelocidad();
@@ -804,7 +816,7 @@ public class FXMLDocumentController implements Initializable {
             javafx.fxml.FXMLLoader desLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Desnivel.fxml"));
             javafx.scene.Parent desRoot = desLoader.load();
             DesnivelController desControl = desLoader.getController();
-            desControl.setActivity(itemSelected);
+            desControl.setActivity(actividad);
             desControl.setMapContext(mapPane, projection);           
             javafx.scene.layout.Region chartRegion = (javafx.scene.layout.Region) desRoot;
             chartRegion.setMinWidth(320);
@@ -828,7 +840,7 @@ public class FXMLDocumentController implements Initializable {
         double mapWidth  = mapPane.getWidth()  * zoomGroup.getScaleX();
         double mapHeight = mapPane.getHeight() * zoomGroup.getScaleY();
 
-        TrackPoint p = itemSelected.getStartPoint();
+        TrackPoint p = actividad.getStartPoint();
         if (p != null) {
             Point2D pixelInicio = projection.project(p.getLatitude(), p.getLongitude());
             double posX = pixelInicio.getX();
@@ -846,7 +858,6 @@ public class FXMLDocumentController implements Initializable {
             timeline.play();
         }
     }
-
     /**
      * Cambia ventana a la de modificar perfil.
      */
@@ -878,6 +889,12 @@ public class FXMLDocumentController implements Initializable {
     /**
      * Quita la actividad seleccionada de la lista de actividades.
      */
+    
+    private void cerrarStatMapa() {
+        if (splitPane.getItems().size() > 2) splitPane.getItems().remove(2);
+        LaSaforApp.abrirActividades();
+    }
+    
     @FXML
     private void removeActivity(ActionEvent event) {
         Activity activity = activityList.getSelectionModel().getSelectedItem();
@@ -904,6 +921,7 @@ public class FXMLDocumentController implements Initializable {
             buildMap(archivoMapa, region);
             map_listview.getItems().clear();
         }
+        cerrarStatMapa();
     }
     
     /**
@@ -963,10 +981,10 @@ public class FXMLDocumentController implements Initializable {
             userAvatar.setImage(img);
         }
         
-        userAvatar.setFitWidth(60);
-        userAvatar.setFitHeight(60);
+        userAvatar.setFitWidth(90);
+        userAvatar.setFitHeight(90);
         userAvatar.setPreserveRatio(true);
-        javafx.scene.shape.Rectangle cut = new javafx.scene.shape.Rectangle(60, 60);
+        javafx.scene.shape.Rectangle cut = new javafx.scene.shape.Rectangle(90, 90);
         userAvatar.setClip(cut);
     }
     
