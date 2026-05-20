@@ -36,7 +36,9 @@ public class DesnivelController {
     private javafx.scene.text.Text textoInfoRastreador; // El texto que acompañará a la bolita
     
     
-
+    /**
+     * Inicializa el controlador para mostrar el desnivel de una ruta
+     */
     public void initialize() {
         graficaDesnivel.setLegendVisible(false); 
         graficaDesnivel.setCreateSymbols(false); 

@@ -21,15 +21,17 @@ public class AnadirMapaController {
     @FXML private TextField latMinField;
     @FXML private TextField latMaxField;
     @FXML private TextField lonMinField;
-    @FXML private TextField lonMaxField;
+    @FXML private TextField lonMaxField;    
+    @FXML private Button btnGuardar;
+    @FXML private Button btnCancelar;
 
     // Guardaremos el archivo de imagen que seleccione el usuario
     private File imagenSeleccionada;
-    @FXML
-    private Button btnGuardar;
-    @FXML
-    private Button btnCancelar;
 
+    /**
+     * Permite al usuario seleccionar un mapa para ser usado
+     * @param event 
+     */
     @FXML
     void seleccionarImagen(ActionEvent event) {
         // Abrimos el explorador de archivos
@@ -47,7 +49,11 @@ public class AnadirMapaController {
             rutaImagenField.setText(file.getAbsolutePath());
         }
     }
-
+    
+    /**
+     * Guarda el mapa para poder ser seleccionado despues
+     * @param event 
+     */
     @FXML
     void guardarMapa(ActionEvent event) {
         if (imagenSeleccionada == null) {
@@ -106,7 +112,10 @@ public class AnadirMapaController {
         alert.showAndWait();
     }
     
-    
+    /**
+     * Devuelve a la ventana de actividades 
+     * @param event 
+     */
     @FXML
     private void accCancelar(ActionEvent event) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
@@ -124,7 +133,9 @@ public class AnadirMapaController {
         }
     }
     
-    
+    /**
+     * Inicializador del controlador para añadir mapas
+     */
     
     @FXML
     public void initialize() {

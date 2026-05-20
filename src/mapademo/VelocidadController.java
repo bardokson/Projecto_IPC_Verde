@@ -23,11 +23,12 @@ public class VelocidadController {
         // Como es solo una leyenda informativa, no se necesita lógica extra de botones.
     }
 
-   
-    
-    
-    
-    
+    /**
+     * Genera el trazado de velocidad de una actividad sobre una projeccion
+     * @param actividad La actividad de que que se genera el trazado
+     * @param proj El mapa donde se projecta el trazado
+     * @return 
+     */
     public Group generarTrazadoVelocidad(Activity actividad, MapProjection proj) {
         Group trazadoColores = new Group();
 
@@ -67,8 +68,6 @@ public class VelocidadController {
             // Añadir tramo al grupo
             trazadoColores.getChildren().add(tramo);
         }
-
-        
         // NUEVA MEJORA: Añadimos una leyenda fija en la esquina del mapa
             javafx.scene.text.Text leyendaRoja = new javafx.scene.text.Text(10, 20, "▬ < 8 km/h (Lento)");
             leyendaRoja.setFill(Color.RED);

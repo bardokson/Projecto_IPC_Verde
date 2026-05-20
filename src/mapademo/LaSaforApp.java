@@ -92,6 +92,7 @@ public class LaSaforApp extends Application {
     public static void abrirActividades() {
         abrirActividades(1200, 800);
     }
+    
     /**
      * Metodo para cambiar a la pantalla de actividades y inicia su tamaño de ventana.
      * @param w anchura de la ventana.
@@ -126,7 +127,7 @@ public class LaSaforApp extends Application {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("Registro_usuario.fxml"));
             Parent regRoot = loader.load();
             LaSaforApp.roots.put("registro", regRoot);
-            setRoot(regRoot, 480, 470);
+            setRoot(regRoot, 500, 500);
         } catch (Exception e) {e.printStackTrace();}
     }
     
