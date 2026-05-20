@@ -127,7 +127,7 @@ public class LaSaforApp extends Application {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("Registro_usuario.fxml"));
             Parent regRoot = loader.load();
             LaSaforApp.roots.put("registro", regRoot);
-            setRoot(regRoot, 480, 470);
+            setRoot(regRoot, 500, 500);
         } catch (Exception e) {e.printStackTrace();}
     }
     
