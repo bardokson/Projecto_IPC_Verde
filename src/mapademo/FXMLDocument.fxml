@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="gridBase" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
+<GridPane fx:id="gridBase" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -33,14 +33,14 @@
    <children>
       <BorderPane minHeight="623.0" minWidth="900.0" prefHeight="623.0" prefWidth="900.0" GridPane.rowIndex="1">
          <center>
-            <VBox prefHeight="556.0" prefWidth="853.0" stylesheets="@../resources/estilos.css">
+            <VBox prefHeight="556.0" prefWidth="853.0">
                <children>
-                  <SplitPane fx:id="splitPane" dividerPositions="0.19699727024567792" VBox.vgrow="ALWAYS">
+                  <SplitPane fx:id="splitPane" dividerPositions="0.197" VBox.vgrow="ALWAYS">
                      <items>
                         <HBox maxWidth="350.0" minWidth="350.0" prefHeight="543.0" prefWidth="350.0">
                            <children>
-                              <ListView fx:id="activityList" maxWidth="174.0" minWidth="175.0" onMouseClicked="#activitySelected" prefHeight="552.0" prefWidth="175.0" />
-                              <ListView fx:id="map_listview" maxWidth="174.0" minWidth="175.0" onMouseClicked="#listClicked" prefHeight="399.0" prefWidth="175.0" />
+                              <ListView fx:id="activityList" maxWidth="174.0" minWidth="175.0" onMouseClicked="#activitySelected" prefHeight="552.0" prefWidth="175.0" styleClass="panel-fondo" />
+                              <ListView fx:id="map_listview" maxWidth="174.0" minWidth="175.0" onMouseClicked="#listClicked" prefHeight="399.0" prefWidth="175.0" styleClass="panel-fondo" />
                            </children>
                         </HBox>
                         <ScrollPane fx:id="map_scrollpane" hbarPolicy="ALWAYS" onMouseMoved="#showPosition" pannable="true" prefHeight="398.0" prefWidth="358.0" vbarPolicy="ALWAYS">
@@ -62,15 +62,15 @@
             </VBox>
          </center>
          <bottom>
-            <HBox alignment="CENTER_RIGHT" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" spacing="10.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER_RIGHT" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" spacing="10.0" styleClass="panel-fondo" BorderPane.alignment="CENTER">
                <children>
                   <Region HBox.hgrow="ALWAYS" />
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="240.0" spacing="5.0">
                      <children>
-                        <Label text="Zoom" />
-                        <Button mnemonicParsing="false" onAction="#zoomOut" text="-" />
+                        <Label styleClass="texto-dato" text="Zoom" />
+                        <Button mnemonicParsing="false" onAction="#zoomOut" styleClass="boton-secundario" text="-" />
                         <Slider fx:id="zoom_slider" HBox.hgrow="SOMETIMES" />
-                        <Button mnemonicParsing="false" onAction="#zoomIn" text="+" />
+                        <Button mnemonicParsing="false" onAction="#zoomIn" styleClass="boton-secundario" text="+" />
                      </children>
                   </HBox>
                   <Separator orientation="VERTICAL" prefHeight="200.0">
@@ -78,10 +78,10 @@
                         <Insets />
                      </HBox.margin>
                   </Separator>
-                  <Label fx:id="mousePosition" minHeight="-Infinity" minWidth="-Infinity" text="SceneX:     ScenY:     " wrapText="true" HBox.hgrow="ALWAYS" />
+                  <Label fx:id="mousePosition" minHeight="-Infinity" minWidth="-Infinity" styleClass="texto-dato" text="SceneX:     ScenY:     " wrapText="true" HBox.hgrow="ALWAYS" />
                </children>
                <BorderPane.margin>
-                  <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                  <Insets top="5.0" />
                </BorderPane.margin>
             </HBox>
          </bottom>
@@ -106,9 +106,9 @@
                         <Insets />
                      </GridPane.margin>
                   </ImageView>
-                  <VBox prefHeight="97.0" prefWidth="920.0">
+                  <VBox prefHeight="97.0" prefWidth="920.0" spacing="5.0">
                      <children>
-                        <HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="35.0" styleClass="barra-menu-unida">
                            <children>
                               <MenuBar maxWidth="-Infinity" prefHeight="27.0">
                                 <menus>
@@ -139,43 +139,43 @@
                                     </Menu>
                                  </menus>
                                  <HBox.margin>
-                                    <Insets />
+                                    <Insets right="10.0" />
                                  </HBox.margin>
                               </MenuBar>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" maxHeight="70.0" minHeight="70.0" prefHeight="70.0">
+                        <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0">
                            <children>
                               <HBox alignment="CENTER">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#importarGPX" text="ImportarActividad" />
+                                    <Button mnemonicParsing="false" onAction="#importarGPX" styleClass="boton-secundario" text="Importar Actividad" />
                                  </children>
                                  <padding>
                                     <Insets right="5.0" />
                                  </padding>
                               </HBox>
-                              <HBox fx:id="modActivity" alignment="CENTER" disable="true" spacing="5.0">
+                              <HBox fx:id="modActivity" alignment="CENTER" disable="true" spacing="10.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#renameActivity" text="Renombrar Actividad" />
-                                    <Button mnemonicParsing="false" onAction="#removeActivity" text="Borrar Actividad" />
+                                    <Button mnemonicParsing="false" onAction="#renameActivity" styleClass="boton-secundario" text="Renombrar Actividad" />
+                                    <Button mnemonicParsing="false" onAction="#removeActivity" styleClass="boton-secundario" text="Borrar Actividad" />
                                  </children>
                                  <padding>
                                     <Insets left="5.0" />
                                  </padding>
                               </HBox>
-                              <HBox fx:id="modNotes" alignment="CENTER" disable="true" spacing="5.0">
+                              <HBox fx:id="modNotes" alignment="CENTER" disable="true" spacing="10.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#renameNote" text="Renombrar Anotación" />
-                                    <Button mnemonicParsing="false" onAction="#removeNote" text="Borrar Anotación" />
+                                    <Button mnemonicParsing="false" onAction="#renameNote" styleClass="boton-secundario" text="Renombrar Anotación" />
+                                    <Button mnemonicParsing="false" onAction="#removeNote" styleClass="boton-secundario" text="Borrar Anotación" />
                                  </children>
                                  <padding>
-                                    <Insets left="10.0" />
+                                    <Insets left="15.0" />
                                  </padding>
                               </HBox>
                               <Region HBox.hgrow="ALWAYS" />
                            </children>
                            <padding>
-                              <Insets left="5.0" right="5.0" />
+                              <Insets left="10.0" right="10.0" />
                            </padding>
                         </HBox>
                      </children>
