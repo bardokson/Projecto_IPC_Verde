@@ -816,7 +816,7 @@ public class FXMLDocumentController implements Initializable {
             javafx.fxml.FXMLLoader desLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Desnivel.fxml"));
             javafx.scene.Parent desRoot = desLoader.load();
             DesnivelController desControl = desLoader.getController();
-            desControl.setActivity(itemSelected);
+            desControl.setActivity(actividad);
             desControl.setMapContext(mapPane, projection);  
             
             // NUEVA LÍNEA: Llamamos a tu método para que pinte la leyenda
@@ -1112,5 +1112,37 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void verSesiones() {
         LaSaforApp.abrirHistorial();
+    }
+    
+    
+    // =========================================================
+    //  ABRIR VENTANA DE ESTADÍSTICAS ACUMULADAS
+    // =========================================================
+    @FXML
+    private void abrirEstadisticas(ActionEvent event) {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("Estadisticas.fxml"));
+            javafx.scene.Parent root = loader.load();
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            
+            // Le ponemos un título chulo y el icono de la app si lo tenéis
+            stage.setTitle("Mis Estadísticas Acumuladas");
+            try {
+                stage.getIcons().add(new javafx.scene.image.Image(getClass().getResourceAsStream("/resources/logo.png")));
+            } catch (Exception ex) {
+                // Si no encuentra el logo, no pasa nada, que siga abriendo
+            }
+            
+            stage.setScene(new javafx.scene.Scene(root));
+            
+            // Usamos initOwner e initModality para que la ventana salga por encima y no deje tocar el mapa de fondo
+            stage.initOwner(mapPane.getScene().getWindow());
+            stage.initModality(javafx.stage.Modality.WINDOW_MODAL);
+            
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("--- ERROR ABRIENDO ESTADISTICAS ---");
+            e.printStackTrace();
+        }
     }
 }
