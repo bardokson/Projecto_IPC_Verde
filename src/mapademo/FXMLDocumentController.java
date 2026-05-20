@@ -49,6 +49,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
@@ -62,6 +63,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -170,7 +172,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML private ListView<Activity> activityList;
     @FXML private ImageView userAvatar;
     @FXML private GridPane gridBase;
-    @FXML private Label username;
+    @FXML private Menu username;
+    @FXML
+    private HBox modActivity;
+    @FXML
+    private HBox modNotes;
  
 
     // =========================================================
@@ -224,7 +230,6 @@ public class FXMLDocumentController implements Initializable {
         map_scrollpane.setHvalue(scrollH);
         map_scrollpane.setVvalue(scrollV);
     }
-    @FXML
     private void ZoomCtrl(ScrollEvent event) {
         if (event.isControlDown()) {
             double valorActual = zoom_slider.getValue();
@@ -493,6 +498,11 @@ public class FXMLDocumentController implements Initializable {
         buildMap(archivoMapa, null);
         
         setupUser();
+        verActividades();
+        
+        modActivity.disableProperty().bind(activityList.getSelectionModel().selectedItemProperty().isNull());
+        modNotes.disableProperty().bind(map_listview.getSelectionModel().selectedItemProperty().isNull());
+        
         map_scrollpane.addEventFilter(javafx.scene.input.ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() == 0) return;
 
@@ -746,6 +756,7 @@ public class FXMLDocumentController implements Initializable {
             mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
             dibujarRutaPorVelocidad();
             verActividades();
+            abrirActividad(actividadActual);
         }
     }
     
@@ -754,8 +765,6 @@ public class FXMLDocumentController implements Initializable {
     /**
      * Actualiza la lista de actividades cada vez que se añaden.
      */
-    @FXML
-    //tal vez podemos borrar el boton de ver actividades, este lo hace sin tener que darle
     private void verActividades() {
         
         User currentUser = LaSaforApp.app.getCurrentUser();
@@ -781,39 +790,33 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     private void activitySelected(MouseEvent event) {
-        Activity itemSelected = activityList.getSelectionModel().getSelectedItem();
+        Activity actividad = activityList.getSelectionModel().getSelectedItem();
+        if (actividad == null) return;
+        abrirActividad(actividad);
+    }
 
-        if (itemSelected == null) return;
-
+    private void abrirActividad(Activity actividad) {
         SportActivityApp app = LaSaforApp.app;
-        MapRegion region = app.findMapForActivity(itemSelected);
+        MapRegion region = app.findMapForActivity(actividad);
         File mapFile = new File(region.getImagePath());
-
-        // 1. Reconstruimos el mapa base
         buildMap(mapFile, region); 
 
-        // 🌟 FIX: Forzamos a JavaFX a procesar el rediseño para actualizar dimensiones geométricas
         mapPane.layout();
-
         double anchoReal = mapPane.getWidth();
         double altoReal = mapPane.getHeight();
-
-        //System.out.println("[Selección] Dimensiones reales detectadas en mapPane: " + anchoReal + "x" + altoReal);
-
         this.projection = new MapProjection(region, anchoReal, altoReal);
         mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
 
-        this.actividadActual = itemSelected;
+        this.actividadActual = actividad;
 
         // 2. Pintamos la ruta al frente
         dibujarRutaPorVelocidad();
 
         try {
-            // Cargamos la gráfica de Desnivel para el panel lateral derecho
             javafx.fxml.FXMLLoader desLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Desnivel.fxml"));
             javafx.scene.Parent desRoot = desLoader.load();
             DesnivelController desControl = desLoader.getController();
-            desControl.setActivity(itemSelected);
+            desControl.setActivity(actividad);
             desControl.setMapContext(mapPane, projection);           
             javafx.scene.layout.Region chartRegion = (javafx.scene.layout.Region) desRoot;
             chartRegion.setMinWidth(320);
@@ -831,14 +834,13 @@ public class FXMLDocumentController implements Initializable {
                 stage.setMinWidth(1200);
             }           
         } catch (Exception e) {
-            //System.out.println("Error cargando el panel de desnivel:");
             e.printStackTrace();
         }
 
         double mapWidth  = mapPane.getWidth()  * zoomGroup.getScaleX();
         double mapHeight = mapPane.getHeight() * zoomGroup.getScaleY();
 
-        TrackPoint p = itemSelected.getStartPoint();
+        TrackPoint p = actividad.getStartPoint();
         if (p != null) {
             Point2D pixelInicio = projection.project(p.getLatitude(), p.getLongitude());
             double posX = pixelInicio.getX();
@@ -856,7 +858,6 @@ public class FXMLDocumentController implements Initializable {
             timeline.play();
         }
     }
-
     /**
      * Cambia ventana a la de modificar perfil.
      */
@@ -888,6 +889,12 @@ public class FXMLDocumentController implements Initializable {
     /**
      * Quita la actividad seleccionada de la lista de actividades.
      */
+    
+    private void cerrarStatMapa() {
+        if (splitPane.getItems().size() > 2) splitPane.getItems().remove(2);
+        LaSaforApp.abrirActividades();
+    }
+    
     @FXML
     private void removeActivity(ActionEvent event) {
         Activity activity = activityList.getSelectionModel().getSelectedItem();
@@ -914,6 +921,7 @@ public class FXMLDocumentController implements Initializable {
             buildMap(archivoMapa, region);
             map_listview.getItems().clear();
         }
+        cerrarStatMapa();
     }
     
     /**
@@ -973,10 +981,10 @@ public class FXMLDocumentController implements Initializable {
             userAvatar.setImage(img);
         }
         
-        userAvatar.setFitWidth(60);
-        userAvatar.setFitHeight(60);
+        userAvatar.setFitWidth(90);
+        userAvatar.setFitHeight(90);
         userAvatar.setPreserveRatio(true);
-        javafx.scene.shape.Rectangle cut = new javafx.scene.shape.Rectangle(60, 60);
+        javafx.scene.shape.Rectangle cut = new javafx.scene.shape.Rectangle(90, 90);
         userAvatar.setClip(cut);
     }
     
@@ -1096,4 +1104,9 @@ public class FXMLDocumentController implements Initializable {
        System.out.println("Duración: " + tiempoFormateado);
        System.out.println("Velocidad Media: " + String.format("%.2f", velocidadMedia) + " Km/h\n");
    }
+
+    @FXML
+    private void verSesiones() {
+        LaSaforApp.abrirHistorial();
+    }
 }
