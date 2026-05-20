@@ -122,7 +122,7 @@
             </VBox>
             <VBox fx:id="V_box" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <children>
-                  <StackPane maxWidth="-Infinity" prefHeight="45.0" prefWidth="236.0">
+                  <StackPane maxWidth="-Infinity" prefHeight="8.0" prefWidth="236.0">
                      <children>
                         <PasswordField fx:id="Pass_reg" maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#Entering_pass" prefHeight="26.0" prefWidth="236.0" styleClass="Field" />
                         <TextField fx:id="Pass_shown" disable="true" maxWidth="-Infinity" prefWidth="236.0" styleClass="Field" visible="false" />

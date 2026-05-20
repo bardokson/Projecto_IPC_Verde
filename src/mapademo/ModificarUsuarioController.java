@@ -230,7 +230,12 @@ public class ModificarUsuarioController implements Initializable {
             Err_tot.setVisible(true);
         }
     }
-
+    
+    /**
+     * Inicializa el controlador de
+     * @param url
+     * @param rb 
+     */
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
         

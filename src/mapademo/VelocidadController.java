@@ -23,11 +23,12 @@ public class VelocidadController {
         // Como es solo una leyenda informativa, no se necesita lógica extra de botones.
     }
 
-   
-    
-    
-    
-    
+    /**
+     * Genera el trazado de velocidad de una actividad sobre una projeccion
+     * @param actividad La actividad de que que se genera el trazado
+     * @param proj El mapa donde se projecta el trazado
+     * @return 
+     */
     public Group generarTrazadoVelocidad(Activity actividad, MapProjection proj) {
         Group trazadoColores = new Group();
 
