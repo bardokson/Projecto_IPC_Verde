@@ -1001,10 +1001,15 @@ public class FXMLDocumentController implements Initializable {
             javafx.stage.Stage stage = new javafx.stage.Stage();
             stage.setTitle("Añadir Nuevo Mapa al Sistema");
             stage.setScene(new javafx.scene.Scene(root));
-            stage.show();
+            
+            // LAS TRES LÍNEAS MÁGICAS PARA BLOQUEAR:
+            stage.initOwner(mapPane.getScene().getWindow()); // 1. Le decimos quién es su padre
+            stage.initModality(javafx.stage.Modality.WINDOW_MODAL); // 2. La hacemos Modal
+            stage.showAndWait(); // 3. Esperamos a que se cierre
+            
         } catch (Exception e) {
             System.out.println("--- ERROR ABRIENDO AÑADIR MAPA ---");
-            e.printStackTrace(); // saber fallo exacto en la consola
+            e.printStackTrace(); 
         }
     }
         
