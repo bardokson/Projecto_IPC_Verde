@@ -79,15 +79,18 @@ S17.642,20.762,13.558,20.762z";
 
 .panel-formulario {
     -fx-background-color: #F4F4F4;
-    -fx-padding: 0px 0px 30px 0px; /* Mantiene el fix que hicimos de los bordes */
-    -fx-spacing: 20px; 
+    -fx-padding: 0px; /* Sin padding general, así la cabecera puede tocar los bordes */
 }
 
+
 .cabecera-naranja {
-    -fx-background-color: #FC4C02; /* Nuevo Naranja Corporativo */
+    -fx-background-color: #FC4C02; 
     -fx-padding: 15px;
     -fx-alignment: center;
+    -fx-pref-width: 1000px; /* Forzamos un ancho grande para que ocupe todo el espacio disponible */
+    -fx-min-width: USE_PREF_SIZE; 
 }
+
 
 .titulo-blanco {
     -fx-font-size: 24px;
