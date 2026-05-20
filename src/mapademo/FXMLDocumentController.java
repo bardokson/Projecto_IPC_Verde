@@ -805,7 +805,11 @@ public class FXMLDocumentController implements Initializable {
             javafx.scene.Parent desRoot = desLoader.load();
             DesnivelController desControl = desLoader.getController();
             desControl.setActivity(itemSelected);
-            desControl.setMapContext(mapPane, projection);           
+            desControl.setMapContext(mapPane, projection);  
+            
+            // NUEVA LÍNEA: Llamamos a tu método para que pinte la leyenda
+            desControl.crearLeyendaVelocidad();
+            
             javafx.scene.layout.Region chartRegion = (javafx.scene.layout.Region) desRoot;
             chartRegion.setMinWidth(320);
             chartRegion.setMaxWidth(320);
@@ -1036,11 +1040,11 @@ public class FXMLDocumentController implements Initializable {
            }
 
            if (velocidadKmH < 35.0) {
-            segmento.setStroke(Color.BLUE);   
+            segmento.setStroke(Color.RED);   
             } else if (velocidadKmH <= 40.0) {
-                segmento.setStroke(Color.GREEN);  
+                segmento.setStroke(Color.ORANGE);  
             } else {
-                segmento.setStroke(Color.RED);    
+                segmento.setStroke(Color.LIMEGREEN);    
             }
 
            segmento.setStrokeWidth(5.0);
