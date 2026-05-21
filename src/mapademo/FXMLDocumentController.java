@@ -82,6 +82,10 @@ import upv.ipc.sportlib.Activity;
 import upv.ipc.sportlib.Annotation;
 import upv.ipc.sportlib.GeoPoint;
 import upv.ipc.sportlib.AnnotationType;
+import static upv.ipc.sportlib.AnnotationType.CIRCLE;
+import static upv.ipc.sportlib.AnnotationType.LINE;
+import static upv.ipc.sportlib.AnnotationType.POINT;
+import static upv.ipc.sportlib.AnnotationType.TEXT;
 import upv.ipc.sportlib.MapProjection;  
 import upv.ipc.sportlib.MapRegion;
 import upv.ipc.sportlib.TrackPoint;
@@ -1031,11 +1035,9 @@ public class FXMLDocumentController implements Initializable {
             timeline.getKeyFrames().add(kf);
             timeline.play();
         }
-        
-        verActividades();
         notes = actividadActual.getAnnotations();
-        refreshActivity();
-        
+        map_listview.getItems().setAll(notes);
+        drawNotes();
     }
     /**
      * Cambia ventana a la de modificar perfil.
@@ -1098,6 +1100,8 @@ public class FXMLDocumentController implements Initializable {
                 archivoMapa = new File("maps/upv.jpg");
             }
             buildMap(archivoMapa, region);
+            mapPane.layout();
+            this.projection = new MapProjection(region, mapPane.getWidth(), mapPane.getHeight());
             map_listview.getItems().clear();
         }
         cerrarStatMapa();
@@ -1120,6 +1124,8 @@ public class FXMLDocumentController implements Initializable {
             LaSaforApp.app.renameActivity(activity, newName);
             refreshActivity();
         });
+        
+        refreshActivity();
     }
     
     @FXML
@@ -1162,6 +1168,10 @@ public class FXMLDocumentController implements Initializable {
         map_listview.getItems().setAll(actividadActual.getAnnotations());
 
         // redibujar todo
+        drawNotes();
+    }
+    
+    private void drawNotes() {
         for (Annotation a : actividadActual.getAnnotations()) {
             switch (a.getType()) {
                 case POINT -> drawPoint(a);
@@ -1353,7 +1363,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void renameNote(ActionEvent event) {
+    private void renameNote() {
         Annotation note = map_listview.getSelectionModel().getSelectedItem();
         if (note == null) return;
 
@@ -1363,8 +1373,10 @@ public class FXMLDocumentController implements Initializable {
         dialog.setContentText("Nuevo nombre:");
 
         dialog.showAndWait().ifPresent(newName -> {
+            LaSaforApp.app.removeAnnotation(note);
             note.setText(newName);
-            map_listview.refresh();
+            Annotation nuevo = LaSaforApp.app.addAnnotation(actividadActual, note);
         });
+        refreshActivity();
     }
 }
