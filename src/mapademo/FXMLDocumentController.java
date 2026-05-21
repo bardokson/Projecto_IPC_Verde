@@ -1218,10 +1218,15 @@ public class FXMLDocumentController implements Initializable {
             javafx.stage.Stage stage = new javafx.stage.Stage();
             stage.setTitle("Añadir Nuevo Mapa al Sistema");
             stage.setScene(new javafx.scene.Scene(root));
-            stage.show();
+            
+            // LAS TRES LÍNEAS MÁGICAS PARA BLOQUEAR:
+            stage.initOwner(mapPane.getScene().getWindow()); // 1. Le decimos quién es su padre
+            stage.initModality(javafx.stage.Modality.WINDOW_MODAL); // 2. La hacemos Modal
+            stage.showAndWait(); // 3. Esperamos a que se cierre
+            
         } catch (Exception e) {
             System.out.println("--- ERROR ABRIENDO AÑADIR MAPA ---");
-            e.printStackTrace(); // saber fallo exacto en la consola
+            e.printStackTrace(); 
         }
     }
         
@@ -1320,10 +1325,7 @@ public class FXMLDocumentController implements Initializable {
        if (segundosTotales > 0) {
            velocidadMedia = (distanciaKm / (segundosTotales / 3600.0));
        }
-       System.out.println("\n📊 --- ESTADÍSTICAS DE LA ACTIVIDAD ---");
-       System.out.println("Distancia: " + String.format("%.2f", distanciaKm) + " Km");
-       System.out.println("Duración: " + tiempoFormateado);
-       System.out.println("Velocidad Media: " + String.format("%.2f", velocidadMedia) + " Km/h\n");
+       
    }
 
     @FXML

@@ -167,9 +167,8 @@ public class DesnivelController {
     // =========================================================
     public void crearLeyendaVelocidad() {
         // Creamos un contenedor horizontal para los textos
-        javafx.scene.layout.HBox leyenda = new javafx.scene.layout.HBox(15);
-        leyenda.setAlignment(javafx.geometry.Pos.CENTER);
-        leyenda.setPadding(new javafx.geometry.Insets(0, 0, 10, 0)); // Margen inferior
+        javafx.scene.layout.VBox leyenda = new javafx.scene.layout.VBox(5);
+        leyenda.setAlignment(javafx.geometry.Pos.CENTER_LEFT); // Para que queden alineados a la izquierda
 
         // Usamos los colores y rangos exactos que tus compañeros han puesto en el main
         javafx.scene.control.Label l1 = new javafx.scene.control.Label("▬ Lento (< 35)");
