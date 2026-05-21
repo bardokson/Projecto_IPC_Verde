@@ -68,6 +68,9 @@ public class Registro_usuarioController implements Initializable {
     
     /**
      * Inicializa el controlador
+     * Hade bindbidireccional para entre textfield y paswordfield para enseñar contraseña
+     * Crea el popover y lo muestra al poner el raton encima del ImageView 
+     * Muestra mensaje de error de contraseña si se escribe en el text field de la contraseña
      * @author Erik Tzv
      * @param url
      * @param rb
@@ -210,13 +213,13 @@ public class Registro_usuarioController implements Initializable {
             Birth_ok = true;
         }
     }
+    
     /**
      * Permite al usuario poner una foto como avatar
      * Si no pone ninguna se le pondra una por defecto
      * @author Jiaxiang Liu
      * @throws IOExceptionn
      */
-    
     @FXML
     private void Avatar_reg() throws IOException {
         FileChooser fc = new FileChooser();
@@ -267,6 +270,7 @@ public class Registro_usuarioController implements Initializable {
         }
         
     }
+    
     /**
      * @author Erik Tzv
      */
