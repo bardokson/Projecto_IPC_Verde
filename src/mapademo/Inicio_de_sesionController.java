@@ -18,7 +18,7 @@ import javafx.scene.image.ImageView;
 /**
  * Controlador del inicio de sesion
  *
- * @author bardokson
+ * @author Erik Tzv
  */
 public class Inicio_de_sesionController implements Initializable{
 
@@ -38,6 +38,7 @@ public class Inicio_de_sesionController implements Initializable{
     
     /**
      * Inicializa el controlador de inicio de sesion
+     * @author Erik Tzv
      */    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -68,6 +69,7 @@ public class Inicio_de_sesionController implements Initializable{
     /**
      * Inicio de sesion si el nick y la contraseña son correctos
      * Si no avisa al usuario que uno de los dos es incorrecto por seguridad
+     * @author Erik Tzv
      * @param event 
      */
     @FXML
@@ -89,6 +91,7 @@ public class Inicio_de_sesionController implements Initializable{
    
     /**
      * Saca al usuario de la app
+     * @author Erik Tzv
      */
     @FXML
     private void Cancel_reg() {         
@@ -98,6 +101,7 @@ public class Inicio_de_sesionController implements Initializable{
     
     /**
      * Cambia la escena a la de "Registro de usuario" mediante un hyperlink
+     * @author Erik Tzv
      */
     @FXML
     private void Reg_ses() {
@@ -106,6 +110,7 @@ public class Inicio_de_sesionController implements Initializable{
 
      /**
      * Muestra la contraseña
+     * @author Erik Tzv
      */
     @FXML
     private void Pass_show() {
@@ -123,26 +128,43 @@ public class Inicio_de_sesionController implements Initializable{
         
     }
     
+    /**
+     * @author Erik Tzv
+     */
     private static void cyclePressed(){
         pressed = !pressed;
     }
-    
+    /**
+     * @author Erik Tzv
+     * @return 
+     */
     private static boolean getPressed(){
         return pressed;
     }
-    
+    /**
+     * @author Erik Tzv
+     */
     private void disableShown(){
         Pass_shown.setDisable(true);
         Pass_shown.setVisible(false);
     }
+    /**
+     * @author Erik Tzv
+     */
     private void disableReg(){
         Pass_reg.setDisable(true);
         Pass_reg.setVisible(false);    
     }
+    /**
+     * @author Erik Tzv
+     */
     private void enableShown(){
         Pass_shown.setDisable(false);
         Pass_shown.setVisible(true);
-    }
+    }   
+    /**
+     * @author Erik Tzv
+     */
     private void enableReg(){        
         Pass_reg.setDisable(false);
         Pass_reg.setVisible(true);

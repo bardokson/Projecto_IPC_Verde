@@ -46,6 +46,7 @@ public class LaSaforApp extends Application {
     /**
      * Cambia la raiz de la escena actual.
      * @param root nodo raíz que se mostrará en la escena
+     * @author Erik Tzv
      */
     static void setRoot(Parent root){
         scene.setRoot(root);
@@ -56,6 +57,7 @@ public class LaSaforApp extends Application {
     /**
      * Cambia la raiz de la escena actual llamando el metodo del mismo nombre que acepte como @param root.
      * @param clave identificador de la vista a cargar
+     * @author Erik Tzv
      */
     static void setRoot(String clave){
         Parent root = roots.get(clave);
