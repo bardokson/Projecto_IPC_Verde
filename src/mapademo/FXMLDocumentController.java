@@ -1122,7 +1122,7 @@ public class FXMLDocumentController implements Initializable {
 
         dialog.showAndWait().ifPresent(newName -> {
             LaSaforApp.app.renameActivity(activity, newName);
-            activityList.refresh();
+            refreshActivity();
         });
         
         refreshActivity();

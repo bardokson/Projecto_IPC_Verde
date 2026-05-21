@@ -47,7 +47,7 @@
                      <VBox.margin>
                         <Insets right="45.0" top="14.0" />
                      </VBox.margin></TextField>
-                  <Label fx:id="Err_nick_ini" prefHeight="18.0" prefWidth="226.0" textFill="RED" visible="false">
+                  <Label fx:id="Err_nick_ini" prefHeight="17.0" prefWidth="268.0" textFill="RED" visible="false">
                      <font>
                         <Font size="10.0" />
                      </font></Label>
@@ -55,18 +55,17 @@
             </VBox>
             <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="265.0">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="Label" text="NickName:   " textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="Label" text="NickName:  " textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
                      <GridPane.margin>
                         <Insets top="44.0" />
                      </GridPane.margin>
-                     <padding>
-                        <Insets top="14.0" />
-                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="4.0" />
+                     </VBox.margin>
                   </Label>
-                  <Label text="Label" visible="false" />
                </children>
             </VBox>
             <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="60.0" prefWidth="164.0" GridPane.rowIndex="1">

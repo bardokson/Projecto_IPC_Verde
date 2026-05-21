@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="gridBase" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
+<GridPane fx:id="gridBase" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -45,7 +45,7 @@
                         </HBox>
                         <ScrollPane fx:id="map_scrollpane" hbarPolicy="ALWAYS" onMouseMoved="#showPosition" pannable="true" prefHeight="398.0" prefWidth="358.0" vbarPolicy="ALWAYS">
                            <content>
-                              <Pane fx:id="mapPane">
+                              <Pane>
                                  <children>
                                     <ImageView pickOnBounds="true">
                                        <image>
@@ -65,7 +65,7 @@
             <HBox alignment="CENTER_RIGHT" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" spacing="10.0" styleClass="panel-fondo" BorderPane.alignment="CENTER">
                <children>
                   <Region HBox.hgrow="ALWAYS" />
-                  <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="240.0" spacing="5.0">
+                  <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="27.0" spacing="5.0">
                      <children>
                         <Label styleClass="texto-dato" text="Zoom" />
                         <Button mnemonicParsing="false" onAction="#zoomOut" styleClass="boton-secundario" text="-" />
@@ -112,13 +112,13 @@
                            <children>
                               <MenuBar maxWidth="-Infinity" prefHeight="27.0">
                                 <menus>
-                                  <Menu mnemonicParsing="false" text="App">
+                                  <Menu mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 50;" text="App">
                                     <items>
                                       <MenuItem mnemonicParsing="false" onAction="#about" text="Acerca de" />
                                           <MenuItem mnemonicParsing="false" onAction="#logOutExit" text="Cerrar" />
                                     </items>
                                   </Menu>
-                                  <Menu mnemonicParsing="false" text="Mapa">
+                                  <Menu mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 50;" text="Mapa">
                                     <items>
                                           <MenuItem mnemonicParsing="false" onAction="#cambiarMapa" text="Cambiar Mapa" />
                                           <MenuItem mnemonicParsing="false" onAction="#abrirMenuAnadirMapa" text="Añadir Mapa" />
@@ -129,7 +129,7 @@
                               <Region HBox.hgrow="ALWAYS" />
                               <MenuBar>
                                  <menus>
-                                    <Menu fx:id="username" mnemonicParsing="false" text="Username">
+                                    <Menu fx:id="username" mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 50;" text="Username">
                                       <items>
                                           <MenuItem mnemonicParsing="false" onAction="#modPerfil" text="Modificar Perfil" />
                                           <MenuItem mnemonicParsing="false" onAction="#abrirEstadisticas" text="Estadísticas" />
@@ -186,3 +186,4 @@
       </BorderPane>
    </children>
 </GridPane>
+
