@@ -45,7 +45,7 @@
                         </HBox>
                         <ScrollPane fx:id="map_scrollpane" hbarPolicy="ALWAYS" onMouseMoved="#showPosition" pannable="true" prefHeight="398.0" prefWidth="358.0" vbarPolicy="ALWAYS">
                            <content>
-                              <Pane>
+                              <Pane fx:id="mapPane">
                                  <children>
                                     <ImageView pickOnBounds="true">
                                        <image>
