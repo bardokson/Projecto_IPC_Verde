@@ -6,6 +6,9 @@ package mapademo;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 /**
@@ -22,5 +25,21 @@ public class PrincipalController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    @FXML
+    private void Reg(ActionEvent event) {
+        LaSaforApp.abrirReg();
+    }
+
+    @FXML
+    private void Ini_ses(ActionEvent event) {
+        LaSaforApp.abrirSignIn();
+    }
+
+    @FXML
+    private void Salir(ActionEvent event) {
+        Platform.exit();
+        System.exit(0);
+    }
     
 }

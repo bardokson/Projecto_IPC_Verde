@@ -94,9 +94,8 @@ public class Inicio_de_sesionController implements Initializable{
      * @author Erik Tzv
      */
     @FXML
-    private void Cancel_reg() {         
-            Platform.exit();
-            System.exit(0);        
+    private void Cancel_reg() {
+        LaSaforApp.abrirHub();
     }
     
     /**

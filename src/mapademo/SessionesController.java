@@ -5,7 +5,6 @@
 package mapademo;
 
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -14,10 +13,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import upv.ipc.sportlib.Session;
 import upv.ipc.sportlib.User;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import java.time.Duration;
-import javafx.event.ActionEvent;
 
 /**
  * FXML Controller class
