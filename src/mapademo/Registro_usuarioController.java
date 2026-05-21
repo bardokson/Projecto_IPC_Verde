@@ -68,6 +68,10 @@ public class Registro_usuarioController implements Initializable {
     
     /**
      * Inicializa el controlador
+     * Hade bindbidireccional para entre textfield y paswordfield para enseñar contraseña
+     * Crea el popover y lo muestra al poner el raton encima del ImageView 
+     * Muestra mensaje de error de contraseña si se escribe en el text field de la contraseña
+     * @author Erik Tzv
      * @param url
      * @param rb
      */
@@ -95,6 +99,7 @@ public class Registro_usuarioController implements Initializable {
     
     /**
      * Comprueba si todos los campos son cerrectos y cambia la escena a la de actividades
+     * @author Erik Tzv
      * @throws IOException 
      */
     @FXML
@@ -113,6 +118,7 @@ public class Registro_usuarioController implements Initializable {
 
     /**
      * Saca al usuario de la app
+     * @author Erik Tzv
      * @param event 
      */
     @FXML
@@ -123,6 +129,7 @@ public class Registro_usuarioController implements Initializable {
     
     /**
      * HyperLink para pasar a la escena de inicio de sesion
+     * @author Erik Tzv
      * @throws IOException 
      */
     @FXML
@@ -132,6 +139,7 @@ public class Registro_usuarioController implements Initializable {
     
     /**
      * TextField del NickName, comprueba si el Nick tiene el formato correcto cada vez que se escribe un caracter
+     * @author Erik Tzv
      * @param event 
      */
     @FXML
@@ -154,6 +162,7 @@ public class Registro_usuarioController implements Initializable {
     
     /**
      * TextField del email, comprueba si el email tiene el formato correcto cada vez que se escribe un caracter
+     * @author Erik Tzv
      * @param event 
      */
     @FXML
@@ -171,6 +180,7 @@ public class Registro_usuarioController implements Initializable {
     /**
      * TextField de la contraseña, comprueba si la pass tiene el formato correcto cada vez que se escribe un caracter
      * Ademas muestra el popover con la info sobre la contraseña
+     * @author Erik Tzv
      * @param event 
      */
     @FXML
@@ -189,6 +199,7 @@ public class Registro_usuarioController implements Initializable {
     
     /**
      * DatePicker del año de nacimiento, comprueba la edad al poner la fecha de nacimiento
+     * @author Erik Tzv
      * @param event 
      */
     @FXML
@@ -202,12 +213,13 @@ public class Registro_usuarioController implements Initializable {
             Birth_ok = true;
         }
     }
+    
     /**
      * Permite al usuario poner una foto como avatar
      * Si no pone ninguna se le pondra una por defecto
+     * @author Jiaxiang Liu
      * @throws IOExceptionn
      */
-    
     @FXML
     private void Avatar_reg() throws IOException {
         FileChooser fc = new FileChooser();
@@ -240,6 +252,7 @@ public class Registro_usuarioController implements Initializable {
     
     /**
      * Muestra la contraseña
+     * @author Erik Tzv
      * @param event 
      */
     @FXML
@@ -258,27 +271,43 @@ public class Registro_usuarioController implements Initializable {
         
     }
     
+    /**
+     * @author Erik Tzv
+     */
     private static void cyclePressed(){
         pressed = !pressed;
     }
-    
+    /**
+     * @author Erik Tzv
+     */
     private static boolean getPressed(){
         
         return pressed;
     }
-    
+    /**
+     * @author Erik Tzv
+     */
     private void disableShown(){
         Pass_shown.setDisable(true);
         Pass_shown.setVisible(false);
     }
+    /**
+     * @author Erik Tzv
+     */
     private void disableReg(){
         Pass_reg.setDisable(true);
         Pass_reg.setVisible(false);       
     }
+    /**
+     * @author Erik Tzv
+     */
     private void enableShown(){
         Pass_shown.setDisable(false);
         Pass_shown.setVisible(true);
     }
+    /**
+     * @author Erik Tzv
+     */
     private void enableReg(){
         Pass_reg.setDisable(false);
         Pass_reg.setVisible(true);
