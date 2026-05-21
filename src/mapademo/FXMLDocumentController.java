@@ -411,23 +411,6 @@ public class FXMLDocumentController implements Initializable {
         mapContextMenu.getItems().get(1).setOnAction(e -> addCircle(clickX, clickY));
         mapContextMenu.getItems().get(2).setOnAction(e -> addLine(clickX, clickY));
         mapContextMenu.getItems().get(3).setOnAction(e -> addPoint(clickX, clickY));
-        /*if (projection != null && actividadActual != null) {
-                GeoPoint puntoGps = projection.unproject(clickX, clickY);
-                    Annotation nota = new Annotation(
-                    AnnotationType.TEXT, 
-                    "Nota en ruta", 
-                    "#FF0000", 
-                    2.0, 
-                    java.util.List.of(puntoGps)
-                );
-                
-                SportActivityApp.getInstance().addAnnotation(actividadActual, nota);
-                
-                Text t = new Text(clickX, clickY, "📌");
-                mapPane.getChildren().add(t);
-            } else {
-                System.out.println("Error: Falta cargar mapa o actividad");
-            }*/
 
         mapContextMenu.show(
             mapPane.getScene().getWindow(),
@@ -1206,10 +1189,10 @@ public class FXMLDocumentController implements Initializable {
             userAvatar.setImage(img);
         }
         
-        userAvatar.setFitWidth(90);
-        userAvatar.setFitHeight(90);
+        userAvatar.setFitWidth(100);
+        userAvatar.setFitHeight(100);
         userAvatar.setPreserveRatio(true);
-        javafx.scene.shape.Rectangle cut = new javafx.scene.shape.Rectangle(90, 90);
+        javafx.scene.shape.Rectangle cut = new javafx.scene.shape.Rectangle(100, 100);
         userAvatar.setClip(cut);
     }
     

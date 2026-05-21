@@ -241,7 +241,7 @@ public class ModificarUsuarioController implements Initializable {
         
         Birth_mod.setValue(PrevBirth);
         Email_mod.setText(PrevEmail);
-        Avatar_mod.setImage(PrevAvatar);
+        if (PrevAvatar != null) Avatar_mod.setImage(PrevAvatar);
 
         Pass_mod.textProperty().bindBidirectional(Pass_shown.textProperty());
         //Se encarga de enseñar el popover sobre la contraseña
