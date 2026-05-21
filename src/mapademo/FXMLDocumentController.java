@@ -30,7 +30,6 @@ package mapademo;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -46,6 +45,7 @@ import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -61,7 +61,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -69,13 +68,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import upv.ipc.sportlib.SportActivityApp;
 import upv.ipc.sportlib.Activity;
@@ -188,7 +187,12 @@ public class FXMLDocumentController implements Initializable {
     private double lineX, lineY;
     private String lineName;
     private List<Annotation> notes;
-    
+    private Color lineColor;
+    private int circleCounter = 1;
+    private int PoiCounter = 1;
+    private int LineCounter = 1;
+    private int PointCounter = 1;
+    private int activityCounter = 1;
     // =========================================================
     //  MANEJADORES DE ZOOM
     // =========================================================
@@ -573,7 +577,21 @@ public class FXMLDocumentController implements Initializable {
     // =========================================================
     //  AÑADIR UN POI (texto) AL MAPA
     // =========================================================
-
+    public String colorToHex(Color color) {
+        if (color == null) {
+            return "#000000";
+        }
+        return String.format("#%02X%02X%02X",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
+    }
+    public Color hexToColor(String hex) {
+    if (hex == null || hex.isEmpty()) {
+        return Color.BLACK; 
+    }
+    return Color.web(hex);
+    }   
     /**
      * Muestra un diálogo para introducir el nombre del nuevo POI,
      * lo añade al ListView y dibuja su etiqueta sobre el mapa.
@@ -582,62 +600,42 @@ public class FXMLDocumentController implements Initializable {
      * @param y coordenada Y del clic en el sistema local del mapPane
      */
     private void addPoi(double x, double y) {
-
-        // ── Construcción del diálogo personalizado ────────────────────
-        Dialog<String> poiDialog = new Dialog<>();
+        Dialog<ButtonType> poiDialog = new Dialog<>();
         poiDialog.setTitle("Nuevo POI");
         poiDialog.setHeaderText("Introduce un nuevo POI");
-
-        // Personalizamos el icono de la ventana del diálogo
         Stage dialogStage = (Stage) poiDialog.getDialogPane().getScene().getWindow();
         dialogStage.getIcons().add(
             new Image(getClass().getResourceAsStream("/resources/logo.png"))
         );
-
-        // Botones del diálogo: Aceptar y Cancelar
         ButtonType okButton = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
         poiDialog.getDialogPane().getButtonTypes().addAll(okButton, ButtonType.CANCEL);
-
-        // Campo de texto para el nombre del POI
         TextField nameField = new TextField();
         nameField.setPromptText("Nombre del POI");
-
-        // Layout del contenido del diálogo (VBox con espaciado de 10 px)
-        VBox vbox = new VBox(10, new Label("Nombre:"), nameField);
+        ColorPicker colorPicker = new ColorPicker(Color.BLACK);
+        VBox vbox = new VBox(10, new Label("Nombre:"), nameField, new Label("Color del texto:"), colorPicker);
         poiDialog.getDialogPane().setContent(vbox);
+        
+        Optional<ButtonType> result = poiDialog.showAndWait();
 
-        // ResultConverter: transforma la selección del botón en un objeto Poi.
-        // FIX 1: ya no usamos coordenadas provisionales (0,0); pasamos (x,y)
-        // directamente al constructor para que el modelo sea coherente desde el inicio.
-        poiDialog.setResultConverter(dialogButton -> {
-            if (dialogButton == okButton) {
-                return nameField.getText();
-            }
-            return null;
-        });
-
-        // Mostramos el diálogo y esperamos la respuesta del usuario
-        Optional<String> result = poiDialog.showAndWait();
-
-        if (result.isPresent()) {
+        if (result.isPresent() && result.get() == okButton) {
             
-            String aux = result.get();
+            String nombre = nameField.getText();
+            if (nombre.isEmpty()) {
+                nombre = "Texto " + PoiCounter;
+                PoiCounter++; 
+            }
+            Color colorElegido = colorPicker.getValue();
             GeoPoint geo = projection.unproject(x, y);
             Annotation note = new Annotation(
                     AnnotationType.TEXT,
-                    aux,
-                    "000000",
+                    nombre,
+                    colorToHex(colorElegido),
                     2.0,
                     List.of(geo)
             );
-            // Añadimos el POI al ListView (la CellFactory mostrará nombre y código)
             LaSaforApp.app.addAnnotation(actividadActual, note);
             drawPoi(note);
             map_listview.getItems().setAll(actividadActual.getAnnotations());
-
-            // FIX 1: usamos (x, y) tanto para el modelo como para el Text,
-            // garantizando que la etiqueta aparezca exactamente donde se hizo clic.
-            
         }
     }
     
@@ -653,6 +651,7 @@ public class FXMLDocumentController implements Initializable {
         Text text = new Text(poi.getCode());
         text.setX(x);
         text.setY(y);
+        text.setFill(hexToColor(note.getColor()));
         text.setUserData("annotation");
         mapPane.getChildren().add(text);
         
@@ -706,8 +705,7 @@ public class FXMLDocumentController implements Initializable {
      * @param y coordenada Y en el sistema local del mapPane
      */
     private void addCircle(double x, double y) {
-        
-        Dialog<String> circleDialog = new Dialog<>();
+        Dialog<ButtonType> circleDialog = new Dialog<>();
         circleDialog.setTitle("Nuevo circulo");
         circleDialog.setHeaderText("Introduce un nuevo circulo");
 
@@ -721,43 +719,46 @@ public class FXMLDocumentController implements Initializable {
 
         TextField nameField = new TextField();
         nameField.setPromptText("Nombre del circulo");
+        ColorPicker colorPicker = new ColorPicker(Color.RED);
 
-        VBox vbox = new VBox(10, new Label("Nombre:"), nameField);
+        VBox vbox = new VBox(10,
+            new Label("Nombre:"), nameField,
+            new Label("Color del círculo:"), colorPicker
+        );
+
+        
         circleDialog.getDialogPane().setContent(vbox);
         
-        circleDialog.setResultConverter(dialogButton -> {
-            if (dialogButton == okButton) {
-                return nameField.getText();
-            }
-            return null;
-        });
-        
-        Optional<String> result = circleDialog.showAndWait();
+        Optional<ButtonType> result = circleDialog.showAndWait();
 
-        if (result.isPresent()) {
-            
-            String aux = result.get();
+        if (result.isPresent() && result.get() == okButton) {
+            String nombre = nameField.getText();
+            if (nombre.isEmpty()) {
+                nombre = "Círculo " + circleCounter;
+                circleCounter++; 
+            }
+            Color colorElegido = colorPicker.getValue();
+ 
             GeoPoint geo = projection.unproject(x, y);
             Annotation note = new Annotation(
-                    AnnotationType.CIRCLE,
-                    aux,
-                    "FF0000",
-                    2.0,
-                    List.of(geo)
+                AnnotationType.CIRCLE,
+                nombre,
+                colorToHex(colorElegido),   
+                2.0,
+                List.of(geo)
             );
-
             LaSaforApp.app.addAnnotation(actividadActual, note);
             drawCircle(note);
             map_listview.getItems().setAll(actividadActual.getAnnotations());
         }
     }
+
     
     private void drawCircle(Annotation note) {
         GeoPoint a = note.getGeoPoints().get(0);
-        
         Point2D p = projection.project(a);
         
-        Circle circle = new Circle(10, Color.RED);
+        Circle circle = new Circle(10, hexToColor(note.getColor()));
         circle.setCenterX(p.getX());
         circle.setCenterY(p.getY());
         circle.setUserData("annotation");
@@ -766,57 +767,58 @@ public class FXMLDocumentController implements Initializable {
     }
     
     private void addPoint(double x, double y) {
-        Dialog<String> circleDialog = new Dialog<>();
-        circleDialog.setTitle("Nuevo punto");
-        circleDialog.setHeaderText("Introduce un nuevo punto");
+        Dialog<ButtonType> pointDialog = new Dialog<>();
+        pointDialog.setTitle("Nuevo punto");
+        pointDialog.setHeaderText("Introduce un nuevo punto");
 
-        Stage dialogStage = (Stage) circleDialog.getDialogPane().getScene().getWindow();
+        Stage dialogStage = (Stage) pointDialog.getDialogPane().getScene().getWindow();
         dialogStage.getIcons().add(
             new Image(getClass().getResourceAsStream("/resources/logo.png"))
         );
 
         ButtonType okButton = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
-        circleDialog.getDialogPane().getButtonTypes().addAll(okButton, ButtonType.CANCEL);
+        pointDialog.getDialogPane().getButtonTypes().addAll(okButton, ButtonType.CANCEL);
 
         TextField nameField = new TextField();
         nameField.setPromptText("Nombre del punto");
 
-        VBox vbox = new VBox(10, new Label("Nombre:"), nameField);
-        circleDialog.getDialogPane().setContent(vbox);
-        
-        circleDialog.setResultConverter(dialogButton -> {
-            if (dialogButton == okButton) {
-                return nameField.getText();
+        ColorPicker colorPicker = new ColorPicker(Color.RED); 
+        VBox vbox = new VBox(10,
+            new Label("Nombre:"), nameField,
+            new Label("Color del punto:"), colorPicker
+        );
+        pointDialog.getDialogPane().setContent(vbox);
+ 
+        Optional<ButtonType> result = pointDialog.showAndWait();
+
+                if (result.isPresent() && result.get() == okButton) {
+            String nombre = nameField.getText();
+            if (nombre.isEmpty()) {
+                nombre = "Punto " + PointCounter;
+                PointCounter++;
             }
-            return null;
-        });
-        
-        Optional<String> result = circleDialog.showAndWait();
-
-        if (result.isPresent()) {
-
-            String aux = result.get();
+            Color colorElegido = colorPicker.getValue();
             GeoPoint geo = projection.unproject(x, y);
             Annotation note = new Annotation(
-                    AnnotationType.POINT,
-                    aux,
-                    "0000FF",
-                    2.0,
-                    List.of(geo)
+                AnnotationType.CIRCLE,
+                nombre,
+                colorToHex(colorElegido),
+                2.0,
+                List.of(geo)
             );
-
             LaSaforApp.app.addAnnotation(actividadActual, note);
             drawPoint(note);
             map_listview.getItems().setAll(actividadActual.getAnnotations());
         }
     }
+
     
     private void drawPoint(Annotation note) {
         GeoPoint a = note.getGeoPoints().get(0);
         
         Point2D p = projection.project(a);
         
-        Circle point = new Circle(3, Color.BLUE);
+        Circle point = new Circle(5, hexToColor(note.getColor()));
         point.setCenterX(p.getX());
         point.setCenterY(p.getY());
         point.setUserData("annotation");
@@ -825,64 +827,78 @@ public class FXMLDocumentController implements Initializable {
     }
     
     private void addLine(double x, double y) {
-        
         if (!lineInput) {
-
+            Dialog<ButtonType> lineDialog = new Dialog<>();
+            lineDialog.setTitle("Nueva línea");
+            lineDialog.setHeaderText("Introduce el nombre y el color de la línea,\nluego haz clic derecho en el punto final.");
+ 
+            ButtonType okButton = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+            lineDialog.getDialogPane().getButtonTypes().addAll(okButton, ButtonType.CANCEL);
+ 
+            TextField nameField = new TextField();
+            nameField.setPromptText("Nombre de la línea");
+ 
+            ColorPicker colorPicker = new ColorPicker(Color.RED);
+ 
+            VBox vbox = new VBox(10,
+                new Label("Nombre:"), nameField,
+                new Label("Color de la línea:"), colorPicker
+            );
+            lineDialog.getDialogPane().setContent(vbox);
+ 
+            Optional<ButtonType> result = lineDialog.showAndWait();
+ 
+            if (result.isEmpty() || result.get() != okButton) return;
+            String nombreIngresado = nameField.getText().trim();
+            if (nombreIngresado.isEmpty()) {
+                lineName = "Línea " + LineCounter;
+                LineCounter++; 
+            } else {
+                lineName = nombreIngresado; 
+            }
+            lineColor = colorPicker.getValue();  
             lineInput = true;
             lineX = x;
             lineY = y;
-
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Nueva línea");
-            dialog.setHeaderText("Introduce nombre de la línea");
-
-            Optional<String> result = dialog.showAndWait();
-
-            if (result.isEmpty()) {
-                lineInput = false;
-                return;
-            }
-
-            lineName = result.get();
-
+ 
         } else {
-            drawLine(x, y, lineName);
+            drawLine(x, y, lineName, lineColor);
         }
     }
-    
-    private void drawLine(double x, double y, String name) {
-        GeoPoint start = projection.unproject(lineX, lineY);
-        GeoPoint end = projection.unproject(x, y);
 
+    
+    private void drawLine(double x, double y, String name, Color color) {
+        GeoPoint start = projection.unproject(lineX, lineY);
+        GeoPoint end   = projection.unproject(x, y);
+ 
         lineInput = false;
         Annotation note = new Annotation(
-                AnnotationType.LINE,
-                name,
-                "FF0000",
-                2.0,
-                List.of(start, end)
+            AnnotationType.LINE,
+            name,
+            colorToHex(color),  
+            5.0,
+            List.of(start, end)
         );
         LaSaforApp.app.addAnnotation(actividadActual, note);
         map_listview.getItems().setAll(actividadActual.getAnnotations());
         drawLine(note);
     }
 
-    private void drawLine(Annotation note) {
+
+        private void drawLine(Annotation note) {
         GeoPoint start = note.getGeoPoints().get(0);
-        GeoPoint end = note.getGeoPoints().get(1);
-        
+        GeoPoint end   = note.getGeoPoints().get(1);
+ 
         Point2D p1 = projection.project(start);
         Point2D p2 = projection.project(end);
-        
-        Line line = new Line();
-        line.setStartX(p1.getX());
-        line.setStartY(p1.getY());
-        line.setEndX(p2.getX());
-        line.setEndY(p2.getY());
+ 
+        Line line = new Line(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+        line.setStroke(hexToColor(note.getColor()));
+        line.setStrokeWidth(5.0);
         line.setUserData("annotation");
         mapPane.getChildren().add(line);
-        
     }
+
     /**
      * Abre un filechooser para importar un archivo gpx y la añade a la lista de actividades.
      */
@@ -911,20 +927,10 @@ public class FXMLDocumentController implements Initializable {
             MapRegion region = app.findMapForActivity(actividadActual);
             File mapFile = new File(region.getImagePath());
             buildMap(mapFile, region);
-
-            // 🌟 FIX: Forzamos a JavaFX a renderizar internamente el mapa para que su ancho y alto dejen de ser 0
             mapPane.layout(); 
-
-            // Guardamos las dimensiones reales calculadas por el contenedor
             double anchoReal = mapPane.getWidth();
             double altoReal = mapPane.getHeight();
-
-            //System.out.println("[Importar] Dimensiones reales detectadas en mapPane: " + anchoReal + "x" + altoReal);
-
-            // 2. Inicializamos la proyección con las medidas reales geométricas del panel
             this.projection = new MapProjection(region, anchoReal, altoReal);
-
-            // 3. Limpiamos y dibujamos
             mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
             dibujarRutaPorVelocidad();
             verActividades();
@@ -983,7 +989,6 @@ public class FXMLDocumentController implements Initializable {
 
         this.actividadActual = actividad;
 
-        // 2. Pintamos la ruta al frente
         dibujarRutaPorVelocidad();
 
         try {
@@ -993,7 +998,6 @@ public class FXMLDocumentController implements Initializable {
             desControl.setActivity(actividad);
             desControl.setMapContext(mapPane, projection);  
             
-            // NUEVA LÍNEA: Llamamos a tu método para que pinte la leyenda
             desControl.crearLeyendaVelocidad();
             
             javafx.scene.layout.Region chartRegion = (javafx.scene.layout.Region) desRoot;
@@ -1052,9 +1056,8 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     private void logOut() {
-        SportActivityApp app = LaSaforApp.app;
-        app.logout();
-        LaSaforApp.abrirSignIn();
+        LaSaforApp.app.logout();
+        LaSaforApp.abrirHub();
     }
 
     /**
@@ -1087,7 +1090,7 @@ public class FXMLDocumentController implements Initializable {
         alert.setTitle("Confirmar eliminación");
         alert.setHeaderText("¿Estás seguro de que deseas eliminar la actividad?");
         alert.setContentText("Esta acción eliminará permanentemente la actividad: " + activity.getName());
-        alert.initOwner(activityList.getScene().getWindow()); // Aseguramos que salga al frente
+        alert.initOwner(activityList.getScene().getWindow()); 
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -1111,22 +1114,26 @@ public class FXMLDocumentController implements Initializable {
      * Renombra la actividad seleccionada de la lista de actividades.
      */
     @FXML
-    void renameActivity() {
-        Activity activity = activityList.getSelectionModel().getSelectedItem();
-        if (activity == null) return;
+void renameActivity() {
+    Activity activity = activityList.getSelectionModel().getSelectedItem();
+    if (activity == null) return;
 
-        TextInputDialog dialog = new TextInputDialog(activity.getName());
-        dialog.setTitle("Renombrar actividad");
-        dialog.setHeaderText("Cambiar nombre actividad");
-        dialog.setContentText("Nuevo nombre:");
+    TextInputDialog dialog = new TextInputDialog(activity.getName());
+    dialog.setTitle("Renombrar actividad");
+    dialog.setHeaderText("Cambiar nombre actividad");
+    dialog.setContentText("Nuevo nombre:");
 
-        dialog.showAndWait().ifPresent(newName -> {
-            LaSaforApp.app.renameActivity(activity, newName);
-            refreshActivity();
-        });
+    dialog.showAndWait().ifPresent(newName -> {
+        // 1. Cambiamos el nombre en el sistema
+        LaSaforApp.app.renameActivity(activity, newName);
         
+        // 2. ¡ACTUALIZAMOS LA LISTA DE LA IZQUIERDA!
+        verActividades(); 
+        
+        // 3. Refrescamos el mapa por si acaso
         refreshActivity();
-    }
+    });
+}
     
     @FXML
     void removeNote() {
@@ -1150,8 +1157,7 @@ public class FXMLDocumentController implements Initializable {
     
     //Mi amigo GPT
     private void refreshActivity() {
-        
-        if (actividadActual == null) return;
+         if (actividadActual == null) return;
 
         //No entiendo de que mundo se ha sacado esto
         actividadActual = LaSaforApp.app

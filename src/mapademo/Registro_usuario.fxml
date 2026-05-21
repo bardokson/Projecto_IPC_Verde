@@ -143,14 +143,14 @@
                      </font></Label>
                </children>
             </VBox>
-            <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="55.0" prefWidth="166.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="9">
+            <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="47.0" prefWidth="190.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="9">
                <children>
                   <Button defaultButton="true" mnemonicParsing="false" onAction="#Acept_reg" styleClass="Boton-pos" text="Registrar">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="11.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#Cancel_reg" styleClass="Boton-neg" text="Salir">
+                  <Button mnemonicParsing="false" onAction="#Cancel_reg" styleClass="Boton-neg" text="Cancelar">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="11.0" />
                      </HBox.margin>
