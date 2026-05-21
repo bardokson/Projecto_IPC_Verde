@@ -183,6 +183,7 @@ public class FXMLDocumentController implements Initializable {
     private boolean lineInput = false;
     private double lineX, lineY;
     private String lineName;
+    private List<Annotation> notes;
     
     // =========================================================
     //  MANEJADORES DE ZOOM
@@ -652,6 +653,7 @@ public class FXMLDocumentController implements Initializable {
             
         }
     }
+    
     private void drawPoi(Annotation note) {
         GeoPoint a = note.getGeoPoints().get(0);
         
@@ -664,7 +666,9 @@ public class FXMLDocumentController implements Initializable {
         Text text = new Text(poi.getCode());
         text.setX(x);
         text.setY(y);
+        text.setUserData("annotation");
         mapPane.getChildren().add(text);
+        
     }
 
 
@@ -769,7 +773,9 @@ public class FXMLDocumentController implements Initializable {
         Circle circle = new Circle(10, Color.RED);
         circle.setCenterX(p.getX());
         circle.setCenterY(p.getY());
+        circle.setUserData("annotation");
         mapPane.getChildren().add(circle);
+        
     }
     
     private void addPoint(double x, double y) {
@@ -826,7 +832,9 @@ public class FXMLDocumentController implements Initializable {
         Circle point = new Circle(3, Color.BLUE);
         point.setCenterX(p.getX());
         point.setCenterY(p.getY());
+        point.setUserData("annotation");
         mapPane.getChildren().add(point);
+
     }
     
     private void addLine(double x, double y) {
@@ -884,8 +892,9 @@ public class FXMLDocumentController implements Initializable {
         line.setStartY(p1.getY());
         line.setEndX(p2.getX());
         line.setEndY(p2.getY());
-        
+        line.setUserData("annotation");
         mapPane.getChildren().add(line);
+        
     }
     /**
      * Abre un filechooser para importar un archivo gpx y la añade a la lista de actividades.
@@ -914,16 +923,6 @@ public class FXMLDocumentController implements Initializable {
 
             MapRegion region = app.findMapForActivity(actividadActual);
             File mapFile = new File(region.getImagePath());
-            buildMap(mapFile, region);
-            
-            
-            mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
-            
-            // Pintamos la ruta en el mapa recién cambiado
-            //dibujarRutaPorVelocidad();
-            
-
-            // 1. Construimos el mapa primero
             buildMap(mapFile, region);
 
             // 🌟 FIX: Forzamos a JavaFX a renderizar internamente el mapa para que su ancho y alto dejen de ser 0
@@ -970,33 +969,6 @@ public class FXMLDocumentController implements Initializable {
         activityList.getItems().setAll(currentUser.getActivities());
         
     }
-    
-    private void verAnnotaciones() {
-        mapPane.getChildren().removeIf(node -> 
-            node instanceof Circle ||
-            node instanceof Line ||
-            node instanceof Text
-        );
-        List<Annotation> lista = new ArrayList<>(actividadActual.getAnnotations());
-        map_listview.getItems().setAll(lista);
-        for (Annotation a : lista) {
-            
-            switch (a.getType()) {
-                case POINT: 
-                    drawPoint(a);
-                    break;
-                case LINE:
-                    drawLine(a);
-                    break;
-                case TEXT:
-                    drawPoi(a);
-                    break;
-                case CIRCLE:
-                    drawCircle(a);
-                    break;
-            }
-        }
-    }
 
     /**
      * Abre y mueve el mapa a la zona de inicio de la actividad seleccionada de la lista.
@@ -1005,17 +977,17 @@ public class FXMLDocumentController implements Initializable {
     private void activitySelected(MouseEvent event) {
         Activity actividad = activityList.getSelectionModel().getSelectedItem();
         if (actividad == null) return;
-        abrirActividad(actividad);
         actividadActual = actividad;
-        verAnnotaciones();
+        abrirActividad(actividadActual);
     }
 
     private void abrirActividad(Activity actividad) {
+
         SportActivityApp app = LaSaforApp.app;
         MapRegion region = app.findMapForActivity(actividad);
         File mapFile = new File(region.getImagePath());
         buildMap(mapFile, region); 
-
+        
         mapPane.layout();
         double anchoReal = mapPane.getWidth();
         double altoReal = mapPane.getHeight();
@@ -1076,6 +1048,10 @@ public class FXMLDocumentController implements Initializable {
             timeline.getKeyFrames().add(kf);
             timeline.play();
         }
+        
+        verActividades();
+        notes = actividadActual.getAnnotations();
+        refreshActivity();
         
     }
     /**
@@ -1175,13 +1151,41 @@ public class FXMLDocumentController implements Initializable {
         alert.initOwner(map_listview.getScene().getWindow());
 
         Optional<ButtonType> result = alert.showAndWait();
+        
         if (result.isPresent() && result.get() == ButtonType.OK) {
 
             LaSaforApp.app.removeAnnotation(note);
-            map_listview.getItems().setAll(actividadActual.getAnnotations());
-            abrirActividad(actividadActual);
-            verAnnotaciones();
-            map_listview.refresh();
+            refreshActivity();
+        }
+    }
+    
+    //Mi amigo GPT
+    private void refreshActivity() {
+        
+        if (actividadActual == null) return;
+
+        //No entiendo de que mundo se ha sacado esto
+        actividadActual = LaSaforApp.app
+                .getActivitiesByUser(LaSaforApp.app.getCurrentUser())
+                .stream()
+                .filter(a -> a.getId() == actividadActual.getId())
+                .findFirst()
+                .orElse(actividadActual);
+
+        // limpiar mapa de anotaciones
+        mapPane.getChildren().removeIf(n -> "annotation".equals(n.getUserData()));
+
+        // actualizar lista
+        map_listview.getItems().setAll(actividadActual.getAnnotations());
+
+        // redibujar todo
+        for (Annotation a : actividadActual.getAnnotations()) {
+            switch (a.getType()) {
+                case POINT -> drawPoint(a);
+                case LINE -> drawLine(a);
+                case TEXT -> drawPoi(a);
+                case CIRCLE -> drawCircle(a);
+            }
         }
     }
     
@@ -1309,7 +1313,7 @@ public class FXMLDocumentController implements Initializable {
        contenedorRuta.toFront();
 
        mostrarEstadisticas(distanciaTotalMetros, puntos);
-   }
+    }
     
     private void mostrarEstadisticas(double distanciaMetros, java.util.List<TrackPoint> puntos) {
        if (puntos == null || puntos.size() < 2) return;
