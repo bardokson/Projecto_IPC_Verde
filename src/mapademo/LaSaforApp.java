@@ -35,9 +35,10 @@ public class LaSaforApp extends Application {
      * @param w ancho de la ventana en píxeles
      * @param h alto de la ventana en píxeles
      */
-    static void setRoot(Parent root, int w, int h){
+    static void setRoot(Parent root,String nombre, int w, int h){
         scene.setRoot(root);
         Stage stage = (Stage) scene.getWindow();
+        stage.setTitle(nombre);
         stage.setWidth(w);
         stage.setHeight(h);
         stage.centerOnScreen();
@@ -72,18 +73,18 @@ public class LaSaforApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Registro_usuario.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Principal.fxml"));
         Parent root = loader.load();
-        roots.put("registro", root);
+        roots.put("principal", root);
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/coconut.jpg")));
         
         scene = new Scene(root);
-        stage.setTitle("Registro");
+        stage.setTitle("Principal");
         stage.setScene(scene);
-        
+        /*
         loader = new FXMLLoader(getClass().getResource("Inicio_de_sesion.fxml"));
         root = loader.load();
-        roots.put("inicio_sesion", root);
+        roots.put("inicio_sesion", root);*/
         
         stage.show();
     }
@@ -105,7 +106,7 @@ public class LaSaforApp extends Application {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("FXMLDocument.fxml"));
             Parent actividadesRoot = loader.load();
             LaSaforApp.roots.put("actividades", actividadesRoot);
-            setRoot(actividadesRoot, w, h);
+            setRoot(actividadesRoot,"Actividades", w, h);
         } catch (Exception e) {e.printStackTrace();}
     }
     
@@ -117,7 +118,7 @@ public class LaSaforApp extends Application {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("ModificarUsuario.fxml"));
             Parent modRoot = loader.load();
             LaSaforApp.roots.put("modificar", modRoot);
-            setRoot(modRoot, 480, 470);
+            setRoot(modRoot,"Modificar perfil", 480, 470);
         } catch (Exception e) {e.printStackTrace();}
     }
     
@@ -129,7 +130,7 @@ public class LaSaforApp extends Application {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("Registro_usuario.fxml"));
             Parent regRoot = loader.load();
             LaSaforApp.roots.put("registro", regRoot);
-            setRoot(regRoot, 500, 500);
+            setRoot(regRoot,"Registro", 500, 500);
         } catch (Exception e) {e.printStackTrace();}
     }
     
@@ -141,7 +142,7 @@ public class LaSaforApp extends Application {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("Inicio_de_sesion.fxml"));
             Parent signRoot = loader.load();
             LaSaforApp.roots.put("signin", signRoot);
-            setRoot(signRoot, 456, 300);
+            setRoot(signRoot,"Inicio de sesión", 456, 300);
         } catch (Exception e) {e.printStackTrace();}
     }
     
@@ -153,7 +154,16 @@ public class LaSaforApp extends Application {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("Sessiones.fxml"));
             Parent signRoot = loader.load();
             LaSaforApp.roots.put("sessionHistory", signRoot);
-            setRoot(signRoot, 600, 600);
+            setRoot(signRoot,"Historial",600, 600);
+        } catch (Exception e) {e.printStackTrace();}
+    }
+    
+    public static void abrirHub() {
+        try {
+            FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("Principal.fxml"));
+            Parent principal = loader.load();
+            LaSaforApp.roots.put("principal", principal);
+            setRoot(principal,"Principal", 456, 500);
         } catch (Exception e) {e.printStackTrace();}
     }
     /**

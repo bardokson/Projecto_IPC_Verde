@@ -123,8 +123,7 @@ public class Registro_usuarioController implements Initializable {
      */
     @FXML
     private void Cancel_reg(ActionEvent event) {                 
-                Platform.exit();
-                System.exit(0);
+        LaSaforApp.abrirHub();
     }
     
     /**

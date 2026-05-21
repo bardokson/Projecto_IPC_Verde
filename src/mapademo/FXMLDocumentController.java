@@ -30,7 +30,6 @@ package mapademo;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -62,7 +61,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -70,7 +68,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
@@ -1059,9 +1056,8 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     private void logOut() {
-        SportActivityApp app = LaSaforApp.app;
-        app.logout();
-        LaSaforApp.abrirSignIn();
+        LaSaforApp.app.logout();
+        LaSaforApp.abrirHub();
     }
 
     /**
@@ -1161,24 +1157,23 @@ void renameActivity() {
     
     //Mi amigo GPT
     private void refreshActivity() {
-        if (actividadActual == null) return;
+         if (actividadActual == null) return;
 
-        // 1. Buscamos la actividad fresca directamente en la lista del usuario
-        for (Activity a : LaSaforApp.app.getCurrentUser().getActivities()) {
-            // Usamos .equals() para comparar IDs de forma segura (sirve para String e Integer)
-            if (String.valueOf(a.getId()).equals(String.valueOf(actividadActual.getId()))) {
-                actividadActual = a;
-                break;
-            }
-        }
+        //No entiendo de que mundo se ha sacado esto
+        actividadActual = LaSaforApp.app
+                .getActivitiesByUser(LaSaforApp.app.getCurrentUser())
+                .stream()
+                .filter(a -> a.getId() == actividadActual.getId())
+                .findFirst()
+                .orElse(actividadActual);
 
-        // 2. Limpiar mapa de anotaciones anteriores
+        // limpiar mapa de anotaciones
         mapPane.getChildren().removeIf(n -> "annotation".equals(n.getUserData()));
 
-        // 3. Actualizar lista lateral con los nuevos datos
+        // actualizar lista
         map_listview.getItems().setAll(actividadActual.getAnnotations());
 
-        // 4. Redibujar todas las formas geométricas sobre el mapa
+        // redibujar todo
         drawNotes();
     }
     
