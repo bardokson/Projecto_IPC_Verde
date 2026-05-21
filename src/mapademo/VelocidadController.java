@@ -68,8 +68,6 @@ public class VelocidadController {
             // Añadir tramo al grupo
             trazadoColores.getChildren().add(tramo);
         }
-
-        
         // NUEVA MEJORA: Añadimos una leyenda fija en la esquina del mapa
             javafx.scene.text.Text leyendaRoja = new javafx.scene.text.Text(10, 20, "▬ < 8 km/h (Lento)");
             leyendaRoja.setFill(Color.RED);
@@ -88,4 +86,9 @@ public class VelocidadController {
         
         return trazadoColores;
     }
+    
 }
+
+
+
+

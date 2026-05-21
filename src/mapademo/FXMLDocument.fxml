@@ -22,31 +22,30 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="gridBase" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
+<GridPane fx:id="gridBase" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="70.0" vgrow="NEVER" />
-      <RowConstraints maxHeight="5.0" minHeight="10.0" prefHeight="5.0" vgrow="SOMETIMES" />
+      <RowConstraints />
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <BorderPane minHeight="623.0" minWidth="900.0" prefHeight="623.0" prefWidth="900.0" GridPane.rowIndex="2">
+      <BorderPane minHeight="623.0" minWidth="900.0" prefHeight="623.0" prefWidth="900.0" GridPane.rowIndex="1">
          <center>
-            <VBox prefHeight="556.0" prefWidth="853.0" stylesheets="@../resources/estilos.css">
+            <VBox prefHeight="556.0" prefWidth="853.0">
                <children>
-                  <SplitPane fx:id="splitPane" dividerPositions="0.19699727024567792" VBox.vgrow="ALWAYS">
+                  <SplitPane fx:id="splitPane" dividerPositions="0.197" VBox.vgrow="ALWAYS">
                      <items>
                         <HBox maxWidth="350.0" minWidth="350.0" prefHeight="543.0" prefWidth="350.0">
                            <children>
-                              <ListView fx:id="activityList" maxWidth="174.0" minWidth="175.0" onMouseClicked="#activitySelected" prefHeight="552.0" prefWidth="175.0" />
-                              <ListView fx:id="map_listview" maxWidth="174.0" minWidth="175.0" onMouseClicked="#listClicked" prefHeight="399.0" prefWidth="175.0" />
+                              <ListView fx:id="activityList" maxWidth="174.0" minWidth="175.0" onMouseClicked="#activitySelected" prefHeight="552.0" prefWidth="175.0" styleClass="panel-fondo" />
+                              <ListView fx:id="map_listview" maxWidth="174.0" minWidth="175.0" onMouseClicked="#listClicked" prefHeight="399.0" prefWidth="175.0" styleClass="panel-fondo" />
                            </children>
                         </HBox>
                         <ScrollPane fx:id="map_scrollpane" hbarPolicy="ALWAYS" onMouseMoved="#showPosition" pannable="true" prefHeight="398.0" prefWidth="358.0" vbarPolicy="ALWAYS">
                            <content>
-                              <Pane>
+                              <Pane fx:id="mapPane">
                                  <children>
                                     <ImageView pickOnBounds="true">
                                        <image>
@@ -62,94 +61,128 @@
                </children>
             </VBox>
          </center>
-         <top>
-            <HBox alignment="CENTER_RIGHT" fillHeight="false" maxHeight="27.0" minHeight="27.0" minWidth="888.0" prefHeight="27.0" prefWidth="888.0" spacing="5.0" BorderPane.alignment="CENTER">
-               <children>
-                  <MenuBar>
-                    <menus>
-                      <Menu mnemonicParsing="false" text="Info">
-                        <items>
-                          <MenuItem mnemonicParsing="false" onAction="#about" text="Acerca de" />
-                        </items>
-                      </Menu>
-                    </menus>
-                  </MenuBar>
-                  <Button mnemonicParsing="false" onAction="#abrirMenuAnadirMapa" text="Añadir Mapa" />
-                  <Button mnemonicParsing="false" onAction="#cambiarMapa" text="Cambiar mapa" />
-                  <Button mnemonicParsing="false" onAction="#importarGPX" text="Importar Carrera" />
-                  <Region HBox.hgrow="ALWAYS" />
-                  <Label text="Zoom" />
-                  <Button mnemonicParsing="false" onAction="#zoomOut" text="-" />
-                  <Slider fx:id="zoom_slider" HBox.hgrow="SOMETIMES" />
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#zoomIn" text="+" />
-               </children>
-               <BorderPane.margin>
-                  <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
-               </BorderPane.margin>
-            </HBox>
-         </top>
          <bottom>
-            <HBox alignment="CENTER_RIGHT" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" spacing="10.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER_RIGHT" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" spacing="10.0" styleClass="panel-fondo" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#renameActivity" text="Renombrar Actividad" />
-                  <Button mnemonicParsing="false" onAction="#removeActivity" text="Borrar Actividad" />
-                  <Separator orientation="VERTICAL" prefHeight="200.0" />
-                  <Button mnemonicParsing="false" onAction="#renameNote" text="Renombrar Anotación" />
-                  <Button mnemonicParsing="false" onAction="#removeNote" text="Borrar Anotación" />
-                  <Separator orientation="VERTICAL" prefHeight="200.0">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin></Separator>
-                  <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="240.0" spacing="5.0">
+                     <children>
+                        <Label styleClass="texto-dato" text="Zoom" />
+                        <Button mnemonicParsing="false" onAction="#zoomOut" styleClass="boton-secundario" text="-" />
+                        <Slider fx:id="zoom_slider" HBox.hgrow="SOMETIMES" />
+                        <Button mnemonicParsing="false" onAction="#zoomIn" styleClass="boton-secundario" text="+" />
+                     </children>
+                  </HBox>
                   <Separator orientation="VERTICAL" prefHeight="200.0">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </Separator>
-                  <Label fx:id="mousePosition" minHeight="-Infinity" minWidth="-Infinity" text="SceneX:     ScenY:     " wrapText="true" HBox.hgrow="ALWAYS" />
+                  <Label fx:id="mousePosition" minHeight="-Infinity" minWidth="-Infinity" styleClass="texto-dato" text="SceneX:     ScenY:     " wrapText="true" HBox.hgrow="ALWAYS" />
                </children>
                <BorderPane.margin>
-                  <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                  <Insets top="5.0" />
                </BorderPane.margin>
             </HBox>
          </bottom>
+         <top>
+            <GridPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <ImageView fx:id="userAvatar" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                     <image>
+                        <Image url="@../resources/avatar_default.png" />
+                     </image>
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </ImageView>
+                  <VBox prefHeight="97.0" prefWidth="920.0" spacing="5.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="35.0" styleClass="barra-menu-unida">
+                           <children>
+                              <MenuBar maxWidth="-Infinity" prefHeight="27.0">
+                                <menus>
+                                  <Menu mnemonicParsing="false" text="App">
+                                    <items>
+                                      <MenuItem mnemonicParsing="false" onAction="#about" text="Acerca de" />
+                                          <MenuItem mnemonicParsing="false" onAction="#logOutExit" text="Cerrar" />
+                                    </items>
+                                  </Menu>
+                                  <Menu mnemonicParsing="false" text="Mapa">
+                                    <items>
+                                          <MenuItem mnemonicParsing="false" onAction="#cambiarMapa" text="Cambiar Mapa" />
+                                          <MenuItem mnemonicParsing="false" onAction="#abrirMenuAnadirMapa" text="Añadir Mapa" />
+                                    </items>
+                                  </Menu>
+                                </menus>
+                              </MenuBar>
+                              <Region HBox.hgrow="ALWAYS" />
+                              <MenuBar>
+                                 <menus>
+                                    <Menu fx:id="username" mnemonicParsing="false" text="Username">
+                                      <items>
+                                          <MenuItem mnemonicParsing="false" onAction="#modPerfil" text="Modificar Perfil" />
+                                          <MenuItem mnemonicParsing="false" onAction="#abrirEstadisticas" text="Estadísticas" />
+                                          <MenuItem mnemonicParsing="false" onAction="#verSesiones" text="Sesiones" />
+                                          <MenuItem mnemonicParsing="false" onAction="#logOut" text="Log Out" />
+                                      </items>
+                                    </Menu>
+                                 </menus>
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </MenuBar>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0">
+                           <children>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#importarGPX" styleClass="boton-secundario" text="Importar Actividad" />
+                                 </children>
+                                 <padding>
+                                    <Insets right="5.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox fx:id="modActivity" alignment="CENTER" disable="true" spacing="10.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#renameActivity" styleClass="boton-secundario" text="Renombrar Actividad" />
+                                    <Button mnemonicParsing="false" onAction="#removeActivity" styleClass="boton-secundario" text="Borrar Actividad" />
+                                 </children>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox fx:id="modNotes" alignment="CENTER" disable="true" spacing="10.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#renameNote" styleClass="boton-secundario" text="Renombrar Anotación" />
+                                    <Button mnemonicParsing="false" onAction="#removeNote" styleClass="boton-secundario" text="Borrar Anotación" />
+                                 </children>
+                                 <padding>
+                                    <Insets left="15.0" />
+                                 </padding>
+                              </HBox>
+                              <Region HBox.hgrow="ALWAYS" />
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </GridPane>
+         </top>
       </BorderPane>
-      <Separator prefWidth="200.0" GridPane.rowIndex="1" />
-      <HBox alignment="CENTER" maxHeight="70.0" minHeight="70.0" prefHeight="70.0" prefWidth="900.0" spacing="10.0" GridPane.halignment="RIGHT" GridPane.vgrow="NEVER">
-         <GridPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </GridPane.margin>
-         <children>
-            <Button mnemonicParsing="false" onAction="#logOut" text="Log Out" />
-            <Button mnemonicParsing="false" onAction="#logOutExit" text="Log Out &amp; Exit" />
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <Button mnemonicParsing="false" onAction="#verSesiones" text="Ver Historial Sesiones" />
-            <Button mnemonicParsing="false" onAction="#modPerfil" text="Modificar Perfil">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Button>
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            <Separator orientation="VERTICAL" prefHeight="200.0">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Separator>
-            <Label fx:id="username" text="Username">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Label>
-            <ImageView fx:id="userAvatar" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../resources/avatar_default.png" />
-               </image>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </ImageView>
-         </children>
-      </HBox>
    </children>
 </GridPane>
