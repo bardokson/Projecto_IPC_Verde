@@ -1002,8 +1002,11 @@ private void abrirActividad(Activity actividad) {
     // Siempre: redibujar anotaciones desde la ListView
     mapPane.getChildren().removeIf(n ->
         !(n instanceof ImageView) &&
-        !"capaRutaGPX".equals(n.getId())
+        !"capaRutaGPX".equals(n.getId()) &&
+        !"rastreador".equals(n.getId()) && 
+        !"textoRastreador".equals(n.getId())
     );
+    
     drawNotes();
 }
     /**
@@ -1113,7 +1116,13 @@ void removeNote() {
         anotacionesPorActividad.getOrDefault(actividadActual.getId(), new java.util.ArrayList<>()).remove(note);
         LaSaforApp.app.removeAnnotation(note);
         map_listview.getItems().remove(note);
-        mapPane.getChildren().removeIf(n -> !(n instanceof ImageView) && !"capaRutaGPX".equals(n.getId()));
+       mapPane.getChildren().removeIf(n ->
+        !(n instanceof ImageView) &&
+        !"capaRutaGPX".equals(n.getId()) &&
+        !"rastreador".equals(n.getId()) && 
+        !"textoRastreador".equals(n.getId())
+    );
+       
         drawNotes();
     }
 }
@@ -1353,7 +1362,9 @@ private void renameNote() {
 
     mapPane.getChildren().removeIf(n ->
         !(n instanceof ImageView) &&
-        !"capaRutaGPX".equals(n.getId())
+        !"capaRutaGPX".equals(n.getId()) &&
+        !"rastreador".equals(n.getId()) && 
+        !"textoRastreador".equals(n.getId())
     );
     drawNotes();
 }
