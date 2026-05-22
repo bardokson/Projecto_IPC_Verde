@@ -922,6 +922,37 @@ private void abrirActividad(Activity actividad) {
             desControl.setActivity(actividad);
             desControl.setMapContext(mapPane, projection);
             desControl.crearLeyendaVelocidad();
+            
+            
+            java.util.List<TrackPoint> puntos = actividad.getTrackPoints();
+            if (puntos != null && puntos.size() >= 2) {
+                TrackPoint pInicio = puntos.get(0);
+                TrackPoint pFin = puntos.get(puntos.size() - 1);
+                
+                // Distancia
+                double distanciaMetros = 0;
+                for (int i = 0; i < puntos.size() - 1; i++) {
+                    distanciaMetros += puntos.get(i).distanceTo(puntos.get(i+1));
+                }
+                double distanciaKm = distanciaMetros / 1000.0;
+                
+                // Tiempo
+                long segundosTotales = java.time.Duration.between(pInicio.getTime(), pFin.getTime()).getSeconds();
+                long horas = segundosTotales / 3600;
+                long minutos = (segundosTotales % 3600) / 60;
+                long segundos = segundosTotales % 60;
+                String tiempoFormateado = String.format("%02d:%02d:%02d", horas, minutos, segundos);
+                
+                // Velocidad
+                double velocidadMedia = 0.0;
+                if (segundosTotales > 0) {
+                    velocidadMedia = (distanciaKm / (segundosTotales / 3600.0));
+                }
+                
+                // Enviamos los datos al panel de la derecha
+                desControl.mostrarEstadisticasEnPantalla(tiempoFormateado, distanciaKm, velocidadMedia);
+            }
+            
             javafx.scene.layout.Region chartRegion = (javafx.scene.layout.Region) desRoot;
             chartRegion.setMinWidth(320);
             chartRegion.setMaxWidth(320);
