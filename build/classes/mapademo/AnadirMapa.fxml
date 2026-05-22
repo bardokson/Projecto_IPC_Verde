@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="369.0" prefWidth="523.0" spacing="10.0" styleClass="panel-formulario" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.AnadirMapaController">
+   <children>
+      <HBox styleClass="cabecera-naranja">
+         <children>
+            <Label styleClass="titulo-blanco" text="Añadir Nuevo Mapa">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox prefHeight="62.0" prefWidth="422.0">
+         <children>
+            <TextField fx:id="rutaImagenField" editable="false" prefHeight="26.0" prefWidth="162.0" promptText="Ruta de la imagen..." />
+            <Button mnemonicParsing="false" onAction="#seleccionarImagen" styleClass="boton-naranja" text="Examinar..." />
+         </children>
+         <VBox.margin>
+            <Insets left="50.0" right="50.0" />
+         </VBox.margin>
+      </HBox>
+      <GridPane prefWidth="398.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Latitud Mínima:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label text="Latitud Máxima:" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label text="Longitud Mínima:" GridPane.rowIndex="2">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label text="Longitud Máxima:" GridPane.rowIndex="3">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="latMinField" styleClass="campo-texto" GridPane.columnIndex="1" />
+            <TextField fx:id="latMaxField" styleClass="campo-texto" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="lonMinField" styleClass="campo-texto" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="lonMaxField" styleClass="campo-texto" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         </children>
+         <VBox.margin>
+            <Insets left="50.0" right="50.0" />
+         </VBox.margin>
+      </GridPane>
+      <HBox alignment="BOTTOM_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="54.0" prefWidth="422.0" spacing="15.0">
+         <children>
+            <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#guardarMapa" styleClass="boton-naranja" text="Guardar Mapa" />
+            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#accCancelar" styleClass="boton-cancelar" text="Cancelar" />
+         </children>
+         <VBox.margin>
+            <Insets left="50.0" right="50.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>
