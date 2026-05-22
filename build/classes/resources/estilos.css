@@ -1,0 +1,278 @@
+/*
+ * Copyright (c) 2014, Oracle and/or its affiliates.
+ * All rights reserved. Use is subject to license terms.
+ *
+ * This file is available and licensed under the following license:
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  - Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the distribution.
+ *  - Neither the name of Oracle Corporation nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/*******************************************************************************
+ *                                                                             *
+ * Embedded Styling                                                            *
+ *                                                                             *
+ ******************************************************************************/
+
+
+
+/*******************************************************************************
+ *                                                                             *
+ * High Contrast Theme                                                         *
+ *                                                                             *
+ ******************************************************************************/
+
+.contrast {
+    -app-color-hi: #5bf900;
+    -app-color-lo: black;
+    -app-hover: #666666;
+    -fx-background-color: -app-color-lo;
+}
+
+/*-------------------------- map pin ------------------------- */
+
+.map-pin {
+    -fx-shape: "M13.558,0C6.07,0,0,6.07,0,13.558s13.558,22.346,13.558,22.346s13.558-14.858,13.558-22.346S21.045,0,13.558,0z
+M13.558,20.762c-4.084,0-7.395-3.311-7.395-7.395s3.311-7.395,7.395-7.395c4.084,0,7.396,3.311,7.396,7.395
+S17.642,20.762,13.558,20.762z";    
+    -fx-background-color: black, white;
+    -fx-background-insets: 0, 2;
+    -fx-effect: dropshadow( two-pass-box, rgba(0, 0, 0, 0.5), 10, 0.0, 0, 10 );
+    -fx-pref-width: 48;
+    -fx-pref-height: 60;
+}
+.map-pin .arrow-button .arrow {
+    -fx-padding: 0;
+}
+
+
+
+
+
+
+
+/* ========================================================= */
+/* ESTILOS PARA AÑADIR MAPA, REGISTROS Y FORMULARIOS         */
+/* ========================================================= */
+
+.panel-formulario {
+    -fx-background-color: #F4F4F4;
+    -fx-padding: 0px; /* Sin padding general, así la cabecera puede tocar los bordes */
+}
+
+
+.cabecera-naranja {
+    -fx-background-color: #FC4C02; 
+    -fx-padding: 15px;
+    -fx-alignment: center;
+    -fx-pref-width: 1000px; /* Forzamos un ancho grande para que ocupe todo el espacio disponible */
+    -fx-min-width: USE_PREF_SIZE; 
+}
+
+
+.titulo-blanco {
+    -fx-font-size: 24px;
+    -fx-text-fill: white; /* Letra blanca para que resalte sobre el naranja */
+    -fx-font-weight: bold;
+}
+
+.boton-naranja {
+    -fx-background-color: #FC4C02; 
+    -fx-text-fill: white; 
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 3px; 
+    /* Hemos quitado el padding y el height para que recupere su tamaño natural */
+}
+
+.boton-naranja:hover {
+    -fx-background-color: #E34402; 
+}
+
+.campo-texto {
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    /* Dejamos a JavaFX que calcule su altura por defecto */
+}
+
+.boton-cancelar {
+    -fx-background-color: transparent; 
+    -fx-border-color: #cccccc; 
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-text-fill: #666666; 
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    /* Hemos borrado el padding para que mida exactamente lo mismo que el naranja */
+}
+
+.boton-cancelar:hover {
+    -fx-background-color: #e6e6e6; 
+    -fx-text-fill: black;
+}
+
+
+/* ========================================================= */
+/* ESTILOS TEMA PRINCIPAL (Estadísticas y general)           */
+/* ========================================================= */
+
+/* Fondo limpio tipo tarjeta */
+.panel-fondo {
+    -fx-background-color: white;
+    -fx-border-color: #e6e6e6;
+    -fx-border-width: 2px;
+}
+
+/* El naranja corporativo de nuestra app para destacar */
+.titulo-destacado {
+    -fx-text-fill: #FC4C02; 
+}
+
+/* Botón principal */
+.boton-principal {
+    -fx-background-color: #FC4C02;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 20px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.boton-principal:hover {
+    -fx-background-color: #E34402; /* Un pelín más oscuro al pasar el ratón */
+}
+
+/* Textos de los datos */
+.texto-dato {
+    -fx-text-fill: #333333;
+}
+
+/* Los números resultantes en naranja corporativo */
+.texto-valor {
+    -fx-text-fill: #FC4C02;
+}
+
+
+/* ========================================================= */
+/* ESTILOS PARA LA GRÁFICA DE DESNIVEL                       */
+/* ========================================================= */
+
+/* Color de la línea de la gráfica (naranja corporativo) */
+.grafica-corporativa .chart-series-area-line {
+    -fx-stroke: #FC4C02;
+    -fx-stroke-width: 2px;
+}
+
+/* Color del relleno bajo la línea (naranja semitransparente) */
+.grafica-corporativa .chart-series-area-fill {
+    -fx-fill: rgba(252, 76, 2, 0.2);
+}
+
+/* Fondo de la zona de dibujo de la gráfica (transparente para que pille el blanco de fondo) */
+.grafica-corporativa .chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+/* Limpiar la cuadrícula: quitamos las líneas verticales y ponemos las horizontales en gris clarito */
+.grafica-corporativa .chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+.grafica-corporativa .chart-horizontal-grid-lines {
+    -fx-stroke: #e6e6e6;
+    -fx-stroke-dash-array: 5 5;
+}
+
+/* Textos de los ejes (Distancia y Altitud) */
+.grafica-corporativa .axis-label {
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+}
+
+
+
+/* ========================================================= */
+/* ESTILOS BARRA DE NAVEGACIÓN Y MENÚS PRINCIPALES           */
+/* ========================================================= */
+
+/* La barra superior unida de lado a lado (Naranja) */
+.barra-menu-unida {
+    -fx-background-color: #FC4C02;
+    -fx-padding: 2px 10px; /* Un poco de aire por los lados */
+}
+
+/* Quitamos el fondo gris por defecto de los menús para que se fundan con la barra */
+.barra-menu-unida .menu-bar {
+    -fx-background-color: transparent;
+}
+
+/* Estilo del texto de los menús principales (App, Mapa, Username) */
+.barra-menu-unida .menu > .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 5px 10px;
+    -fx-cursor: hand;
+}
+
+/* Efecto al pasar el ratón por App, Mapa o Username */
+.barra-menu-unida .menu:hover,
+.barra-menu-unida .menu:showing {
+    -fx-background-color: #E34402; /* Un naranja un poco más oscuro */
+    -fx-background-radius: 4px;
+}
+
+/* Estilo del desplegable (cuando haces clic y se abre hacia abajo) */
+.barra-menu-unida .context-menu {
+    -fx-background-color: white;
+    -fx-border-color: #FC4C02;
+    -fx-border-width: 2px;
+}
+.barra-menu-unida .menu-item .label {
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+}
+.barra-menu-unida .menu-item:hover {
+    -fx-background-color: #FFF0E6; /* Naranja super clarito al pasar el ratón */
+}
+
+/* ========================================================= */
+/* BOTONES SECUNDARIOS (Para herramientas debajo de la barra)*/
+/* ========================================================= */
+.boton-secundario {
+    -fx-background-color: white;
+    -fx-border-color: #FC4C02;
+    -fx-text-fill: #FC4C02;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 5px 10px;
+}
+.boton-secundario:hover {
+    -fx-background-color: #FFF0E6; 
+}
+
