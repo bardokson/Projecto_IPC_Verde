@@ -1012,7 +1012,7 @@ private void abrirActividad(Activity actividad) {
     }
     
     @FXML
-    private void removeActivity(ActionEvent event) {
+    private void removeActivity() {
         Activity activity = activityList.getSelectionModel().getSelectedItem();
         if (activity == null) return;
         
@@ -1038,8 +1038,8 @@ private void abrirActividad(Activity actividad) {
             mapPane.layout();
             this.projection = new MapProjection(region, mapPane.getWidth(), mapPane.getHeight());
             map_listview.getItems().clear();
+            cerrarStatMapa();
         }
-        cerrarStatMapa();
     }
     
     /**
