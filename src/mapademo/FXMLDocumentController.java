@@ -1111,7 +1111,7 @@ public class FXMLDocumentController implements Initializable {
     }
     
     @FXML
-    private void removeActivity(ActionEvent event) {
+    private void removeActivity() {
         Activity activity = activityList.getSelectionModel().getSelectedItem();
         if (activity == null) return;
         
@@ -1137,8 +1137,8 @@ public class FXMLDocumentController implements Initializable {
             mapPane.layout();
             this.projection = new MapProjection(region, mapPane.getWidth(), mapPane.getHeight());
             map_listview.getItems().clear();
+            cerrarStatMapa();
         }
-        cerrarStatMapa();
     }
     
     /**
