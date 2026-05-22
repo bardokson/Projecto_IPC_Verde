@@ -56,6 +56,14 @@ public class DesnivelController {
             if (puntoRastreador != null) puntoRastreador.setVisible(false);
             if (textoInfoRastreador != null) textoInfoRastreador.setVisible(false);
         });
+        
+        
+        javafx.scene.layout.VBox.setVgrow(graficaDesnivel, javafx.scene.layout.Priority.ALWAYS);
+        
+        graficaDesnivel.setLegendVisible(false); 
+        graficaDesnivel.setCreateSymbols(false); 
+        graficaDesnivel.setAnimated(false);
+        
     }
 
     public void setMapContext(Pane mapPane, MapProjection projection) {
@@ -196,4 +204,43 @@ public class DesnivelController {
         }
     
     }
+    
+    
+    // =========================================================
+    // ESTADÍSTICAS DE LA ACTIVIDAD (Texto en pantalla)
+    // =========================================================
+    public void mostrarEstadisticasEnPantalla(String tiempo, double distanciaKm, double velocidad) {
+        
+        javafx.scene.layout.VBox statsBox = new javafx.scene.layout.VBox(5);
+        statsBox.setAlignment(javafx.geometry.Pos.CENTER); 
+        statsBox.setStyle("-fx-padding: 10px; -fx-background-color: #fdfdfd; -fx-border-color: #e6e6e6; -fx-border-radius: 5px; -fx-background-radius: 5px;"); // Un fondito sutil para que destaque
+
+        javafx.scene.control.Label titulo = new javafx.scene.control.Label("Resumen del Track");
+        titulo.setStyle("-fx-font-weight: bold; -fx-text-fill: #FC4C02; -fx-font-size: 14px;"); // Tu naranja corporativo
+
+        javafx.scene.control.Label lblDist = new javafx.scene.control.Label(String.format("Distancia: %.2f km", distanciaKm));
+        lblDist.setStyle("-fx-font-weight: bold; -fx-text-fill: #333333;");
+
+        javafx.scene.control.Label lblTiempo = new javafx.scene.control.Label("Tiempo: " + tiempo);
+        lblTiempo.setStyle("-fx-font-weight: bold; -fx-text-fill: #333333;");
+
+        javafx.scene.control.Label lblVel = new javafx.scene.control.Label(String.format("Velocidad Media: %.2f km/h", velocidad));
+        lblVel.setStyle("-fx-font-weight: bold; -fx-text-fill: #333333;");
+
+        statsBox.getChildren().addAll(titulo, lblDist, lblTiempo, lblVel);
+
+        // Añadimos esta cajita nueva al contenedor principal, debajo de la gráfica
+        if (graficaDesnivel.getParent() instanceof javafx.scene.layout.VBox) {
+            javafx.scene.layout.VBox padre = (javafx.scene.layout.VBox) graficaDesnivel.getParent();
+            
+            // Lo añadimos al final (debajo de la gráfica)
+            // Asegurarnos de no añadirlo mil veces si el usuario clica varias actividades
+            if(padre.getChildren().size() < 4) {
+                 padre.getChildren().add(statsBox);
+            } else {
+                 padre.getChildren().set(3, statsBox); // Si ya existe, lo reemplazamos
+            }
+        }
+    }
+    
 }
