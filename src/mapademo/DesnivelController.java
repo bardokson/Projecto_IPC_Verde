@@ -71,14 +71,20 @@ public class DesnivelController {
         this.projection = projection;
 
         // Creamos punto rastreador
-        this.puntoRastreador = new Circle(6, Color.BLUE);
+       this.puntoRastreador = new Circle(6, Color.BLUE);
+        this.puntoRastreador.setId("rastreador"); // <--- NUEVO
         this.puntoRastreador.setStroke(Color.WHITE);
+        
+        
         this.puntoRastreador.setStrokeWidth(2);
         this.puntoRastreador.setMouseTransparent(true); // Para que no bloquee clics
         this.puntoRastreador.setVisible(false);
         
         // NUEVA MEJORA: Inicializamos nuestro texto flotante
         this.textoInfoRastreador = new javafx.scene.text.Text();
+        
+        this.textoInfoRastreador.setId("textoRastreador");
+        
         this.textoInfoRastreador.setStyle("-fx-font-weight: bold; -fx-fill: #191970;"); // Color azul oscuro
         this.textoInfoRastreador.setVisible(false);
         this.textoInfoRastreador.setMouseTransparent(true);
@@ -176,7 +182,7 @@ public class DesnivelController {
     public void crearLeyendaVelocidad() {
         // Creamos un contenedor horizontal para los textos
         javafx.scene.layout.VBox leyenda = new javafx.scene.layout.VBox(5);
-        leyenda.setAlignment(javafx.geometry.Pos.CENTER_LEFT); // Para que queden alineados a la izquierda
+        leyenda.setAlignment(javafx.geometry.Pos.CENTER); // Para que queden alineados a la izquierda
 
         // Usamos los colores y rangos exactos que tus compañeros han puesto en el main
         javafx.scene.control.Label l1 = new javafx.scene.control.Label("▬ Lento (< 35)");
