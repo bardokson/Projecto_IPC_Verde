@@ -17,6 +17,10 @@ import upv.ipc.sportlib.Activity;
 import upv.ipc.sportlib.SportActivityApp;
 import upv.ipc.sportlib.User;
 
+/**
+ * Controlador de la ventana de Estadísticas Acumuladas.
+ */
+
 public class EstadisticasController {
 
     @FXML private DatePicker dpDesde;
@@ -27,6 +31,13 @@ public class EstadisticasController {
     @FXML private Label lblAscenso;
     @FXML private Label lblDescenso;
 
+    
+    
+    /**
+     * Método de inicialización de JavaFX.
+     */
+    
+    
     @FXML
     public void initialize() {
 
@@ -37,7 +48,14 @@ public class EstadisticasController {
     }
 
     /**
-     * Documentacion.
+     * Motor principal de cálculo de estadísticas.
+     * Extrae el rango de fechas seleccionado por el usuario y recorre todas las 
+     * actividades del perfil activo. 
+     * Si una actividad entra en el rango temporal,itera sobre sus TrackPoints para 
+     * acumular la distancia total y calcular las diferencias de altitud (ascenso y descenso acumulado).
+     * Finalmente, formatea los datos y los inyecta en las etiquetas de la interfaz.
+     * 
+     * [Código asistido por IA]
      */
     @FXML
     private void calcularEstadisticas() {
@@ -112,7 +130,7 @@ public class EstadisticasController {
 
     /**
      * Metodo auxiliar para crear alertas.
-     * 
+     * Configurado por defecto como una alerta de tipo WARNING
      * @param titulo titulo para la alerta
      * @param mensaje titulo para el mensaje
      */

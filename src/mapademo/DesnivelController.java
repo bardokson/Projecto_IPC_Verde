@@ -20,6 +20,10 @@ import upv.ipc.sportlib.TrackPoint;
 import upv.ipc.sportlib.GeoUtils;
 import upv.ipc.sportlib.MapProjection;
 
+/*
+ * Controlador encargado de la visualización y gestión del perfil de desnivel.
+ */
+
 public class DesnivelController {
 
     @FXML private AreaChart<Number, Number> graficaDesnivel;
@@ -62,10 +66,12 @@ public class DesnivelController {
     }
 
     /**
-     * Documentacion.
+     * Enlaza este controlador con el contexto visual y geográfico del mapa principal.
+     * Inicializa los elementos gráficos (un círculo y un texto) que actuarán como 
+     * "rastreador" interactivo sobre el mapa cuando el usuario pase el ratón por la gráfica.
      * 
-     * @param mapPane
-     * @param projection
+     * @param mapPane    El panel principal donde se dibuja el mapa y las rutas.
+     * @param projection Objeto que permite traducir coordenadas GPS a píxeles en pantalla.
      */
     public void setMapContext(Pane mapPane, MapProjection projection) {
         this.mapPane = mapPane;
@@ -92,9 +98,11 @@ public class DesnivelController {
     }
     
     /**
-     * Documentacion.
+     * Procesa los puntos GPS de la actividad seleccionada para generar la gráfica de altimetría.
      * 
-     * @param actividad
+     * [Código asistido por IA]
+     * 
+     * @param actividad La actividad deportiva seleccionada que contiene el track GPS.
      */
     public void setActivity(Activity actividad) {
         this.actividadActual = actividad;
@@ -128,9 +136,14 @@ public class DesnivelController {
     }
 
     /**
-     * Documentacion.
+     * Maneja el evento de movimiento del ratón sobre la gráfica de desnivel.
+     * Interpola la posición X del ratón para calcular la distancia en kilómetros, 
+     * busca el punto GPS real más cercano a esa distancia y actualiza la posición 
+     * del "rastreador" (bolita azul y texto) sobre el mapa para sincronizar ambas vistas.
      * 
-     * @param event
+     * [Código asistido por IA]
+     * 
+     * @param event El evento de ratón capturado sobre el AreaChart.
      */
     private void onMouseMovedGraph(MouseEvent event) {
         if (actividadActual == null || mapPane == null || projection == null || puntoRastreador == null) {return;}
@@ -172,8 +185,8 @@ public class DesnivelController {
         textoInfoRastreador.toFront();
     }
 
-    /**
-     * Documentacion.
+   /**
+     * Construye e inyecta dinámicamente la leyenda de colores para los tramos de velocidad.
      */
     public void crearLeyendaVelocidad() {
         
@@ -202,11 +215,15 @@ public class DesnivelController {
     
     
     /**
-     * Documentacion.
+     * Genera un panel visual (Dashboard) con el resumen estadístico de la actividad.
+     * Muestra la distancia total, el tiempo empleado y la velocidad media en una caja
+     * se acopla dinámicamente debajo de la gráfica de desnivel.
      * 
-     * @param tiempo
-     * @param distanciaKm
-     * @param velocidad
+     * [Código asistido por IA]
+     * 
+     * @param tiempo      Cadena de texto formateada (HH:MM:SS) con la duración total.
+     * @param distanciaKm Distancia total recorrida en kilómetros.
+     * @param velocidad   Velocidad media de la actividad en km/h.
      */
     public void mostrarEstadisticasEnPantalla(String tiempo, double distanciaKm, double velocidad) {
         
