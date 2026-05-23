@@ -10,13 +10,11 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-// Importamos las clases de la librería de la práctica
 import upv.ipc.sportlib.MapRegion;
 import upv.ipc.sportlib.SportActivityApp;
 
 public class AnadirMapaController {
 
-    // Las variables inyectadas desde el Scene Builder (fx:id)
     @FXML private TextField rutaImagenField;
     @FXML private TextField latMinField;
     @FXML private TextField latMaxField;
@@ -24,8 +22,7 @@ public class AnadirMapaController {
     @FXML private TextField lonMaxField;    
     @FXML private Button btnGuardar;
     @FXML private Button btnCancelar;
-
-    // Guardaremos el archivo de imagen que seleccione el usuario
+    
     private File imagenSeleccionada;
 
     /**
@@ -66,12 +63,10 @@ public class AnadirMapaController {
             double latMax = Double.parseDouble(latMaxField.getText());
             double lonMin = Double.parseDouble(lonMinField.getText());
             double lonMax = Double.parseDouble(lonMaxField.getText());
-            
-            
-            // MEJORA: Comprobamos que las coordenadas tengan sentido lógico
+
             if (latMin >= latMax || lonMin >= lonMax) {
                 mostrarAlerta(Alert.AlertType.WARNING, "Coordenadas inválidas", "Las coordenadas máximas deben ser estrictamente mayores que las mínimas.");
-                return; // Cortamos la ejecución aquí para no guardar un mapa roto
+                return;
             }
             
 
@@ -83,9 +78,7 @@ public class AnadirMapaController {
 
             if (nuevaRegion != null) {
                 mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "El mapa se ha añadido correctamente a la base de datos.");
-                
-                // Cierra la ventana actual tras guardar
-                
+
                 javafx.scene.Node source = (javafx.scene.Node) event.getSource();
                 Stage stage = (Stage) source.getScene().getWindow();
                 stage.close();
@@ -99,11 +92,14 @@ public class AnadirMapaController {
         }
     }
 
-    
-    
-    
-
-    // Método de apoyo para mostrar ventanas emergentes 
+    /**
+     * Metodo que genera las alertas.
+     * IA
+     * 
+     * @param tipo tipo de alerta
+     * @param titulo titulo de la alerta
+     * @param mensaje mensaje de la alerta
+     */
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
@@ -113,11 +109,14 @@ public class AnadirMapaController {
     }
     
     /**
-     * Devuelve a la ventana de actividades 
+     * Devuelve a la ventana de actividades.
+     * IA
+     * 
      * @param event 
      */
     @FXML
     private void accCancelar(ActionEvent event) {
+        
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle("Confirmar cancelación");
         alerta.setHeaderText(null);
@@ -126,7 +125,6 @@ public class AnadirMapaController {
         Optional<ButtonType> resultado = alerta.showAndWait();
         
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-            // Obtiene la referencia a la ventana actual a través del evento y la cierra
             javafx.scene.Node source = (javafx.scene.Node) event.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
             stage.close();
@@ -134,9 +132,8 @@ public class AnadirMapaController {
     }
     
     /**
-     * Inicializador del controlador para añadir mapas
+     * Inicializador del controlador para añadir mapas.
      */
-    
     @FXML
     public void initialize() {
         configurarFiltroNumerico(latMinField);
@@ -145,8 +142,10 @@ public class AnadirMapaController {
         configurarFiltroNumerico(lonMaxField);
     }
 
-    /*
-     * permitir unicamente la entrada de caracteres numericos, el punto decimal y el signo negativo.
+    /**
+     * Permitir unicamente la entrada de caracteres numericos, el punto decimal y el signo negativo.
+     * 
+     * @param campoTexto campo de texto que configurar
      */
     private void configurarFiltroNumerico(TextField campoTexto) {
         campoTexto.textProperty().addListener((observable, oldValue, newValue) -> {

@@ -36,12 +36,14 @@ public class SessionesController implements Initializable {
 
     private User user = LaSaforApp.app.getCurrentUser();
     private List<Session> sesList = LaSaforApp.app.getSessionsByUser(user);
+    
     /**
-     * Inicializa el controlador de sesiones
+     * Inicializa el controlador de sesiones.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        //GPT
         sesion.setCellValueFactory(
                 cellData -> new javafx.beans.property.ReadOnlyStringWrapper("Sesión " + cellData.getValue().getId()));
 
@@ -58,6 +60,7 @@ public class SessionesController implements Initializable {
         
         numNote.setCellValueFactory(
                 cellData -> new javafx.beans.property.ReadOnlyObjectWrapper<>(cellData.getValue().getAnnotationsCreated()));
+        //GPT
         
         tablaSesiones.setItems(javafx.collections.FXCollections.observableArrayList(sesList));
         
@@ -78,6 +81,7 @@ public class SessionesController implements Initializable {
         final int finalAnnotations = totalNotes;
         final String finalDuration = totalDuration.toHours() + " h " + (totalDuration.toMinutes() % 60) + " min";
         
+        //GPT
         totalTime.setCellValueFactory(
                 cellData ->new javafx.beans.property.ReadOnlyObjectWrapper<>(finalDuration));
         
@@ -94,10 +98,11 @@ public class SessionesController implements Initializable {
             javafx.collections.ObservableList<Session> filaTotal = javafx.collections.FXCollections.observableArrayList(sesList.get(0));
             tablaTotal.setItems(filaTotal);
         }
+        //GPT
     }    
     
     /**
-     * Retorna la escena a las actividades
+     * Retorna la escena a las actividades.
      */
     @FXML
     private void volver() {

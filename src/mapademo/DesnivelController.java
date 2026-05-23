@@ -27,31 +27,26 @@ public class DesnivelController {
     @FXML private NumberAxis ejeY;
 
     private Activity actividadActual;
-    private List<Double> distanciasAcumuladas; // Guardar la distancia de cada punto
+    private List<Double> distanciasAcumuladas;
 
-    // Variables para comunicar con mapa principal
     private Pane mapPane;
     private MapProjection projection;
-    private Circle puntoRastreador; // El punto flotante que viaja por el mapa
-    private javafx.scene.text.Text textoInfoRastreador; // El texto que acompañará a la bolita
+    private Circle puntoRastreador;
+    private javafx.scene.text.Text textoInfoRastreador;
     
     
     /**
-     * Inicializa el controlador para mostrar el desnivel de una ruta
+     * Inicializa el controlador para mostrar el desnivel de una ruta.
      */
     public void initialize() {
         graficaDesnivel.setLegendVisible(false); 
         graficaDesnivel.setCreateSymbols(false); 
         graficaDesnivel.setAnimated(false); 
 
-        // Hacemos que el eje Y se ajuste a las altitudes reales 
-        // y no nos obligue a empezar siempre desde 0 metros.
         ejeY.setForceZeroInRange(false);
 
-        // Escuchamos el movimiento del ratón sobre nuestra gráfica
         graficaDesnivel.setOnMouseMoved(this::onMouseMovedGraph);
-        
-        // Esconder el punto y texto si sacas el ratón de la gráfica
+
         graficaDesnivel.setOnMouseExited(e -> {
             if (puntoRastreador != null) puntoRastreador.setVisible(false);
             if (textoInfoRastreador != null) textoInfoRastreador.setVisible(false);
@@ -66,33 +61,41 @@ public class DesnivelController {
         
     }
 
+    /**
+     * Documentacion.
+     * 
+     * @param mapPane
+     * @param projection
+     */
     public void setMapContext(Pane mapPane, MapProjection projection) {
         this.mapPane = mapPane;
         this.projection = projection;
 
-        // Creamos punto rastreador
-       this.puntoRastreador = new Circle(6, Color.BLUE);
-        this.puntoRastreador.setId("rastreador"); // <--- NUEVO
+        this.puntoRastreador = new Circle(6, Color.BLUE);
+        this.puntoRastreador.setId("rastreador");
         this.puntoRastreador.setStroke(Color.WHITE);
         
         
         this.puntoRastreador.setStrokeWidth(2);
-        this.puntoRastreador.setMouseTransparent(true); // Para que no bloquee clics
+        this.puntoRastreador.setMouseTransparent(true);
         this.puntoRastreador.setVisible(false);
-        
-        // NUEVA MEJORA: Inicializamos nuestro texto flotante
+
         this.textoInfoRastreador = new javafx.scene.text.Text();
         
         this.textoInfoRastreador.setId("textoRastreador");
         
-        this.textoInfoRastreador.setStyle("-fx-font-weight: bold; -fx-fill: #191970;"); // Color azul oscuro
+        this.textoInfoRastreador.setStyle("-fx-font-weight: bold; -fx-fill: #191970;");
         this.textoInfoRastreador.setVisible(false);
         this.textoInfoRastreador.setMouseTransparent(true);
-        
-        // Añadimos la bolita y el texto al lienzo del mapa
+
         this.mapPane.getChildren().addAll(puntoRastreador, textoInfoRastreador);
     }
-
+    
+    /**
+     * Documentacion.
+     * 
+     * @param actividad
+     */
     public void setActivity(Activity actividad) {
         this.actividadActual = actividad;
         this.distanciasAcumuladas = new ArrayList<>();
@@ -111,8 +114,7 @@ public class DesnivelController {
         for (TrackPoint puntoActual : puntos) {
             distanciaAcumuladaMetros += GeoUtils.distance(puntoAnterior, puntoActual);
             double distanciaKm = distanciaAcumuladaMetros / 1000.0;
-            
-            // Guardamos esto para que el ratón sepa qué buscar luego
+
             distanciasAcumuladas.add(distanciaKm);
 
             double altitud = puntoActual.getElevation();
@@ -125,28 +127,25 @@ public class DesnivelController {
         graficaDesnivel.getData().add(serieDesnivel);
     }
 
-    // Sincronizar el ratón con el mapa
-    // Sincronizar el ratón con el mapa
+    /**
+     * Documentacion.
+     * 
+     * @param event
+     */
     private void onMouseMovedGraph(MouseEvent event) {
-        if (actividadActual == null || mapPane == null || projection == null || puntoRastreador == null) {
-            return;
-        }
+        if (actividadActual == null || mapPane == null || projection == null || puntoRastreador == null) {return;}
 
-        // qué coordenada X (kilómetros) tenemos el ratón
         double xEnPixels = ejeX.sceneToLocal(event.getSceneX(), event.getSceneY()).getX();
         Number distanciaKmObj = ejeX.getValueForDisplay(xEnPixels);
         if (distanciaKmObj == null) return;
         double distanciaRaton = distanciaKmObj.doubleValue();
 
-        // NUEVO FIX: Evitar que salga la bolita si estamos en el margen izquierdo (< 0) 
-        // o si nos salimos por la derecha de la gráfica.
         if (distanciaRaton < 0 || distanciasAcumuladas.isEmpty() || distanciaRaton > distanciasAcumuladas.get(distanciasAcumuladas.size() - 1)) {
             puntoRastreador.setVisible(false);
             if (textoInfoRastreador != null) textoInfoRastreador.setVisible(false);
-            return; // Cortamos la ejecución aquí
+            return;
         }
 
-        // 2. Buscar en la lista qué punto GPS está más cerca de esa distancia
         int indiceMasCercano = 0;
         double diferenciaMinima = Double.MAX_VALUE;
 
@@ -158,7 +157,6 @@ public class DesnivelController {
             }
         }
 
-        // 3. Obtener el punto GPS real, traducirlo a píxeles y mover la bolita azul
         TrackPoint puntoGPS = actividadActual.getTrackPoints().get(indiceMasCercano);
         Point2D pixelPos = projection.project(puntoGPS);
 
@@ -167,24 +165,21 @@ public class DesnivelController {
         puntoRastreador.setVisible(true);
         puntoRastreador.toFront(); // Poner siempre encima de todo
         
-        // Movemos el texto junto a la bolita y le ponemos los datos
         textoInfoRastreador.setText(String.format("%.2f km | %.0f m", distanciaRaton, puntoGPS.getElevation()));
-        // Lo ponemos un poco desplazado para que el ratón o la bolita no lo tapen
         textoInfoRastreador.setX(pixelPos.getX() + 12);
         textoInfoRastreador.setY(pixelPos.getY() - 12);
         textoInfoRastreador.setVisible(true);
         textoInfoRastreador.toFront();
     }
 
-    // =========================================================
-    // LEYENDA DE VELOCIDAD
-    // =========================================================
+    /**
+     * Documentacion.
+     */
     public void crearLeyendaVelocidad() {
-        // Creamos un contenedor horizontal para los textos
+        
         javafx.scene.layout.VBox leyenda = new javafx.scene.layout.VBox(5);
-        leyenda.setAlignment(javafx.geometry.Pos.CENTER); // Para que queden alineados a la izquierda
+        leyenda.setAlignment(javafx.geometry.Pos.CENTER);
 
-        // Usamos los colores y rangos exactos que tus compañeros han puesto en el main
         javafx.scene.control.Label l1 = new javafx.scene.control.Label("▬ Lento (< 35)");
         l1.setTextFill(Color.RED);
         l1.setStyle("-fx-font-weight: bold;");
@@ -199,22 +194,20 @@ public class DesnivelController {
 
         leyenda.getChildren().addAll(l1, l2, l3);
 
-        // Cogemos el VBox principal de esta vista (el padre de la gráfica)
         if (graficaDesnivel.getParent() instanceof javafx.scene.layout.VBox) {
             javafx.scene.layout.VBox padre = (javafx.scene.layout.VBox) graficaDesnivel.getParent();
-            
-            // FIX: Lo insertamos en la posición 0 (arriba del todo, por encima del título)
-            if (padre.getChildren().size() == 2) {
-                padre.getChildren().add(0, leyenda);
-            }
+            if (padre.getChildren().size() == 2) {padre.getChildren().add(0, leyenda);}
         }
-    
     }
     
     
-    // =========================================================
-    // ESTADÍSTICAS DE LA ACTIVIDAD (Texto en pantalla)
-    // =========================================================
+    /**
+     * Documentacion.
+     * 
+     * @param tiempo
+     * @param distanciaKm
+     * @param velocidad
+     */
     public void mostrarEstadisticasEnPantalla(String tiempo, double distanciaKm, double velocidad) {
         
         javafx.scene.layout.VBox statsBox = new javafx.scene.layout.VBox(5);
@@ -235,16 +228,13 @@ public class DesnivelController {
 
         statsBox.getChildren().addAll(titulo, lblDist, lblTiempo, lblVel);
 
-        // Añadimos esta cajita nueva al contenedor principal, debajo de la gráfica
         if (graficaDesnivel.getParent() instanceof javafx.scene.layout.VBox) {
             javafx.scene.layout.VBox padre = (javafx.scene.layout.VBox) graficaDesnivel.getParent();
-            
-            // Lo añadimos al final (debajo de la gráfica)
-            // Asegurarnos de no añadirlo mil veces si el usuario clica varias actividades
+
             if(padre.getChildren().size() < 4) {
                  padre.getChildren().add(statsBox);
             } else {
-                 padre.getChildren().set(3, statsBox); // Si ya existe, lo reemplazamos
+                 padre.getChildren().set(3, statsBox);
             }
         }
     }

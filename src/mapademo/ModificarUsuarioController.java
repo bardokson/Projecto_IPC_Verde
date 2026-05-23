@@ -63,7 +63,8 @@ public class ModificarUsuarioController implements Initializable {
     private Image Avatar;
     private String Avatar_Path;
 
-    /**Abre filechooser para elegir una imagen que poner como avatar
+    /**
+     * Abre filechooser para elegir una imagen que poner como avatar.
      */
     @FXML
     void Avatar_mod() throws Exception{
