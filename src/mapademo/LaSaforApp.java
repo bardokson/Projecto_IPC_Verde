@@ -76,9 +76,9 @@ public class LaSaforApp extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Principal.fxml"));
         Parent root = loader.load();
         roots.put("principal", root);
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/coconut.jpg")));
-        
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/coconut.jpg")));    
         scene = new Scene(root);
+        scene.getStylesheets().add("/resources/estilos.css");
         stage.setTitle("Principal");
         stage.setScene(scene);
         /*

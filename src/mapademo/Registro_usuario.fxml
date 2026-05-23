@@ -20,7 +20,7 @@
 
 <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="480.0" styleClass="Background" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.Registro_usuarioController">
    <children>
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="471.0" style="-fx-background-color: orange;">
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="471.0" styleClass="header">
          <children>
             <Label styleClass="header" text="Registro">
                <font>
@@ -34,7 +34,7 @@
             <Insets top="16.0" />
          </opaqueInsets>
       </Separator>
-      <GridPane alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="413.0" prefWidth="471.0">
+      <GridPane alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="413.0" prefWidth="471.0" styleClass="panel-fondo">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="161.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="310.0" minWidth="10.0" prefWidth="310.0" />
@@ -54,7 +54,7 @@
          <children>
             <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="61.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <TextField fx:id="NickName_reg" maxWidth="-Infinity" onKeyTyped="#Entering_Nick" prefHeight="26.0" prefWidth="236.0" styleClass="Field">
+                  <TextField fx:id="NickName_reg" maxWidth="-Infinity" onKeyTyped="#Entering_Nick" prefHeight="26.0" prefWidth="236.0" styleClass="campo">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin></TextField>
@@ -66,7 +66,7 @@
             </VBox>
             <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="65.0" prefWidth="237.0" GridPane.rowIndex="2">
                <children>
-                  <Label alignment="CENTER_RIGHT" styleClass="Label" text="NickName:  " textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" styleClass="texto-principal" text="NickName:  " textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -76,7 +76,7 @@
             </VBox>
             <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="64.0" prefWidth="237.0" GridPane.rowIndex="3">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="Label" text="Email:  " textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="texto-principal" text="Email:  " textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -86,7 +86,7 @@
             </VBox>
             <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="59.0" prefWidth="237.0" GridPane.rowIndex="4">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="Label" text="Contraseña:  " textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="texto-principal" text="Contraseña:  " textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -96,7 +96,7 @@
             </VBox>
             <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="59.0" prefWidth="237.0" GridPane.rowIndex="5">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="Label" text="Fecha nacimiento:" textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="texto-principal" text="Fecha nacimiento:" textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -109,7 +109,7 @@
             </VBox>
             <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="64.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
-                  <TextField fx:id="Email_reg" maxWidth="-Infinity" onKeyTyped="#Entering_email" prefHeight="26.0" prefWidth="236.0" promptText="usuario@dominio" styleClass="Field">
+                  <TextField fx:id="Email_reg" maxWidth="-Infinity" onKeyTyped="#Entering_email" prefHeight="26.0" prefWidth="236.0" promptText="usuario@dominio" styleClass="campo">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
@@ -124,8 +124,8 @@
                <children>
                   <StackPane maxWidth="-Infinity" prefHeight="8.0" prefWidth="236.0">
                      <children>
-                        <PasswordField fx:id="Pass_reg" maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#Entering_pass" prefHeight="26.0" prefWidth="236.0" styleClass="Field" />
-                        <TextField fx:id="Pass_shown" disable="true" maxWidth="-Infinity" prefWidth="236.0" styleClass="Field" visible="false" />
+                        <PasswordField fx:id="Pass_reg" maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#Entering_pass" prefHeight="26.0" prefWidth="236.0" styleClass="campo" />
+                        <TextField fx:id="Pass_shown" disable="true" maxWidth="-Infinity" prefWidth="236.0" styleClass="campo" visible="false" />
                      </children>
                   </StackPane>
                   <Label fx:id="Err_pass" prefHeight="18.0" prefWidth="338.0" text="El formato de la contraseña es incorecto" textFill="RED" visible="false">
@@ -136,21 +136,21 @@
             </VBox>
             <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="61.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <children>
-                  <DatePicker fx:id="Birth_reg" onAction="#Entering_birth" prefHeight="26.0" prefWidth="122.0" promptText="dd/mm/yyyy" styleClass="Field" />
+                  <DatePicker id="date" fx:id="Birth_reg" onAction="#Entering_birth" prefHeight="26.0" prefWidth="122.0" promptText="dd/mm/yyyy" styleClass="date_picker" stylesheets="@../resources/dater.css" />
                   <Label fx:id="Err_birth" prefHeight="18.0" prefWidth="226.0" text="El usuario debe ser mayor de 12 años" textFill="RED" visible="false">
                      <font>
                         <Font size="10.0" />
                      </font></Label>
                </children>
             </VBox>
-            <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="47.0" prefWidth="190.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="9">
+            <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="47.0" prefWidth="601.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="9">
                <children>
-                  <Button defaultButton="true" mnemonicParsing="false" onAction="#Acept_reg" styleClass="Boton-pos" text="Registrar">
+                  <Button defaultButton="true" mnemonicParsing="false" onAction="#Acept_reg" styleClass="boton-principal" text="Registrar">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="11.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#Cancel_reg" styleClass="Boton-neg" text="Cancelar">
+                  <Button mnemonicParsing="false" onAction="#Cancel_reg" styleClass="boton-principal-neg" text="Cancelar">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="11.0" />
                      </HBox.margin>
@@ -162,20 +162,19 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
                <children>
-                  <Label alignment="CENTER" styleClass="Texto" text="Si ya tienes una cuenta puedes">
+                  <Label alignment="CENTER" styleClass="texto-info" text="Si ya tienes una cuenta puedes iniciar sesion">
                      <HBox.margin>
-                        <Insets right="-3.0" />
+                        <Insets />
                      </HBox.margin></Label>
-                  <Hyperlink onAction="#Ini_ses" prefHeight="24.0" prefWidth="93.0" styleClass="Hyper" text="iniciar sesion" />
-                  <Label styleClass="Texto" text="aqui">
-                     <HBox.margin>
-                        <Insets left="-8.0" />
-                     </HBox.margin></Label>
+                  <Hyperlink onAction="#Ini_ses" prefHeight="24.0" prefWidth="36.0" styleClass="Hyper" text="aqui">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding></Hyperlink>
                </children>
             </HBox>
             <HBox maxWidth="-Infinity" prefHeight="60.0" prefWidth="73.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
                <children>
-                  <Button mnemonicParsing="false" onAction="#Pass_show" prefHeight="25.0" prefWidth="28.0">
+                  <Button id="show" mnemonicParsing="false" onAction="#Pass_show" prefHeight="25.0" prefWidth="28.0" styleClass="boton-principal">
                      <HBox.margin>
                         <Insets left="3.0" top="8.0" />
                      </HBox.margin>
@@ -183,7 +182,7 @@
                         <Insets bottom="-10.0" left="-22.0" right="-21.0" top="-10.0" />
                      </padding>
                      <graphic>
-                        <ImageView fx:id="Img_pass" fitHeight="15.0" fitWidth="24.0" pickOnBounds="true" styleClass="Boton">
+                        <ImageView fx:id="Img_pass" fitHeight="15.0" fitWidth="24.0" pickOnBounds="true">
                            <image>
                               <Image url="@../resources/ojo_cerrado.png" />
                            </image>
@@ -210,12 +209,12 @@
             </Label>
             <VBox alignment="CENTER_RIGHT" GridPane.rowIndex="6">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="Label" text="Avatar:  " textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="texto-principal" text="Avatar:  " textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Label text="(Opcional)">
+                  <Label styleClass="texto-info" text="(Opcional)">
                      <padding>
                         <Insets left="12.0" />
                      </padding>
@@ -227,9 +226,9 @@
             </VBox>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#Avatar_reg">
+                  <Button id="avatar" mnemonicParsing="false" onAction="#Avatar_reg" styleClass="boton-principal-neg">
                      <graphic>
-                        <ImageView fx:id="Avatar_reg" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" styleClass="Boton">
+                        <ImageView fx:id="Avatar_reg" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../resources/avatar_default.png" />
                            </image>

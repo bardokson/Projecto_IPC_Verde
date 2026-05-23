@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="369.0" prefWidth="523.0" spacing="10.0" styleClass="panel-formulario" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.AnadirMapaController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="369.0" prefWidth="523.0" spacing="10.0" styleClass="panel-fondo" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.AnadirMapaController">
    <children>
-      <HBox styleClass="cabecera-naranja">
+      <HBox alignment="CENTER" prefHeight="63.0" prefWidth="523.0" styleClass="header">
          <children>
-            <Label styleClass="titulo-blanco" text="Añadir Nuevo Mapa">
+            <Label styleClass="titulo-destacado" text="Añadir Nuevo Mapa">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -24,8 +24,11 @@
       </HBox>
       <HBox prefHeight="62.0" prefWidth="422.0">
          <children>
-            <TextField fx:id="rutaImagenField" editable="false" prefHeight="26.0" prefWidth="162.0" promptText="Ruta de la imagen..." />
-            <Button mnemonicParsing="false" onAction="#seleccionarImagen" styleClass="boton-naranja" text="Examinar..." />
+            <TextField fx:id="rutaImagenField" editable="false" prefHeight="26.0" prefWidth="162.0" promptText="Ruta de la imagen..." styleClass="campo" />
+            <Button mnemonicParsing="false" onAction="#seleccionarImagen" prefHeight="25.0" prefWidth="97.0" styleClass="boton-principal" text="Examinar...">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin></Button>
          </children>
          <VBox.margin>
             <Insets left="50.0" right="50.0" />
@@ -43,30 +46,30 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Latitud Mínima:">
+            <Label styleClass="texto-principal" text="Latitud Mínima:">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label text="Latitud Máxima:" GridPane.rowIndex="1">
+            <Label styleClass="texto-principal" text="Latitud Máxima:" GridPane.rowIndex="1">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label text="Longitud Mínima:" GridPane.rowIndex="2">
+            <Label styleClass="texto-principal" text="Longitud Mínima:" GridPane.rowIndex="2">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label text="Longitud Máxima:" GridPane.rowIndex="3">
+            <Label styleClass="texto-principal" text="Longitud Máxima:" GridPane.rowIndex="3">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="latMinField" styleClass="campo-texto" GridPane.columnIndex="1" />
-            <TextField fx:id="latMaxField" styleClass="campo-texto" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="lonMinField" styleClass="campo-texto" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="lonMaxField" styleClass="campo-texto" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="latMinField" styleClass="campo" GridPane.columnIndex="1" />
+            <TextField fx:id="latMaxField" styleClass="campo" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="lonMinField" styleClass="campo" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="lonMaxField" styleClass="campo" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
          <VBox.margin>
             <Insets left="50.0" right="50.0" />
@@ -74,8 +77,8 @@
       </GridPane>
       <HBox alignment="BOTTOM_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="54.0" prefWidth="422.0" spacing="15.0">
          <children>
-            <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#guardarMapa" styleClass="boton-naranja" text="Guardar Mapa" />
-            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#accCancelar" styleClass="boton-cancelar" text="Cancelar" />
+            <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#guardarMapa" styleClass="boton-principal" text="Guardar Mapa" />
+            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#accCancelar" styleClass="boton-principal-neg" text="Cancelar" />
          </children>
          <VBox.margin>
             <Insets left="50.0" right="50.0" />
