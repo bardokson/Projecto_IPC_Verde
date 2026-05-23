@@ -43,6 +43,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ColorPicker;
@@ -101,7 +102,7 @@ import upv.ipc.sportlib.User;
  */
 public class FXMLDocumentController implements Initializable {
 
-    @FXML private Pane mapPane;
+    private Pane mapPane;
     @FXML private ListView<Annotation> map_listview;
     @FXML private ScrollPane map_scrollpane;
     @FXML private Slider zoom_slider;
@@ -1392,5 +1393,6 @@ public class FXMLDocumentController implements Initializable {
         anotacionesPorActividad.computeIfAbsent(id, k -> new java.util.ArrayList<>()).add(saved);
         map_listview.getItems().add(saved);
     }
-    
+
 }
+    

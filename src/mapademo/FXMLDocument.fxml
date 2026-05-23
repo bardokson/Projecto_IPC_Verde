@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="gridBase" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
+<GridPane fx:id="gridBase" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -165,7 +165,7 @@
                               </HBox>
                               <HBox fx:id="modNotes" alignment="CENTER" disable="true" spacing="10.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#renameNote" styleClass="boton-secundario" text="Modificar Anotación" />
+                                    <Button mnemonicParsing="false" onAction="#modifyNote" styleClass="boton-secundario" text="Modificar Anotación" />
                                     <Button mnemonicParsing="false" onAction="#removeNote" styleClass="boton-secundario" text="Borrar Anotación" />
                                  </children>
                                  <padding>
