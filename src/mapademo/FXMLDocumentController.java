@@ -1052,7 +1052,9 @@ public class FXMLDocumentController implements Initializable {
     }
     
     /**
-     * Renombra la actividad seleccionada de la lista de actividades.
+     * Este método abre un cuadro de diálogo para renombrar la actividad
+     * seleccionada, aplica el cambio en el sistema y refresca la lista para 
+     * mostrar el nuevo nombre.
      * IA
      */
     @FXML
@@ -1073,7 +1075,9 @@ public class FXMLDocumentController implements Initializable {
     }
     
     /**
-     * Borra anotacion seleccionada de la listview.
+     * Este método solicita confirmación para borrar la anotación seleccionada,
+     * actualiza las estructuras de datos, elimina el elemento de la interfaz y 
+     * redibuja las notas restantes en el mapa.
      * IA
      */
     @FXML
@@ -1176,93 +1180,95 @@ public class FXMLDocumentController implements Initializable {
         }
     }
         
-    /**
-     * Dibuja la ruta de la carrera, coloreando el camino dependiendo de la velocidad de cada seccion.
-     * IA
-     */
-    private void dibujarRutaPorVelocidad() {
-        
-       if (actividadActual == null || projection == null) return;
+        /**
+         * Este método visualiza una ruta GPS sobre el mapa, aplicando un código 
+         * de colores dinámico a cada segmento según la velocidad detectada y añadiendo 
+         * marcadores para el inicio y fin del recorrido.
+         * IA
+         */
+        private void dibujarRutaPorVelocidad() {
 
-       java.util.List<TrackPoint> puntos = actividadActual.getTrackPoints();
-       
-       if (puntos == null || puntos.size() < 2) return;
+           if (actividadActual == null || projection == null) return;
 
-       javafx.scene.layout.Pane contenedorRuta = new javafx.scene.layout.Pane();
-       
-       contenedorRuta.setId("capaRutaGPX");
-       contenedorRuta.setMinWidth(mapPane.getWidth());
-       contenedorRuta.setMinHeight(mapPane.getHeight());
-       contenedorRuta.setPrefSize(mapPane.getWidth(), mapPane.getHeight());
-       contenedorRuta.setMouseTransparent(true);
+           java.util.List<TrackPoint> puntos = actividadActual.getTrackPoints();
 
-       mapPane.getChildren().add(contenedorRuta);
+           if (puntos == null || puntos.size() < 2) return;
 
-       double distanciaTotalMetros = 0;
+           javafx.scene.layout.Pane contenedorRuta = new javafx.scene.layout.Pane();
 
-       for (int i = 0; i < puntos.size() - 1; i++) {
-           TrackPoint p1 = puntos.get(i);
-           TrackPoint p2 = puntos.get(i + 1);
+           contenedorRuta.setId("capaRutaGPX");
+           contenedorRuta.setMinWidth(mapPane.getWidth());
+           contenedorRuta.setMinHeight(mapPane.getHeight());
+           contenedorRuta.setPrefSize(mapPane.getWidth(), mapPane.getHeight());
+           contenedorRuta.setMouseTransparent(true);
 
-           double distMetros = p1.distanceTo(p2);
-           distanciaTotalMetros += distMetros; 
+           mapPane.getChildren().add(contenedorRuta);
 
-           Point2D pixel1 = projection.project(p1.getLatitude(), p1.getLongitude());
-           Point2D pixel2 = projection.project(p2.getLatitude(), p2.getLongitude());
+           double distanciaTotalMetros = 0;
 
-           if (Double.isNaN(pixel1.getX()) || Double.isNaN(pixel1.getY()) ||
-               Double.isNaN(pixel2.getX()) || Double.isNaN(pixel2.getY())) {
-               continue; 
-           }
+           for (int i = 0; i < puntos.size() - 1; i++) {
+               TrackPoint p1 = puntos.get(i);
+               TrackPoint p2 = puntos.get(i + 1);
 
-           javafx.scene.shape.Line segmento = new javafx.scene.shape.Line(
-               pixel1.getX(), pixel1.getY(), 
-               pixel2.getX(), pixel2.getY()
-           );
+               double distMetros = p1.distanceTo(p2);
+               distanciaTotalMetros += distMetros; 
 
-           double velocidadKmH = 0.0;
-           try {
-               long segundosTramo = java.time.Duration.between(p1.getTime(), p2.getTime()).getSeconds();
-               if (segundosTramo > 0) {
-                   double distKm = distMetros / 1000.0;
-                   double horasTramo = segundosTramo / 3600.0;
-                   velocidadKmH = distKm / horasTramo;
+               Point2D pixel1 = projection.project(p1.getLatitude(), p1.getLongitude());
+               Point2D pixel2 = projection.project(p2.getLatitude(), p2.getLongitude());
+
+               if (Double.isNaN(pixel1.getX()) || Double.isNaN(pixel1.getY()) ||
+                   Double.isNaN(pixel2.getX()) || Double.isNaN(pixel2.getY())) {
+                   continue; 
                }
-           } catch (Exception e) {
-               velocidadKmH = 25.0; 
+
+               javafx.scene.shape.Line segmento = new javafx.scene.shape.Line(
+                   pixel1.getX(), pixel1.getY(), 
+                   pixel2.getX(), pixel2.getY()
+               );
+
+               double velocidadKmH = 0.0;
+               try {
+                   long segundosTramo = java.time.Duration.between(p1.getTime(), p2.getTime()).getSeconds();
+                   if (segundosTramo > 0) {
+                       double distKm = distMetros / 1000.0;
+                       double horasTramo = segundosTramo / 3600.0;
+                       velocidadKmH = distKm / horasTramo;
+                   }
+               } catch (Exception e) {
+                   velocidadKmH = 25.0; 
+               }
+
+               if (velocidadKmH < 35.0) {
+                segmento.setStroke(Color.RED);   
+                } else if (velocidadKmH <= 40.0) {
+                    segmento.setStroke(Color.ORANGE);  
+                } else {
+                    segmento.setStroke(Color.LIMEGREEN);    
+                }
+
+               segmento.setStrokeWidth(5.0);
+               contenedorRuta.getChildren().add(segmento);
            }
 
-           if (velocidadKmH < 35.0) {
-            segmento.setStroke(Color.RED);   
-            } else if (velocidadKmH <= 40.0) {
-                segmento.setStroke(Color.ORANGE);  
-            } else {
-                segmento.setStroke(Color.LIMEGREEN);    
-            }
+           TrackPoint inicio = puntos.get(0);
+           Point2D pixelInicio = projection.project(inicio.getLatitude(), inicio.getLongitude());
+           javafx.scene.shape.Circle nodoInicio = new javafx.scene.shape.Circle(pixelInicio.getX(), pixelInicio.getY(), 12);
+           nodoInicio.setFill(Color.LIME); 
+           nodoInicio.setStroke(Color.WHITE);
+           nodoInicio.setStrokeWidth(3.0);
 
-           segmento.setStrokeWidth(5.0);
-           contenedorRuta.getChildren().add(segmento);
-       }
+           TrackPoint fin = puntos.get(puntos.size() - 1);
+           Point2D pixelFin = projection.project(fin.getLatitude(), fin.getLongitude());
+           javafx.scene.shape.Circle nodoFin = new javafx.scene.shape.Circle(pixelFin.getX(), pixelFin.getY(), 12);
+           nodoFin.setFill(Color.RED); 
+           nodoFin.setStroke(Color.WHITE);
+           nodoFin.setStrokeWidth(3.0);
 
-       TrackPoint inicio = puntos.get(0);
-       Point2D pixelInicio = projection.project(inicio.getLatitude(), inicio.getLongitude());
-       javafx.scene.shape.Circle nodoInicio = new javafx.scene.shape.Circle(pixelInicio.getX(), pixelInicio.getY(), 12);
-       nodoInicio.setFill(Color.LIME); 
-       nodoInicio.setStroke(Color.WHITE);
-       nodoInicio.setStrokeWidth(3.0);
+           contenedorRuta.getChildren().addAll(nodoInicio, nodoFin);
+           contenedorRuta.toFront();
 
-       TrackPoint fin = puntos.get(puntos.size() - 1);
-       Point2D pixelFin = projection.project(fin.getLatitude(), fin.getLongitude());
-       javafx.scene.shape.Circle nodoFin = new javafx.scene.shape.Circle(pixelFin.getX(), pixelFin.getY(), 12);
-       nodoFin.setFill(Color.RED); 
-       nodoFin.setStroke(Color.WHITE);
-       nodoFin.setStrokeWidth(3.0);
-
-       contenedorRuta.getChildren().addAll(nodoInicio, nodoFin);
-       contenedorRuta.toFront();
-
-       mostrarEstadisticas(distanciaTotalMetros, puntos);
-    }
+           mostrarEstadisticas(distanciaTotalMetros, puntos);
+        }
     
     /**
      * Muestra las estadisticas de cada carrera.
