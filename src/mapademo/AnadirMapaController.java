@@ -13,6 +13,15 @@ import javafx.stage.Stage;
 import upv.ipc.sportlib.MapRegion;
 import upv.ipc.sportlib.SportActivityApp;
 
+
+
+/**
+ * Controlador encargado de la lógica de la ventana emergente "Añadir Nuevo Mapa".
+ * Gestiona la selección del archivo físico (JPG) y la validación de las coordenadas
+ * del Bounding Box introducidas por el usuario antes de inyectarlas en el sistema.
+ */
+
+
 public class AnadirMapaController {
 
     @FXML private TextField rutaImagenField;
@@ -26,9 +35,12 @@ public class AnadirMapaController {
     private File imagenSeleccionada;
 
     /**
-     * Permite al usuario seleccionar un mapa para ser usado
-     * @param event 
+     * Abre el explorador de archivos nativo para que el usuario seleccione el mapa físico.
+     * Una vez seleccionado, muestra la ruta absoluta del archivo en el campo de texto correspondiente.
+     *
+     * @param event Evento disparado por la pulsación del botón "Examinar...".
      */
+    
     @FXML
     void seleccionarImagen(ActionEvent event) {
         // Abrimos el explorador de archivos
@@ -47,9 +59,10 @@ public class AnadirMapaController {
         }
     }
     
-    /**
-     * Guarda el mapa para poder ser seleccionado despues
-     * @param event 
+   /**
+     * Procesa, valida y guarda la información del nuevo mapa en el sistema.
+     * [Código asistido por IA]
+     * @param event Evento disparado por la pulsación del botón "Guardar Mapa".
      */
     @FXML
     void guardarMapa(ActionEvent event) {
@@ -92,13 +105,12 @@ public class AnadirMapaController {
         }
     }
 
-    /**
-     * Metodo que genera las alertas.
-     * IA
-     * 
-     * @param tipo tipo de alerta
-     * @param titulo titulo de la alerta
-     * @param mensaje mensaje de la alerta
+   /**
+     * Método auxiliar para generar y mostrar alertas en pantalla.
+     *
+     * @param tipo    El tipo de alerta (ERROR, WARNING, INFORMATION, CONFIRMATION).
+     * @param titulo  El título superior de la ventana de alerta.
+     * @param mensaje El texto que leerá el usuario.
      */
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
         Alert alert = new Alert(tipo);
@@ -109,10 +121,13 @@ public class AnadirMapaController {
     }
     
     /**
-     * Devuelve a la ventana de actividades.
-     * IA
+     * Intercepta cancelar la subida del mapa y pide confirmación al usuario.
+     * Evita la pérdida accidental de datos 
+     * Si el usuario confirma, obtiene la referencia del Stage actual y destruye la ventana.
      * 
-     * @param event 
+     * [Código asistido por IA]
+     *
+     * @param event Evento disparado por la pulsación del botón "Cancelar".
      */
     @FXML
     private void accCancelar(ActionEvent event) {
@@ -143,9 +158,11 @@ public class AnadirMapaController {
     }
 
     /**
-     * Permitir unicamente la entrada de caracteres numericos, el punto decimal y el signo negativo.
+     * Aplica un listener reactivo a un campo de texto para restringir su entrada en tiempo real.
      * 
-     * @param campoTexto campo de texto que configurar
+     * [Código asistido por IA]
+     * 
+     * @param campoTexto El TextField sobre el que se aplicará el filtro de validación.
      */
     private void configurarFiltroNumerico(TextField campoTexto) {
         campoTexto.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -155,3 +172,4 @@ public class AnadirMapaController {
         });
     }
 }
+
