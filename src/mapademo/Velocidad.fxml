@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.VelocidadController">
    <padding>
       <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
@@ -30,7 +29,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="■ Lento (&lt; 8 km/h)" textFill="RED" />
+            <Label text="▬ Lento (&lt; 35)" textFill="RED" />
             <Label text="■ Medio (8 - 12 km/h)" textFill="#ff9f00" GridPane.rowIndex="1" />
             <Label text="■ Rápido (&gt; 12 km/h)" textFill="#33a426" GridPane.rowIndex="2" />
          </children>
