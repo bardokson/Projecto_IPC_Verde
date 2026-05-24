@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="550.0" spacing="30.0" styleClass="panel-fondo" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.EstadisticasController">
+<VBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="550.0" spacing="30.0" styleClass="panel-fondo" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.EstadisticasController">
    <children>
-      <HBox styleClass="cabecera-naranja">
+      <HBox alignment="CENTER" prefHeight="58.0" prefWidth="550.0" styleClass="header">
          <children>
-            <Label styleClass="titulo-blanco" text="Estadísticas Acumuladas">
+            <Label styleClass="titulo-destacado" text="Estadísticas Acumuladas">
                <font>
                   <Font name="System Bold" size="26.0" />
                </font>
@@ -25,15 +25,15 @@
       
       <HBox alignment="CENTER" spacing="15.0">
          <children>
-            <Label styleClass="texto-dato" text="Desde:">
+            <Label styleClass="texto-principal" text="Desde:">
                <font><Font name="System Bold" size="14.0" /></font>
             </Label>
-            <DatePicker fx:id="dpDesde" prefWidth="140.0" />
+            <DatePicker fx:id="dpDesde" prefWidth="140.0" stylesheets="@../resources/dater.css" />
             
-            <Label styleClass="texto-dato" text="Hasta:">
+            <Label styleClass="texto-principal" text="Hasta:">
                <font><Font name="System Bold" size="14.0" /></font>
             </Label>
-            <DatePicker fx:id="dpHasta" prefWidth="140.0" />
+            <DatePicker fx:id="dpHasta" prefWidth="140.0" stylesheets="@../resources/dater.css" />
          </children>
       </HBox>
       
@@ -55,17 +55,17 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label styleClass="texto-dato" text="Tiempo Total:">
-               <font><Font name="System Bold" size="18.0" /></font>
+            <Label styleClass="texto-principal" text="Tiempo Total:">
+               <font><Font name="System Bold" size="21.0" /></font>
             </Label>
-            <Label styleClass="texto-dato" text="Distancia Acumulada:" GridPane.rowIndex="1">
-               <font><Font name="System Bold" size="18.0" /></font>
+            <Label styleClass="texto-principal" text="Distancia Acumulada:" GridPane.rowIndex="1">
+               <font><Font name="System Bold" size="21.0" /></font>
             </Label>
-            <Label styleClass="texto-dato" text="Ascenso Total:" GridPane.rowIndex="2">
-               <font><Font name="System Bold" size="18.0" /></font>
+            <Label styleClass="texto-principal" text="Ascenso Total:" GridPane.rowIndex="2">
+               <font><Font name="System Bold" size="21.0" /></font>
             </Label>
-            <Label styleClass="texto-dato" text="Descenso Total:" GridPane.rowIndex="3">
-               <font><Font name="System Bold" size="18.0" /></font>
+            <Label styleClass="texto-principal" text="Descenso Total:" GridPane.rowIndex="3">
+               <font><Font name="System Bold" size="21.0" /></font>
             </Label>
             
             <Label fx:id="lblTiempo" styleClass="texto-valor" text="00:00:00" GridPane.columnIndex="1">

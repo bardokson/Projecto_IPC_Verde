@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="gridBase" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
+<GridPane fx:id="gridBase" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -39,8 +39,8 @@
                      <items>
                         <HBox maxWidth="350.0" minWidth="350.0" prefHeight="543.0" prefWidth="350.0">
                            <children>
-                              <ListView fx:id="activityList" maxWidth="174.0" minWidth="175.0" onMouseClicked="#activitySelected" prefHeight="552.0" prefWidth="175.0" styleClass="panel-fondo" />
-                              <ListView fx:id="map_listview" maxWidth="174.0" minWidth="175.0" onMouseClicked="#listClicked" prefHeight="399.0" prefWidth="175.0" styleClass="panel-fondo" />
+                              <ListView fx:id="activityList" maxWidth="174.0" minWidth="175.0" onMouseClicked="#activitySelected" prefHeight="552.0" prefWidth="175.0" stylesheets="@../resources/actividades.css" />
+                              <ListView fx:id="map_listview" maxWidth="174.0" minWidth="175.0" onMouseClicked="#listClicked" prefHeight="399.0" prefWidth="175.0" stylesheets="@../resources/anotaciones.css" />
                            </children>
                         </HBox>
                         <ScrollPane fx:id="map_scrollpane" hbarPolicy="ALWAYS" onMouseMoved="#showPosition" pannable="true" prefHeight="398.0" prefWidth="358.0" vbarPolicy="ALWAYS">
@@ -112,13 +112,13 @@
                            <children>
                               <MenuBar maxWidth="-Infinity" prefHeight="27.0">
                                 <menus>
-                                  <Menu mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 50;" text="App">
+                                  <Menu mnemonicParsing="false" style="-fx-border-color: white; -fx-border-wifdth: 3; -fx-border-radius: 50;" text="App">
                                     <items>
                                       <MenuItem mnemonicParsing="false" onAction="#about" text="Acerca de" />
                                           <MenuItem mnemonicParsing="false" onAction="#logOutExit" text="Cerrar" />
                                     </items>
                                   </Menu>
-                                  <Menu mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 50;" text="Mapa">
+                                  <Menu fx:id="men" mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 50;" text="Mapa">
                                     <items>
                                           <MenuItem mnemonicParsing="false" onAction="#cambiarMapa" text="Cambiar Mapa" />
                                           <MenuItem mnemonicParsing="false" onAction="#abrirMenuAnadirMapa" text="Añadir Mapa" />
@@ -126,15 +126,16 @@
                                   </Menu>
                                 </menus>
                               </MenuBar>
-                              <Region HBox.hgrow="ALWAYS" />
+                              <Region styleClass="header" HBox.hgrow="ALWAYS" />
                               <MenuBar>
                                  <menus>
                                     <Menu fx:id="username" mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 50;" text="Username">
                                       <items>
-                                          <MenuItem mnemonicParsing="false" onAction="#modPerfil" text="Modificar Perfil" />
-                                          <MenuItem mnemonicParsing="false" onAction="#abrirEstadisticas" text="Estadísticas" />
-                                          <MenuItem mnemonicParsing="false" onAction="#verSesiones" text="Sesiones" />
-                                          <MenuItem mnemonicParsing="false" onAction="#logOut" text="Log Out" />
+                                          <MenuItem fx:id="mod" mnemonicParsing="false" onAction="#modPerfil" text="Modificar Perfil" />
+                                          <MenuItem fx:id="ests" mnemonicParsing="false" onAction="#abrirEstadisticas" text="Estadísticas" />
+                                          <MenuItem fx:id="ses" mnemonicParsing="false" onAction="#verSesiones" text="Sesiones" />
+                                          <MenuItem fx:id="out" mnemonicParsing="false" onAction="#logOut" text="Log Out" />
+                                          <MenuItem fx:id="auth" mnemonicParsing="false" onAction="#auth" text="Autentificarse" visible="false" />
                                       </items>
                                     </Menu>
                                  </menus>
@@ -146,9 +147,9 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0">
                            <children>
-                              <HBox alignment="CENTER">
+                              <HBox fx:id="imph" alignment="CENTER">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#importarGPX" styleClass="boton-secundario" text="Importar Actividad" />
+                                    <Button fx:id="imp" mnemonicParsing="false" onAction="#importarGPX" styleClass="boton-secundario" text="Importar Actividad" />
                                  </children>
                                  <padding>
                                     <Insets right="5.0" />
@@ -165,7 +166,7 @@
                               </HBox>
                               <HBox fx:id="modNotes" alignment="CENTER" disable="true" spacing="10.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#renameNote" styleClass="boton-secundario" text="Modificar Anotación" />
+                                    <Button mnemonicParsing="false" onAction="#modifyNote" styleClass="boton-secundario" text="Modificar Anotación" />
                                     <Button mnemonicParsing="false" onAction="#removeNote" styleClass="boton-secundario" text="Borrar Anotación" />
                                  </children>
                                  <padding>

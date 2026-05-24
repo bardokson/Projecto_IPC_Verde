@@ -1,6 +1,7 @@
 package mapademo;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -65,7 +66,7 @@ public class AnadirMapaController {
      * @param event Evento disparado por la pulsación del botón "Guardar Mapa".
      */
     @FXML
-    void guardarMapa(ActionEvent event) {
+    void guardarMapa(ActionEvent event) throws IOException {
         if (imagenSeleccionada == null) {
             mostrarAlerta(Alert.AlertType.ERROR, "Error", "Debes seleccionar una imagen para el mapa.");
             return;
@@ -84,7 +85,7 @@ public class AnadirMapaController {
             
 
             String nombreMapa = imagenSeleccionada.getName().replaceFirst("[.][^.]+$", "");
-
+            FXMLDocumentController.mapaOb.add(imagenSeleccionada.getCanonicalPath());
             SportActivityApp app = SportActivityApp.getInstance();
             
             MapRegion nuevaRegion = app.addMapRegion(nombreMapa, imagenSeleccionada, latMin, latMax, lonMin, lonMax);

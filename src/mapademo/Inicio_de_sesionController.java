@@ -6,7 +6,6 @@ package mapademo;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -78,6 +77,7 @@ public class Inicio_de_sesionController implements Initializable{
             Err_nick_ini.setVisible(false);
             Err_pass_ini.setVisible(false);
             shown = false;
+            FXMLDocumentController.setGuest(false);
             LaSaforApp.abrirActividades();
             
         }else{

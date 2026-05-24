@@ -30,6 +30,7 @@ package mapademo;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -37,12 +38,16 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ColorPicker;
@@ -76,6 +81,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import org.controlsfx.control.PopOver;
 import upv.ipc.sportlib.SportActivityApp;
 import upv.ipc.sportlib.Activity;
 import upv.ipc.sportlib.Annotation;
@@ -101,7 +107,7 @@ import upv.ipc.sportlib.User;
  */
 public class FXMLDocumentController implements Initializable {
 
-    @FXML private Pane mapPane;
+    private Pane mapPane;
     @FXML private ListView<Annotation> map_listview;
     @FXML private ScrollPane map_scrollpane;
     @FXML private Slider zoom_slider;
@@ -113,30 +119,47 @@ public class FXMLDocumentController implements Initializable {
     @FXML private Menu username;
     @FXML private HBox modActivity;
     @FXML private HBox modNotes;
+    @FXML private MenuItem mod;
+    @FXML private MenuItem ests;
+    @FXML private MenuItem ses;
+    @FXML private MenuItem out;
+    @FXML private MenuItem auth;
+    @FXML private Menu men;
+    @FXML private Button imp;
+    @FXML private HBox imph;
+    
+    private static boolean guest = false;
+
+    
+    private static List<String> mapas = new ArrayList<>();
+    public static ObservableList<String> mapaOb = FXCollections.observableList(mapas);
     
     private int circleCounter = 1;
     private int PoiCounter = 1;
     private int LineCounter = 1;
     private int PointCounter = 1;
-    private int activityCounter = 1;
-    private double mapaAltoActual;
-    private double mapaAnchoActual;
     private double lineX, lineY;
     private final java.util.Set<Long> anotacionesBorradas = new java.util.HashSet<>();
     private final java.util.Map<Long, java.util.List<Annotation>> anotacionesPorActividad = new java.util.HashMap<>();
     private boolean insertionMode = false;
     private boolean lineInput = false;
     private Group zoomGroup;
-    private MenuButton map_pin;
     private Activity actividadActual;
     private MapProjection projection;
     private ContextMenu mapContextMenu;
     private User user;
     private String lineName;
-    private List<Annotation> notes;
     private Color lineColor;
     private Long actividadActualId = null;
-
+    private String nombre;
+    private static File imgFile;
+    
+    public static void setGuest(boolean is){
+        guest = is;
+    }
+    private static boolean isGuest(){
+        return guest;
+    }
     /**
      * Aumenta el zoom en 0.1 unidades al pulsar el botón "+".
      *
@@ -342,6 +365,7 @@ public class FXMLDocumentController implements Initializable {
      * @param y coordenada Y del clic en el sistema local del mapPane
      */
     private void onMapRightClick(double x, double y) {
+        if(!isGuest()){
         // FIX 6: cerramos el menú si ya estaba visible (evita instancias flotantes)
         mapContextMenu.hide();
         
@@ -359,7 +383,7 @@ public class FXMLDocumentController implements Initializable {
             mapPane.localToScreen(x, y).getX(),
             mapPane.localToScreen(x, y).getY()
         );
-        
+        }
     }
 
     // =========================================================
@@ -381,7 +405,21 @@ public class FXMLDocumentController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        if(isGuest()){
+            PopOver popover = new PopOver(new Label("  Para poder importar una actividad o mapa \n " 
+                    + "      debes de iniciar sesion o registrarte  \n"));
+            activityList.setDisable(isGuest());
+            map_listview.setDisable(isGuest());
+            username.setText("Invitado");
+            mod.setVisible(!isGuest());
+            ests.setVisible(!isGuest());
+            ses.setVisible(!isGuest());
+            out.setVisible(!isGuest());
+            auth.setVisible(isGuest());
+            men.setDisable(isGuest());
+            imp.setDisable(isGuest());
+            imph.setOnMouseEntered(e-> popover.show(imph));
+        }
 
         zoom_slider.setMin(0.5);   
         zoom_slider.setMax(1.5);   
@@ -415,14 +453,16 @@ public class FXMLDocumentController implements Initializable {
             }
         });
         
-        File archivoMapa = new File("src/maps/upv.jpg");
+        /*File archivoMapa = new File("/src/maps/upv.jpg");
         if (!archivoMapa.exists()) {
             archivoMapa = new File("maps/upv.jpg");
-        }
+        }*/
+        File archivoMapa = new File("maps/upv.jpg");
         buildMap(archivoMapa, null);
-        
+        if(!isGuest()){
         setupUser();
         verActividades();
+        }
         
         modActivity.disableProperty().bind(activityList.getSelectionModel().selectedItemProperty().isNull());
         modNotes.disableProperty().bind(map_listview.getSelectionModel().selectedItemProperty().isNull());
@@ -444,7 +484,12 @@ public class FXMLDocumentController implements Initializable {
                 event.consume();
             }
         });
-
+         
+        mapas.add("maps/upv.jpg");
+        mapas.add("maps/calderona.jpg");
+        mapas.add("maps/pirineos.jpg"); 
+        mapas.add("maps/valencia.jpg");
+        
     }
 
     // =========================================================
@@ -586,19 +631,26 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     private void cambiarMapa(ActionEvent event) throws IOException {
-        FileChooser fc = new FileChooser();
-        fc.setInitialDirectory(new File(".")); // Empezamos en el directorio del proyecto
-
-        File imgFile = fc.showOpenDialog(zoom_slider.getScene().getWindow());
-
-        // FIX 3: showOpenDialog() devuelve null si el usuario cancela la selección
+       javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("CambiarMapa.fxml"));
+            javafx.scene.Parent root = loader.load();
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            
+            stage.setTitle("Cambiar mapa");
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add("/resources/estilos.css");
+            stage.setScene(scene);
+            stage.initOwner(mapPane.getScene().getWindow());
+            stage.initModality(javafx.stage.Modality.WINDOW_MODAL);
+            stage.showAndWait();
         if (imgFile != null) {
             System.out.println("Mapa seleccionado: " + imgFile.getCanonicalPath());
             buildMap(imgFile, null); // Reconstruimos la vista con la nueva imagen
             map_listview.getItems().clear(); // Borramos los datos del mapa anterior
         }
     }
-
+    public static File cambiarMapa(String mapa){
+        return imgFile = new File(mapa);
+    }
     // =========================================================
     //  AÑADIR UN CÍRCULO AL MAPA
     // =========================================================
@@ -800,8 +852,16 @@ public class FXMLDocumentController implements Initializable {
         if (seleccionado != null) {
             actividadActual = app.importActivity(seleccionado);
             int numPuntos = actividadActual.getTrackPoints().size();
-            String nombre = actividadActual.getName();
-
+            nombre = actividadActual.getName();
+            
+            TextInputDialog dialog = new TextInputDialog(nombre);
+            dialog.setTitle("Renombrar actividad");
+            dialog.setHeaderText("Cambiar nombre actividad");
+            dialog.setContentText("Nuevo nombre:");
+            dialog.showAndWait().ifPresent(newName -> {
+            if(newName != null) nombre = newName;
+            });
+            
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
             alerta.setTitle("Éxito");
             alerta.setHeaderText("Datos cargados correctamente");
@@ -810,7 +870,8 @@ public class FXMLDocumentController implements Initializable {
             Window ventanaActual = mapPane.getScene().getWindow();
             alerta.initOwner(ventanaActual);
             alerta.showAndWait();
-
+            
+            app.renameActivity(actividadActual, nombre);
             MapRegion region = app.findMapForActivity(actividadActual);
             File mapFile = new File(region.getImagePath());
             buildMap(mapFile, region);
@@ -1052,7 +1113,9 @@ public class FXMLDocumentController implements Initializable {
     }
     
     /**
-     * Renombra la actividad seleccionada de la lista de actividades.
+     * Este método abre un cuadro de diálogo para renombrar la actividad
+     * seleccionada, aplica el cambio en el sistema y refresca la lista para 
+     * mostrar el nuevo nombre.
      * IA
      */
     @FXML
@@ -1073,7 +1136,9 @@ public class FXMLDocumentController implements Initializable {
     }
     
     /**
-     * Borra anotacion seleccionada de la listview.
+     * Este método solicita confirmación para borrar la anotación seleccionada,
+     * actualiza las estructuras de datos, elimina el elemento de la interfaz y 
+     * redibuja las notas restantes en el mapa.
      * IA
      */
     @FXML
@@ -1176,93 +1241,95 @@ public class FXMLDocumentController implements Initializable {
         }
     }
         
-    /**
-     * Dibuja la ruta de la carrera, coloreando el camino dependiendo de la velocidad de cada seccion.
-     * IA
-     */
-    private void dibujarRutaPorVelocidad() {
-        
-       if (actividadActual == null || projection == null) return;
+        /**
+         * Este método visualiza una ruta GPS sobre el mapa, aplicando un código 
+         * de colores dinámico a cada segmento según la velocidad detectada y añadiendo 
+         * marcadores para el inicio y fin del recorrido.
+         * IA
+         */
+        private void dibujarRutaPorVelocidad() {
 
-       java.util.List<TrackPoint> puntos = actividadActual.getTrackPoints();
-       
-       if (puntos == null || puntos.size() < 2) return;
+           if (actividadActual == null || projection == null) return;
 
-       javafx.scene.layout.Pane contenedorRuta = new javafx.scene.layout.Pane();
-       
-       contenedorRuta.setId("capaRutaGPX");
-       contenedorRuta.setMinWidth(mapPane.getWidth());
-       contenedorRuta.setMinHeight(mapPane.getHeight());
-       contenedorRuta.setPrefSize(mapPane.getWidth(), mapPane.getHeight());
-       contenedorRuta.setMouseTransparent(true);
+           java.util.List<TrackPoint> puntos = actividadActual.getTrackPoints();
 
-       mapPane.getChildren().add(contenedorRuta);
+           if (puntos == null || puntos.size() < 2) return;
 
-       double distanciaTotalMetros = 0;
+           javafx.scene.layout.Pane contenedorRuta = new javafx.scene.layout.Pane();
 
-       for (int i = 0; i < puntos.size() - 1; i++) {
-           TrackPoint p1 = puntos.get(i);
-           TrackPoint p2 = puntos.get(i + 1);
+           contenedorRuta.setId("capaRutaGPX");
+           contenedorRuta.setMinWidth(mapPane.getWidth());
+           contenedorRuta.setMinHeight(mapPane.getHeight());
+           contenedorRuta.setPrefSize(mapPane.getWidth(), mapPane.getHeight());
+           contenedorRuta.setMouseTransparent(true);
 
-           double distMetros = p1.distanceTo(p2);
-           distanciaTotalMetros += distMetros; 
+           mapPane.getChildren().add(contenedorRuta);
 
-           Point2D pixel1 = projection.project(p1.getLatitude(), p1.getLongitude());
-           Point2D pixel2 = projection.project(p2.getLatitude(), p2.getLongitude());
+           double distanciaTotalMetros = 0;
 
-           if (Double.isNaN(pixel1.getX()) || Double.isNaN(pixel1.getY()) ||
-               Double.isNaN(pixel2.getX()) || Double.isNaN(pixel2.getY())) {
-               continue; 
-           }
+           for (int i = 0; i < puntos.size() - 1; i++) {
+               TrackPoint p1 = puntos.get(i);
+               TrackPoint p2 = puntos.get(i + 1);
 
-           javafx.scene.shape.Line segmento = new javafx.scene.shape.Line(
-               pixel1.getX(), pixel1.getY(), 
-               pixel2.getX(), pixel2.getY()
-           );
+               double distMetros = p1.distanceTo(p2);
+               distanciaTotalMetros += distMetros; 
 
-           double velocidadKmH = 0.0;
-           try {
-               long segundosTramo = java.time.Duration.between(p1.getTime(), p2.getTime()).getSeconds();
-               if (segundosTramo > 0) {
-                   double distKm = distMetros / 1000.0;
-                   double horasTramo = segundosTramo / 3600.0;
-                   velocidadKmH = distKm / horasTramo;
+               Point2D pixel1 = projection.project(p1.getLatitude(), p1.getLongitude());
+               Point2D pixel2 = projection.project(p2.getLatitude(), p2.getLongitude());
+
+               if (Double.isNaN(pixel1.getX()) || Double.isNaN(pixel1.getY()) ||
+                   Double.isNaN(pixel2.getX()) || Double.isNaN(pixel2.getY())) {
+                   continue; 
                }
-           } catch (Exception e) {
-               velocidadKmH = 25.0; 
+
+               javafx.scene.shape.Line segmento = new javafx.scene.shape.Line(
+                   pixel1.getX(), pixel1.getY(), 
+                   pixel2.getX(), pixel2.getY()
+               );
+
+               double velocidadKmH = 0.0;
+               try {
+                   long segundosTramo = java.time.Duration.between(p1.getTime(), p2.getTime()).getSeconds();
+                   if (segundosTramo > 0) {
+                       double distKm = distMetros / 1000.0;
+                       double horasTramo = segundosTramo / 3600.0;
+                       velocidadKmH = distKm / horasTramo;
+                   }
+               } catch (Exception e) {
+                   velocidadKmH = 25.0; 
+               }
+
+               if (velocidadKmH < 35.0) {
+                segmento.setStroke(Color.RED);   
+                } else if (velocidadKmH <= 40.0) {
+                    segmento.setStroke(Color.ORANGE);  
+                } else {
+                    segmento.setStroke(Color.LIMEGREEN);    
+                }
+
+               segmento.setStrokeWidth(5.0);
+               contenedorRuta.getChildren().add(segmento);
            }
 
-           if (velocidadKmH < 35.0) {
-            segmento.setStroke(Color.RED);   
-            } else if (velocidadKmH <= 40.0) {
-                segmento.setStroke(Color.ORANGE);  
-            } else {
-                segmento.setStroke(Color.LIMEGREEN);    
-            }
+           TrackPoint inicio = puntos.get(0);
+           Point2D pixelInicio = projection.project(inicio.getLatitude(), inicio.getLongitude());
+           javafx.scene.shape.Circle nodoInicio = new javafx.scene.shape.Circle(pixelInicio.getX(), pixelInicio.getY(), 12);
+           nodoInicio.setFill(Color.LIME); 
+           nodoInicio.setStroke(Color.WHITE);
+           nodoInicio.setStrokeWidth(3.0);
 
-           segmento.setStrokeWidth(5.0);
-           contenedorRuta.getChildren().add(segmento);
-       }
+           TrackPoint fin = puntos.get(puntos.size() - 1);
+           Point2D pixelFin = projection.project(fin.getLatitude(), fin.getLongitude());
+           javafx.scene.shape.Circle nodoFin = new javafx.scene.shape.Circle(pixelFin.getX(), pixelFin.getY(), 12);
+           nodoFin.setFill(Color.RED); 
+           nodoFin.setStroke(Color.WHITE);
+           nodoFin.setStrokeWidth(3.0);
 
-       TrackPoint inicio = puntos.get(0);
-       Point2D pixelInicio = projection.project(inicio.getLatitude(), inicio.getLongitude());
-       javafx.scene.shape.Circle nodoInicio = new javafx.scene.shape.Circle(pixelInicio.getX(), pixelInicio.getY(), 12);
-       nodoInicio.setFill(Color.LIME); 
-       nodoInicio.setStroke(Color.WHITE);
-       nodoInicio.setStrokeWidth(3.0);
+           contenedorRuta.getChildren().addAll(nodoInicio, nodoFin);
+           contenedorRuta.toFront();
 
-       TrackPoint fin = puntos.get(puntos.size() - 1);
-       Point2D pixelFin = projection.project(fin.getLatitude(), fin.getLongitude());
-       javafx.scene.shape.Circle nodoFin = new javafx.scene.shape.Circle(pixelFin.getX(), pixelFin.getY(), 12);
-       nodoFin.setFill(Color.RED); 
-       nodoFin.setStroke(Color.WHITE);
-       nodoFin.setStrokeWidth(3.0);
-
-       contenedorRuta.getChildren().addAll(nodoInicio, nodoFin);
-       contenedorRuta.toFront();
-
-       mostrarEstadisticas(distanciaTotalMetros, puntos);
-    }
+           mostrarEstadisticas(distanciaTotalMetros, puntos);
+        }
     
     /**
      * Muestra las estadisticas de cada carrera.
@@ -1386,5 +1453,10 @@ public class FXMLDocumentController implements Initializable {
         anotacionesPorActividad.computeIfAbsent(id, k -> new java.util.ArrayList<>()).add(saved);
         map_listview.getItems().add(saved);
     }
-    
+
+    @FXML
+    private void auth(ActionEvent event) {
+        LaSaforApp.abrirHub();
+    }
 }
+    

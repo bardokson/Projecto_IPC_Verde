@@ -14,6 +14,7 @@ import javafx.scene.control.TableView;
 import upv.ipc.sportlib.Session;
 import upv.ipc.sportlib.User;
 import java.time.Duration;
+import javafx.scene.control.ListView;
 
 /**
  * FXML Controller class
