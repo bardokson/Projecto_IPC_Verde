@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="gridBase" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
+<GridPane fx:id="gridBase" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: orange;" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -37,12 +37,14 @@
                <children>
                   <SplitPane fx:id="splitPane" dividerPositions="0.197" VBox.vgrow="ALWAYS">
                      <items>
-                        <HBox maxWidth="350.0" minWidth="350.0" prefHeight="543.0" prefWidth="350.0">
+                        <VBox alignment="CENTER" style="-fx-background-color: orange;">
                            <children>
-                              <ListView fx:id="activityList" maxWidth="174.0" minWidth="175.0" onMouseClicked="#activitySelected" prefHeight="552.0" prefWidth="175.0" stylesheets="@../resources/actividades.css" />
-                              <ListView fx:id="map_listview" maxWidth="174.0" minWidth="175.0" onMouseClicked="#listClicked" prefHeight="399.0" prefWidth="175.0" stylesheets="@../resources/anotaciones.css" />
+                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="22.0" prefWidth="194.0" styleClass="texto-principal" text="Actividades" textAlignment="CENTER" />
+                              <ListView fx:id="activityList" onMouseClicked="#activitySelected" prefHeight="536.0" prefWidth="194.0" stylesheets="@../resources/actividades.css" />
+                              <Label alignment="CENTER" prefHeight="22.0" prefWidth="199.0" styleClass="texto-principal" text="Anotaciones" />
+                              <ListView fx:id="map_listview" onMouseClicked="#listClicked" stylesheets="@../resources/anotaciones.css" />
                            </children>
-                        </HBox>
+                        </VBox>
                         <ScrollPane fx:id="map_scrollpane" hbarPolicy="ALWAYS" onMouseMoved="#showPosition" pannable="true" prefHeight="398.0" prefWidth="358.0" vbarPolicy="ALWAYS">
                            <content>
                               <Pane>
@@ -62,7 +64,7 @@
             </VBox>
          </center>
          <bottom>
-            <HBox alignment="CENTER_RIGHT" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" spacing="10.0" styleClass="panel-fondo" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER_RIGHT" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" spacing="10.0" style="-fx-background-color: orange;" BorderPane.alignment="CENTER">
                <children>
                   <Region HBox.hgrow="ALWAYS" />
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="27.0" spacing="5.0">
@@ -98,17 +100,21 @@
                   <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <ImageView fx:id="userAvatar" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
-                     <image>
-                        <Image url="@../resources/avatar_default.png" />
-                     </image>
+                  <Pane id="img" GridPane.columnIndex="1">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
-                  </ImageView>
+                     <children>
+                        <ImageView id="img" fx:id="userAvatar" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/avatar_default.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
                   <VBox prefHeight="97.0" prefWidth="920.0" spacing="5.0">
                      <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="35.0" styleClass="barra-menu-unida">
+                        <HBox alignment="CENTER_LEFT" prefHeight="35.0" style="-fx-background-color: orangered;" styleClass="barra-menu-unida">
                            <children>
                               <MenuBar maxWidth="-Infinity" prefHeight="27.0">
                                 <menus>
@@ -126,7 +132,7 @@
                                   </Menu>
                                 </menus>
                               </MenuBar>
-                              <Region styleClass="header" HBox.hgrow="ALWAYS" />
+                              <Region style="-fx-background-color: orangered;" styleClass="header" HBox.hgrow="ALWAYS" />
                               <MenuBar>
                                  <menus>
                                     <Menu fx:id="username" mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 50;" text="Username">

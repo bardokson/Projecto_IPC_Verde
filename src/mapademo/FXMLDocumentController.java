@@ -57,7 +57,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
@@ -152,7 +151,7 @@ public class FXMLDocumentController implements Initializable {
     private Color lineColor;
     private Long actividadActualId = null;
     private String nombre;
-    private static File imgFile;
+    private static File imgFileCam;
     
     public static void setGuest(boolean is){
         guest = is;
@@ -365,6 +364,7 @@ public class FXMLDocumentController implements Initializable {
      * @param y coordenada Y del clic en el sistema local del mapPane
      */
     private void onMapRightClick(double x, double y) {
+        if(!isGuest()){
         // FIX 6: cerramos el menú si ya estaba visible (evita instancias flotantes)
         mapContextMenu.hide();
         
@@ -382,7 +382,7 @@ public class FXMLDocumentController implements Initializable {
             mapPane.localToScreen(x, y).getX(),
             mapPane.localToScreen(x, y).getY()
         );
-        
+        }
     }
 
     // =========================================================
@@ -483,12 +483,12 @@ public class FXMLDocumentController implements Initializable {
                 event.consume();
             }
         });
-         
+        if(mapas.isEmpty()) {
         mapas.add("maps/upv.jpg");
         mapas.add("maps/calderona.jpg");
         mapas.add("maps/pirineos.jpg"); 
         mapas.add("maps/valencia.jpg");
-        
+        }
     }
 
     // =========================================================
@@ -641,14 +641,14 @@ public class FXMLDocumentController implements Initializable {
             stage.initOwner(mapPane.getScene().getWindow());
             stage.initModality(javafx.stage.Modality.WINDOW_MODAL);
             stage.showAndWait();
-        if (imgFile != null) {
-            System.out.println("Mapa seleccionado: " + imgFile.getCanonicalPath());
-            buildMap(imgFile, null); // Reconstruimos la vista con la nueva imagen
+        if (imgFileCam != null) {
+            System.out.println("Mapa seleccionado: " + imgFileCam.getCanonicalPath());
+            buildMap(imgFileCam, null); // Reconstruimos la vista con la nueva imagen
             map_listview.getItems().clear(); // Borramos los datos del mapa anterior
         }
     }
-    public static File cambiarMapa(String mapa){
-        return imgFile = new File(mapa);
+    public static void cambiarMapa(String mapa){
+        imgFileCam = new File(mapa);
     }
     // =========================================================
     //  AÑADIR UN CÍRCULO AL MAPA

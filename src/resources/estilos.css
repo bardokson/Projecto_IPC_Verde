@@ -63,6 +63,9 @@
 #sal{
     -fx-font-size: 16px;
 }
+#img{
+    -fx-background-color: linear-gradient( orangered 0%, orangered 25%, orange 75%,  orange 100%);
+}
 /*******************************************************************************
  *                                                                             *
  * High Contrast Theme                                                         *
