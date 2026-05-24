@@ -365,6 +365,7 @@ public class FXMLDocumentController implements Initializable {
      * @param y coordenada Y del clic en el sistema local del mapPane
      */
     private void onMapRightClick(double x, double y) {
+        if(!isGuest()){
         // FIX 6: cerramos el menú si ya estaba visible (evita instancias flotantes)
         mapContextMenu.hide();
         
@@ -382,7 +383,7 @@ public class FXMLDocumentController implements Initializable {
             mapPane.localToScreen(x, y).getX(),
             mapPane.localToScreen(x, y).getY()
         );
-        
+        }
     }
 
     // =========================================================

@@ -6,22 +6,18 @@ package mapademo;
 
 import java.io.File;
 import java.io.IOException;
-import static java.lang.Thread.sleep;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
@@ -104,7 +100,10 @@ public class Registro_usuarioController implements Initializable {
      */
     @FXML
     private void Acept_reg(ActionEvent event) throws IOException {
-        
+         if(LaSaforApp.app.nickNameExists(Nick)){
+            Err_nick.setText("Este nick ya existe, eliga otro");
+            Err_nick.setVisible(true);
+        }
         if(Nick_ok && Email_ok && Pass_ok && Birth_ok){
             Err_tot.setVisible(false);
             boolean ok = LaSaforApp.app.registerUser(Nick, Email, Pass, Birth, Avatar_Path);
@@ -147,13 +146,8 @@ public class Registro_usuarioController implements Initializable {
     @FXML
     private void Entering_Nick(KeyEvent event) {
         Nick = NickName_reg.getText();
-        if(LaSaforApp.app.nickNameExists(Nick)){
-            Err_nick.setText("Este nick ya existe, porfavor sea original");
-            Err_nick.setVisible(true);
-        }else{
-            Err_nick.setText("Tiene que ser de 6-15 letras/digitos/guione o subguion");
-        }
         if(!User.checkNickName(Nick)){
+            Err_nick.setText("Tiene que ser de 6-15 letras/digitos/guione o subguion");
             Err_nick.setVisible(true);
             Nick_ok = false;
         } else {
