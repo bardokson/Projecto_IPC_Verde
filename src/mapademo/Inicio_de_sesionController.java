@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,7 +24,7 @@ public class Inicio_de_sesionController implements Initializable{
 
     @FXML private TextField NickName_ini;
     @FXML private Label Err_nick_ini;
-    @FXML private TextField Pass_reg;
+    @FXML private PasswordField Pass_reg;
     @FXML private Label Err_pass_ini;
     @FXML private ImageView Img_pass;
     @FXML private TextField Pass_shown;
@@ -50,19 +51,24 @@ public class Inicio_de_sesionController implements Initializable{
                 Err_pass_ini.setVisible(false);
             }
         });
-        Pass_reg.setOnKeyTyped(e -> {
+        
+        Pass_reg.textProperty().bindBidirectional(Pass_shown.textProperty());
+        Pass_shown.setVisible(false);
+        Pass_shown.setManaged(false);
+        /*Pass_reg.setOnKeyTyped(e -> {
             Pass = Pass_reg.getText();  
             if(shown){
                 Err_nick_ini.setVisible(false);
                 Err_pass_ini.setVisible(false);
             }
         });
+        
         Pass_shown.setOnKeyTyped(e->{
             if(shown){
                 Err_nick_ini.setVisible(false);
                 Err_pass_ini.setVisible(false);
             }
-        });
+        });*/
     }    
     
     /**
@@ -73,10 +79,14 @@ public class Inicio_de_sesionController implements Initializable{
      */
     @FXML
     private void Ini_ses(ActionEvent event) {
-        if(LaSaforApp.app.login(Nick,Pass)){  
+        
+        String nick = NickName_ini.getText();
+        String pass = Pass_reg.getText();
+        
+        if(LaSaforApp.app.login(nick,pass)){  
             Err_nick_ini.setVisible(false);
             Err_pass_ini.setVisible(false);
-            shown = false;
+            //shown = false;
             FXMLDocumentController.setGuest(false);
             LaSaforApp.abrirActividades();
             
@@ -113,16 +123,25 @@ public class Inicio_de_sesionController implements Initializable{
      */
     @FXML
     private void Pass_show() {
-        if(getPressed()){
-            disableShown();
-            enableReg();            
+        
+        boolean ver = Pass_shown.isVisible();
+        
+        Pass_shown.setVisible(!ver);
+        Pass_shown.setManaged(!ver);
+        
+        Pass_reg.setVisible(ver);
+        Pass_reg.setManaged(ver);
+        
+        if(ver){
+            //disableShown();
+            //enableReg();            
             Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_cerrado.png")));
-            cyclePressed();
+            //cyclePressed();
         }else{
-            enableShown();
-            disableReg();            
+            //enableShown();
+            //disableReg();            
             Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_abierto.png")));
-            cyclePressed();
+            //cyclePressed();
         }
         
     }
@@ -168,5 +187,5 @@ public class Inicio_de_sesionController implements Initializable{
         Pass_reg.setDisable(false);
         Pass_reg.setVisible(true);
     }
-
+    
 }
