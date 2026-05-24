@@ -465,7 +465,7 @@ public class FXMLDocumentController implements Initializable {
         
         modActivity.disableProperty().bind(activityList.getSelectionModel().selectedItemProperty().isNull());
         modNotes.disableProperty().bind(map_listview.getSelectionModel().selectedItemProperty().isNull());
-        
+       
         map_scrollpane.addEventFilter(javafx.scene.input.ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() == 0) return;
 

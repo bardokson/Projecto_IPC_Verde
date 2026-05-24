@@ -66,6 +66,20 @@
          <bottom>
             <HBox alignment="CENTER_RIGHT" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" spacing="10.0" style="-fx-background-color: orange;" BorderPane.alignment="CENTER">
                <children>
+                  <HBox fx:id="modNotes" disable="true" prefHeight="35.0" prefWidth="315.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#modifyNote" styleClass="boton-secundario" text="Modificar Anotación">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#removeNote" styleClass="boton-secundario" text="Borrar Anotación">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
                   <Region HBox.hgrow="ALWAYS" />
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="27.0" spacing="5.0">
                      <children>
@@ -168,15 +182,6 @@
                                  </children>
                                  <padding>
                                     <Insets left="5.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox fx:id="modNotes" alignment="CENTER" disable="true" spacing="10.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" onAction="#modifyNote" styleClass="boton-secundario" text="Modificar Anotación" />
-                                    <Button mnemonicParsing="false" onAction="#removeNote" styleClass="boton-secundario" text="Borrar Anotación" />
-                                 </children>
-                                 <padding>
-                                    <Insets left="15.0" />
                                  </padding>
                               </HBox>
                               <Region HBox.hgrow="ALWAYS" />
