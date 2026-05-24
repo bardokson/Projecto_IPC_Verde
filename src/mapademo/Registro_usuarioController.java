@@ -77,8 +77,6 @@ public class Registro_usuarioController implements Initializable {
         // TODO
         Pass_reg.textProperty().bindBidirectional(Pass_shown.textProperty());
         
-        Pass_shown.setVisible(false);
-        Pass_shown.setManaged(false);
         //Se encarga de enseñar el popover sobre la contraseña
         popover = new PopOver(new Label("  La contraseña debe tener entre 8 y 20 caracteres,  \n " 
                 + "  con al menos una mayúscula, una minúscula, un   \n"
@@ -97,7 +95,7 @@ public class Registro_usuarioController implements Initializable {
         }});
         */
         Pass_reg.textProperty().addListener((obs, oldVal, newVal) -> {
-            Pass = newVal;
+            Pass = Pass_shown.getText();
             if(!User.checkPassword(Pass)){
             if(!popover.isShowing()) popover.show(Info_pass);
             Err_pass.setVisible(true);
@@ -270,25 +268,17 @@ public class Registro_usuarioController implements Initializable {
      */
     @FXML
     private void Pass_show(ActionEvent event) {
-        
-        boolean ver = Pass_shown.isVisible();
-        
-        Pass_reg.setVisible(!ver);
-        Pass_reg.setManaged(!ver);
-        
-        Pass_shown.setVisible(ver);
-        Pass_shown.setManaged(ver);
                 
-        if(ver){
-            //disableShown();
-            //enableReg();            
+        if(pressed){
+            disableShown();
+            enableReg();            
             Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_cerrado.png")));
-            //yclePressed();
+            cyclePressed();
         }else{
-            //enableShown();
-            //disableReg();            
+            enableShown();
+            disableReg();            
             Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_abierto.png")));
-            //cyclePressed();
+            cyclePressed();
         }
         
     }

@@ -51,11 +51,7 @@ public class Inicio_de_sesionController implements Initializable{
                 Err_pass_ini.setVisible(false);
             }
         });
-        
-        Pass_reg.textProperty().bindBidirectional(Pass_shown.textProperty());
-        Pass_shown.setVisible(false);
-        Pass_shown.setManaged(false);
-        /*Pass_reg.setOnKeyTyped(e -> {
+        Pass_reg.setOnKeyTyped(e -> {
             Pass = Pass_reg.getText();  
             if(shown){
                 Err_nick_ini.setVisible(false);
@@ -68,7 +64,7 @@ public class Inicio_de_sesionController implements Initializable{
                 Err_nick_ini.setVisible(false);
                 Err_pass_ini.setVisible(false);
             }
-        });*/
+        });
     }    
     
     /**
@@ -80,13 +76,10 @@ public class Inicio_de_sesionController implements Initializable{
     @FXML
     private void Ini_ses(ActionEvent event) {
         
-        String nick = NickName_ini.getText();
-        String pass = Pass_reg.getText();
-        
-        if(LaSaforApp.app.login(nick,pass)){  
+        if(LaSaforApp.app.login(Nick,Pass)){  
             Err_nick_ini.setVisible(false);
             Err_pass_ini.setVisible(false);
-            //shown = false;
+            shown = false;
             FXMLDocumentController.setGuest(false);
             LaSaforApp.abrirActividades();
             
@@ -124,24 +117,16 @@ public class Inicio_de_sesionController implements Initializable{
     @FXML
     private void Pass_show() {
         
-        boolean ver = Pass_shown.isVisible();
-        
-        Pass_shown.setVisible(!ver);
-        Pass_shown.setManaged(!ver);
-        
-        Pass_reg.setVisible(ver);
-        Pass_reg.setManaged(ver);
-        
-        if(ver){
-            //disableShown();
-            //enableReg();            
+        if(pressed){
+            disableShown();
+            enableReg();            
             Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_cerrado.png")));
-            //cyclePressed();
+            cyclePressed();
         }else{
-            //enableShown();
-            //disableReg();            
+            enableShown();
+            disableReg();            
             Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_abierto.png")));
-            //cyclePressed();
+            cyclePressed();
         }
         
     }
