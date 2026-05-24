@@ -118,7 +118,7 @@
                                           <MenuItem mnemonicParsing="false" onAction="#logOutExit" text="Cerrar" />
                                     </items>
                                   </Menu>
-                                  <Menu mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 50;" text="Mapa">
+                                  <Menu fx:id="men" mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 50;" text="Mapa">
                                     <items>
                                           <MenuItem mnemonicParsing="false" onAction="#cambiarMapa" text="Cambiar Mapa" />
                                           <MenuItem mnemonicParsing="false" onAction="#abrirMenuAnadirMapa" text="Añadir Mapa" />
@@ -131,10 +131,11 @@
                                  <menus>
                                     <Menu fx:id="username" mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 50;" text="Username">
                                       <items>
-                                          <MenuItem mnemonicParsing="false" onAction="#modPerfil" text="Modificar Perfil" />
-                                          <MenuItem mnemonicParsing="false" onAction="#abrirEstadisticas" text="Estadísticas" />
-                                          <MenuItem mnemonicParsing="false" onAction="#verSesiones" text="Sesiones" />
-                                          <MenuItem mnemonicParsing="false" onAction="#logOut" text="Log Out" />
+                                          <MenuItem fx:id="mod" mnemonicParsing="false" onAction="#modPerfil" text="Modificar Perfil" />
+                                          <MenuItem fx:id="ests" mnemonicParsing="false" onAction="#abrirEstadisticas" text="Estadísticas" />
+                                          <MenuItem fx:id="ses" mnemonicParsing="false" onAction="#verSesiones" text="Sesiones" />
+                                          <MenuItem fx:id="out" mnemonicParsing="false" onAction="#logOut" text="Log Out" />
+                                          <MenuItem fx:id="auth" mnemonicParsing="false" onAction="#auth" text="Autentificarse" visible="false" />
                                       </items>
                                     </Menu>
                                  </menus>
@@ -146,9 +147,9 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0">
                            <children>
-                              <HBox alignment="CENTER">
+                              <HBox fx:id="imph" alignment="CENTER">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#importarGPX" styleClass="boton-secundario" text="Importar Actividad" />
+                                    <Button fx:id="imp" mnemonicParsing="false" onAction="#importarGPX" styleClass="boton-secundario" text="Importar Actividad" />
                                  </children>
                                  <padding>
                                     <Insets right="5.0" />

@@ -77,6 +77,7 @@ public class Inicio_de_sesionController implements Initializable{
             Err_nick_ini.setVisible(false);
             Err_pass_ini.setVisible(false);
             shown = false;
+            FXMLDocumentController.setGuest(false);
             LaSaforApp.abrirActividades();
             
         }else{

@@ -51,6 +51,18 @@
 #grandes{
     -fx-padding: 8px 25px;
 }
+#ini{
+    -fx-font-size: 20px;
+}
+#reg{
+    -fx-font-size: 20px;
+}
+#guest{
+    -fx-font-size: 18px;
+}
+#sal{
+    -fx-font-size: 16px;
+}
 /*******************************************************************************
  *                                                                             *
  * High Contrast Theme                                                         *

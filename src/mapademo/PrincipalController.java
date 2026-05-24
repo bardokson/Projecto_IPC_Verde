@@ -41,7 +41,11 @@ public class PrincipalController implements Initializable {
     private void Ini_ses(ActionEvent event) {
         LaSaforApp.abrirSignIn();
     }
-
+    @FXML
+    private void Invitado(ActionEvent event) {
+        FXMLDocumentController.setGuest(true);
+        LaSaforApp.abrirActividades();
+    }
     /**
      * Cierra la aplicacion.
      */
@@ -50,5 +54,7 @@ public class PrincipalController implements Initializable {
         Platform.exit();
         System.exit(0);
     }
+
+    
     
 }

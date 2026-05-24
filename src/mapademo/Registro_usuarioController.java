@@ -109,7 +109,10 @@ public class Registro_usuarioController implements Initializable {
             Err_tot.setVisible(false);
             boolean ok = LaSaforApp.app.registerUser(Nick, Email, Pass, Birth, Avatar_Path);
             boolean logged = LaSaforApp.app.login(Nick, Pass);
-            if (ok && logged) LaSaforApp.abrirActividades();
+            if (ok && logged) {
+                FXMLDocumentController.setGuest(false);
+                LaSaforApp.abrirActividades();
+            }
                 
         }else{
             Err_tot.setVisible(true);

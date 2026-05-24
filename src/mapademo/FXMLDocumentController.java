@@ -30,6 +30,7 @@ package mapademo;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -37,11 +38,14 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -77,6 +81,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import org.controlsfx.control.PopOver;
 import upv.ipc.sportlib.SportActivityApp;
 import upv.ipc.sportlib.Activity;
 import upv.ipc.sportlib.Annotation;
@@ -114,30 +119,47 @@ public class FXMLDocumentController implements Initializable {
     @FXML private Menu username;
     @FXML private HBox modActivity;
     @FXML private HBox modNotes;
+    @FXML private MenuItem mod;
+    @FXML private MenuItem ests;
+    @FXML private MenuItem ses;
+    @FXML private MenuItem out;
+    @FXML private MenuItem auth;
+    @FXML private Menu men;
+    @FXML private Button imp;
+    @FXML private HBox imph;
+    
+    private static boolean guest = false;
+
+    
+    private static List<String> mapas = new ArrayList<>();
+    public static ObservableList<String> mapaOb = FXCollections.observableList(mapas);
     
     private int circleCounter = 1;
     private int PoiCounter = 1;
     private int LineCounter = 1;
     private int PointCounter = 1;
-    private int activityCounter = 1;
-    private double mapaAltoActual;
-    private double mapaAnchoActual;
     private double lineX, lineY;
     private final java.util.Set<Long> anotacionesBorradas = new java.util.HashSet<>();
     private final java.util.Map<Long, java.util.List<Annotation>> anotacionesPorActividad = new java.util.HashMap<>();
     private boolean insertionMode = false;
     private boolean lineInput = false;
     private Group zoomGroup;
-    private MenuButton map_pin;
     private Activity actividadActual;
     private MapProjection projection;
     private ContextMenu mapContextMenu;
     private User user;
     private String lineName;
-    private List<Annotation> notes;
     private Color lineColor;
     private Long actividadActualId = null;
-
+    private String nombre;
+    private static File imgFile;
+    
+    public static void setGuest(boolean is){
+        guest = is;
+    }
+    private static boolean isGuest(){
+        return guest;
+    }
     /**
      * Aumenta el zoom en 0.1 unidades al pulsar el botón "+".
      *
@@ -382,7 +404,21 @@ public class FXMLDocumentController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        if(isGuest()){
+            PopOver popover = new PopOver(new Label("  Para poder importar una actividad o mapa \n " 
+                    + "      debes de iniciar sesion o registrarte  \n"));
+            activityList.setDisable(isGuest());
+            map_listview.setDisable(isGuest());
+            username.setText("Invitado");
+            mod.setVisible(!isGuest());
+            ests.setVisible(!isGuest());
+            ses.setVisible(!isGuest());
+            out.setVisible(!isGuest());
+            auth.setVisible(isGuest());
+            men.setDisable(isGuest());
+            imp.setDisable(isGuest());
+            imph.setOnMouseEntered(e-> popover.show(imph));
+        }
 
         zoom_slider.setMin(0.5);   
         zoom_slider.setMax(1.5);   
@@ -416,14 +452,16 @@ public class FXMLDocumentController implements Initializable {
             }
         });
         
-        File archivoMapa = new File("src/maps/upv.jpg");
+        /*File archivoMapa = new File("/src/maps/upv.jpg");
         if (!archivoMapa.exists()) {
             archivoMapa = new File("maps/upv.jpg");
-        }
+        }*/
+        File archivoMapa = new File("maps/upv.jpg");
         buildMap(archivoMapa, null);
-        
+        if(!isGuest()){
         setupUser();
         verActividades();
+        }
         
         modActivity.disableProperty().bind(activityList.getSelectionModel().selectedItemProperty().isNull());
         modNotes.disableProperty().bind(map_listview.getSelectionModel().selectedItemProperty().isNull());
@@ -445,7 +483,12 @@ public class FXMLDocumentController implements Initializable {
                 event.consume();
             }
         });
-
+         
+        mapas.add("maps/upv.jpg");
+        mapas.add("maps/calderona.jpg");
+        mapas.add("maps/pirineos.jpg"); 
+        mapas.add("maps/valencia.jpg");
+        
     }
 
     // =========================================================
@@ -587,19 +630,26 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     private void cambiarMapa(ActionEvent event) throws IOException {
-        FileChooser fc = new FileChooser();
-        fc.setInitialDirectory(new File(".")); // Empezamos en el directorio del proyecto
-
-        File imgFile = fc.showOpenDialog(zoom_slider.getScene().getWindow());
-
-        // FIX 3: showOpenDialog() devuelve null si el usuario cancela la selección
+       javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("CambiarMapa.fxml"));
+            javafx.scene.Parent root = loader.load();
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            
+            stage.setTitle("Cambiar mapa");
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add("/resources/estilos.css");
+            stage.setScene(scene);
+            stage.initOwner(mapPane.getScene().getWindow());
+            stage.initModality(javafx.stage.Modality.WINDOW_MODAL);
+            stage.showAndWait();
         if (imgFile != null) {
             System.out.println("Mapa seleccionado: " + imgFile.getCanonicalPath());
             buildMap(imgFile, null); // Reconstruimos la vista con la nueva imagen
             map_listview.getItems().clear(); // Borramos los datos del mapa anterior
         }
     }
-
+    public static File cambiarMapa(String mapa){
+        return imgFile = new File(mapa);
+    }
     // =========================================================
     //  AÑADIR UN CÍRCULO AL MAPA
     // =========================================================
@@ -801,8 +851,16 @@ public class FXMLDocumentController implements Initializable {
         if (seleccionado != null) {
             actividadActual = app.importActivity(seleccionado);
             int numPuntos = actividadActual.getTrackPoints().size();
-            String nombre = actividadActual.getName();
-
+            nombre = actividadActual.getName();
+            
+            TextInputDialog dialog = new TextInputDialog(nombre);
+            dialog.setTitle("Renombrar actividad");
+            dialog.setHeaderText("Cambiar nombre actividad");
+            dialog.setContentText("Nuevo nombre:");
+            dialog.showAndWait().ifPresent(newName -> {
+            if(newName != null) nombre = newName;
+            });
+            
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
             alerta.setTitle("Éxito");
             alerta.setHeaderText("Datos cargados correctamente");
@@ -811,7 +869,8 @@ public class FXMLDocumentController implements Initializable {
             Window ventanaActual = mapPane.getScene().getWindow();
             alerta.initOwner(ventanaActual);
             alerta.showAndWait();
-
+            
+            app.renameActivity(actividadActual, nombre);
             MapRegion region = app.findMapForActivity(actividadActual);
             File mapFile = new File(region.getImagePath());
             buildMap(mapFile, region);
@@ -1394,5 +1453,9 @@ public class FXMLDocumentController implements Initializable {
         map_listview.getItems().add(saved);
     }
 
+    @FXML
+    private void auth(ActionEvent event) {
+        LaSaforApp.abrirHub();
+    }
 }
     

@@ -38,7 +38,6 @@ public class EstadisticasController {
      */
     
     
-    @FXML
     public void initialize() {
 
         dpHasta.setValue(LocalDate.now());
@@ -140,5 +139,9 @@ public class EstadisticasController {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void cancel(ActionEvent event) {
     }
 }
