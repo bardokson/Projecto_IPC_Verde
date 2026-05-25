@@ -238,38 +238,16 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     void listClicked(MouseEvent event) {
-
         Annotation note = map_listview.getSelectionModel().getSelectedItem();
         if (note == null) return;
-        
+
         Point2D p = projection.project(note.getGeoPoints().get(0));
         double x = p.getX();
         double y = p.getY();
 
         mapPane.layout();
-        
-        //GPT
-        double viewW = map_scrollpane.getViewportBounds().getWidth();
-        double viewH = map_scrollpane.getViewportBounds().getHeight();
 
-        double contentW = mapPane.getBoundsInParent().getWidth();
-        double contentH = mapPane.getBoundsInParent().getHeight();
-        //GPT
-
-        double scrollH = (x * zoomGroup.getScaleX() - viewW / 2) / (contentW - viewW);
-        double scrollV = (y * zoomGroup.getScaleY() - viewH / 2) / (contentH - viewH);
-
-        //GPT
-        scrollH = Math.max(0, Math.min(1, scrollH));
-        scrollV = Math.max(0, Math.min(1, scrollV));
-        //GPT
-
-        final Timeline timeline = new Timeline();
-        final KeyValue kv1 = new KeyValue(map_scrollpane.hvalueProperty(), scrollH);
-        final KeyValue kv2 = new KeyValue(map_scrollpane.vvalueProperty(), scrollV);
-        final KeyFrame kf  = new KeyFrame(Duration.millis(500), kv1, kv2);
-        timeline.getKeyFrames().add(kf);
-        timeline.play(); 
+        Platform.runLater(() -> centrarEnPunto(x, y));
     }
 
     // =========================================================
@@ -870,19 +848,20 @@ public class FXMLDocumentController implements Initializable {
             alerta.initOwner(ventanaActual);
             alerta.showAndWait();
             
-            app.renameActivity(actividadActual, nombre);
-            MapRegion region = app.findMapForActivity(actividadActual);
-            File mapFile = new File(region.getImagePath());
-            buildMap(mapFile, region);
-            mapPane.layout(); 
-            double anchoReal = mapPane.getWidth();
-            double altoReal = mapPane.getHeight();
-            this.projection = new MapProjection(region, anchoReal, altoReal);
-            mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
-            dibujarRutaPorVelocidad();
-            verActividades();
-            actividadActualId = null;
-            abrirActividad(actividadActual);
+           app.renameActivity(actividadActual, nombre);
+           MapRegion region = app.findMapForActivity(actividadActual);
+           File mapFile = new File(region.getImagePath());
+           buildMap(mapFile, region);
+           mapPane.layout();
+           double anchoReal = mapPane.getWidth();
+           double altoReal = mapPane.getHeight();
+           this.projection = new MapProjection(region, anchoReal, altoReal);
+           mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
+           dibujarRutaPorVelocidad();
+           verActividades();
+           actividadActualId = null;
+           abrirActividad(actividadActual);
+           Platform.runLater(() -> centrarEnActividad(actividadActual));
         }
     }
     
@@ -920,6 +899,7 @@ public class FXMLDocumentController implements Initializable {
         if (actividad == null) return;
         actividadActual = actividad;
         abrirActividad(actividadActual);
+        Platform.runLater(() -> centrarEnActividad(actividad));
     }
 
     /**
@@ -1299,11 +1279,11 @@ public class FXMLDocumentController implements Initializable {
                }
 
                if (velocidadKmH < 35.0) {
-                segmento.setStroke(Color.RED);   
+                    segmento.setStroke(Color.web("#2c3e50"));
                 } else if (velocidadKmH <= 40.0) {
-                    segmento.setStroke(Color.ORANGE);  
+                    segmento.setStroke(Color.web("#7f8c8d"));
                 } else {
-                    segmento.setStroke(Color.LIMEGREEN);    
+                    segmento.setStroke(Color.web("#27ae60"));
                 }
 
                segmento.setStrokeWidth(5.0);
@@ -1456,6 +1436,45 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void auth(ActionEvent event) {
         LaSaforApp.abrirHub();
+    }
+    //Ayuda a centrar las actividades justo en el centro de la pantalla
+    private void centrarEnActividad(Activity actividad) {
+    if (actividad == null || projection == null) return;
+    List<TrackPoint> puntos = actividad.getTrackPoints();
+    if (puntos == null || puntos.isEmpty()) return;
+
+    double sumX = 0, sumY = 0;
+    for (TrackPoint p : puntos) {
+        Point2D px = projection.project(p.getLatitude(), p.getLongitude());
+        sumX += px.getX();
+        sumY += px.getY();
+    }
+    double cx = sumX / puntos.size();
+    double cy = sumY / puntos.size();
+    centrarEnPunto(cx, cy);
+    }
+    //Ayuda a centrar las anotaciones en el medio e la pantalla
+    private void centrarEnPunto(double x, double y) {
+        double escala = zoomGroup.getScaleX();
+        double contentW = mapPane.getWidth() * escala;
+        double contentH = mapPane.getHeight() * escala;
+        double viewW = map_scrollpane.getViewportBounds().getWidth();
+        double viewH = map_scrollpane.getViewportBounds().getHeight();
+
+        double scrollH = (x * escala - viewW / 2.0) / (contentW - viewW);
+        double scrollV = (y * escala - viewH / 2.0) / (contentH - viewH);
+
+        scrollH = Math.max(0, Math.min(1, scrollH));
+        scrollV = Math.max(0, Math.min(1, scrollV));
+
+        final double fH = scrollH;
+        final double fV = scrollV;
+
+        Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(500),
+            new KeyValue(map_scrollpane.hvalueProperty(), fH),
+            new KeyValue(map_scrollpane.vvalueProperty(), fV)));
+        timeline.play();
     }
 }
     

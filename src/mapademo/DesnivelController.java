@@ -195,15 +195,15 @@ public class DesnivelController {
 
         javafx.scene.control.Label l1 = new javafx.scene.control.Label("▬ Lento (< 35)");
         l1.setTextFill(Color.RED);
-        l1.setStyle("-fx-font-weight: bold;");
+        l1.setTextFill(Color.web("#2c3e50"));
 
         javafx.scene.control.Label l2 = new javafx.scene.control.Label("▬ Medio (35-40)");
         l2.setTextFill(Color.ORANGE);
-        l2.setStyle("-fx-font-weight: bold;");
+        l2.setTextFill(Color.web("#7f8c8d")); 
 
         javafx.scene.control.Label l3 = new javafx.scene.control.Label("▬ Rápido (> 40)");
         l3.setTextFill(Color.LIMEGREEN);
-        l3.setStyle("-fx-font-weight: bold;");
+        l3.setTextFill(Color.web("#27ae60"));
 
         leyenda.getChildren().addAll(l1, l2, l3);
 
@@ -232,7 +232,7 @@ public class DesnivelController {
         statsBox.setStyle("-fx-padding: 10px; -fx-background-color: #fdfdfd; -fx-border-color: #e6e6e6; -fx-border-radius: 5px; -fx-background-radius: 5px;"); // Un fondito sutil para que destaque
 
         javafx.scene.control.Label titulo = new javafx.scene.control.Label("Resumen del Track");
-        titulo.setStyle("-fx-font-weight: bold; -fx-text-fill: #FC4C02; -fx-font-size: 14px;"); // Tu naranja corporativo
+        titulo.setStyle("-fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-font-size: 14px;");
 
         javafx.scene.control.Label lblDist = new javafx.scene.control.Label(String.format("Distancia: %.2f km", distanciaKm));
         lblDist.setStyle("-fx-font-weight: bold; -fx-text-fill: #333333;");

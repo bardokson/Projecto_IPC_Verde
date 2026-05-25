@@ -15,7 +15,7 @@
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="header">
          <children>
-            <Label styleClass="titulo-destacado" text="Running La Safor">
+            <Label styleClass="titulo-destacado" text="Running La Safor" textFill="WHITE">
                <font>
                   <Font size="31.0" />
                </font>

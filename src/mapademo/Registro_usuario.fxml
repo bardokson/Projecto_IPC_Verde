@@ -22,7 +22,7 @@
    <children>
       <HBox alignment="CENTER" prefHeight="50.0" prefWidth="471.0" styleClass="header">
          <children>
-            <Label styleClass="header" text="Registro">
+            <Label styleClass="header" text="Registro" textFill="WHITE">
                <font>
                   <Font size="31.0" />
                </font>

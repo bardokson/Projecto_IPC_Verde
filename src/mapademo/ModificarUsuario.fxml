@@ -18,7 +18,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.ModificarUsuarioController">
    <children>
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="471.0" style="-fx-background-color: orange;" styleClass="header">
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="471.0" style="-fx-background-color: #2c3e50&quot;;" styleClass="texto-principal">
          <children>
             <Label styleClass="titulo-destacado" text="Modificar">
                <font>

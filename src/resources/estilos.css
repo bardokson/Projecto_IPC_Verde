@@ -1,428 +1,394 @@
-/*
- * Copyright (c) 2014, Oracle and/or its affiliates.
- * All rights reserved. Use is subject to license terms.
- *
- * This file is available and licensed under the following license:
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *  - Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *  - Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the distribution.
- *  - Neither the name of Oracle Corporation nor the names of its
- *    contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 /*******************************************************************************
- *                                                                             *
- * Embedded Styling                                                            *
- *                                                                             *
+ *   IDs unicos
  ******************************************************************************/
-
-/*******************************************************************************
-*
-*   Estilos unicos                                                             *
-*******************************************************************************/
-#show{
-    -fx-background-color:orange;
+ 
+#show {
+    -fx-background-color: #2c3e50;
     -fx-padding: -10px -21px -10px -22px;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 2, 0, 0, 0);
 }
-#avatar{
+ 
+#avatar {
     -fx-padding: 0px;
 }
-#grandes{
+ 
+#grandes {
     -fx-padding: 8px 25px;
 }
-#ini{
-    -fx-font-size: 20px;
+ 
+#ini   { -fx-font-size: 20px; }
+#reg   { -fx-font-size: 20px; }
+#guest { -fx-font-size: 18px; }
+#sal   { -fx-font-size: 16px; }
+ 
+#img {
+    -fx-background-color: linear-gradient(#2c3e50 0%, #34495e 50%, #2c3e50 100%);
 }
-#reg{
-    -fx-font-size: 20px;
-}
-#guest{
-    -fx-font-size: 18px;
-}
-#sal{
-    -fx-font-size: 16px;
-}
-#img{
-    -fx-background-color: linear-gradient( orangered 0%, orangered 25%, orange 75%,  orange 100%);
-}
+ 
 /*******************************************************************************
- *                                                                             *
- * High Contrast Theme                                                         *
- *                                                                             *
+ *   High Contrast
  ******************************************************************************/
-
+ 
 .contrast {
     -app-color-hi: #5bf900;
     -app-color-lo: black;
     -app-hover: #666666;
     -fx-background-color: -app-color-lo;
 }
-
-/*-------------------------- map pin ------------------------- */
-
+ 
+/*******************************************************************************
+ *   Map pin
+ ******************************************************************************/
+ 
 .map-pin {
-    -fx-shape: "M13.558,0C6.07,0,0,6.07,0,13.558s13.558,22.346,13.558,22.346s13.558-14.858,13.558-22.346S21.045,0,13.558,0z
-M13.558,20.762c-4.084,0-7.395-3.311-7.395-7.395s3.311-7.395,7.395-7.395c4.084,0,7.396,3.311,7.396,7.395
-S17.642,20.762,13.558,20.762z";    
+    -fx-shape: "M13.558,0C6.07,0,0,6.07,0,13.558s13.558,22.346,13.558,22.346s13.558-14.858,13.558-22.346S21.045,0,13.558,0z M13.558,20.762c-4.084,0-7.395-3.311-7.395-7.395s3.311-7.395,7.395-7.395c4.084,0,7.396,3.311,7.396,7.395 S17.642,20.762,13.558,20.762z";
     -fx-background-color: black, white;
     -fx-background-insets: 0, 2;
-    -fx-effect: dropshadow( two-pass-box, rgba(0, 0, 0, 0.5), 10, 0.0, 0, 10 );
+    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.5), 10, 0.0, 0, 10);
     -fx-pref-width: 48;
     -fx-pref-height: 60;
 }
+ 
 .map-pin .arrow-button .arrow {
     -fx-padding: 0;
 }
-
-/* ========================================================= */
-/* ESTILOS PARA AÑADIR MAPA, REGISTROS Y FORMULARIOS         */
-/* ========================================================= */
-
+ 
+/*******************************************************************************
+ *   Formularios
+ ******************************************************************************/
+ 
 .panel-formulario {
-    -fx-background-color: #F4F4F4;
-    -fx-padding: 0px; /* Sin padding general, así la cabecera puede tocar los bordes */
+    -fx-background-color: #f4f4f4;
+    -fx-padding: 0px;
 }
-
-
+ 
 .cabecera-naranja {
-    -fx-background-color: #FC4C02; 
+    -fx-background-color: #2c3e50;
     -fx-padding: 15px;
     -fx-alignment: center;
-    -fx-pref-width: 1000px; /* Forzamos un ancho grande para que ocupe todo el espacio disponible */
-    -fx-min-width: USE_PREF_SIZE; 
+    -fx-pref-width: 1000px;
+    -fx-min-width: USE_PREF_SIZE;
 }
-
-
+ 
 .titulo-blanco {
     -fx-font-size: 24px;
-    -fx-text-fill: white; /* Letra blanca para que resalte sobre el naranja */
+    -fx-text-fill: white;
     -fx-font-weight: bold;
 }
-
-.boton-naranja {
-    -fx-background-color: #FC4C02; 
-    -fx-text-fill: white; 
-    -fx-font-weight: bold;
-    -fx-cursor: hand;
-    -fx-background-radius: 3px; 
-    /* Hemos quitado el padding y el height para que recupere su tamaño natural */
-}
-
-.boton-naranja:hover {
-    -fx-background-color: #E34402; 
-}
-
+ 
 .campo-texto {
     -fx-border-color: #cccccc;
     -fx-border-radius: 3px;
     -fx-background-radius: 3px;
-    /* Dejamos a JavaFX que calcule su altura por defecto */
 }
-
-.boton-cancelar {
-    -fx-background-color: transparent; 
-    -fx-border-color: #cccccc; 
-    -fx-border-radius: 3px;
-    -fx-background-radius: 3px;
-    -fx-text-fill: #666666; 
+ 
+/*******************************************************************************
+ *   Botones
+ ******************************************************************************/
+ 
+.boton-naranja {
+    -fx-background-color: #2c3e50;
+    -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-cursor: hand;
-    /* Hemos borrado el padding para que mida exactamente lo mismo que el naranja */
+    -fx-background-radius: 4px;
 }
-
+ 
+.boton-naranja:hover {
+    -fx-background-color: #34495e;
+}
+ 
+.boton-cancelar {
+    -fx-background-color: transparent;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-text-fill: #666666;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+ 
 .boton-cancelar:hover {
-    -fx-background-color: #e6e6e6; 
+    -fx-background-color: #e6e6e6;
     -fx-text-fill: black;
 }
-
-
-/* ========================================================= */
-/* ESTILOS TEMA PRINCIPAL (Estadísticas y general)           */
-/* ========================================================= */
-
-/* Fondo limpio tipo tarjeta */
-.panel-fondo {
-    -fx-background-color: white;
-}
-
-/* El naranja corporativo de nuestra app para destacar */
-.titulo-destacado {
-    -fx-text-fill: #000000; 
-}
-.header{
-    -fx-background-color:orange;
-   /* -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);*/
-}
-/* Botón principal */
+ 
 .boton-principal {
-    -fx-background-color: #FC4C02;
+    -fx-background-color: #2c3e50;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-background-radius: 4px;
-    -fx-cursor: hand;    
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 4, 0, 0, 1);
 }
-
+ 
 .boton-principal:hover {
-    -fx-background-color: #E34402; /* Un pelín más oscuro al pasar el ratón */
+    -fx-background-color: #34495e;
 }
-
-
-
-.boton-principal-neg{
+ 
+.boton-principal-neg {
     -fx-background-color: white;
-    -fx-text-fill: black;
+    -fx-text-fill: #2c3e50;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-background-radius: 4px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-border-color: #2c3e50;
+    -fx-border-radius: 4px;
     -fx-cursor: hand;
 }
-.boton-principal-neg:hover{
-    -fx-background-color: lightgrey;
+ 
+.boton-principal-neg:hover {
+    -fx-background-color: #ecf0f1;
 }
-.campo{
-    -fx-background-color: orange , white , white;
-    -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
-}
-.campo:focused{
-    -fx-background-color: orange , white , white;
-    -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
-}
-.date-picker > .month-year-pane {   
-    -fx-base: #1d1d1d ;
-    -fx-mark-highlight-color: -fx-light-text-color ;
-}
-
-.text-info{
-    -fx-text-fill: #666666;
-}
-.texto-principal{
-    -fx-text-fill:black;
-    -fx-font-size:16px;    
-    -fx-font-weight:bold;
-}
-/* Textos de los datos */
-.texto-dato {
-    -fx-text-fill: #333333;
-}
-
-/* Los números resultantes en naranja corporativo */
-.texto-valor {
-    -fx-text-fill: #FC4C02;
-}
-
-
-/* ========================================================= */
-/* ESTILOS PARA LA GRÁFICA DE DESNIVEL                       */
-/* ========================================================= */
-
-/* Color de la línea de la gráfica (naranja corporativo) */
-.grafica-corporativa .chart-series-area-line {
-    -fx-stroke: #FC4C02;
-    -fx-stroke-width: 2px;
-}
-
-/* Color del relleno bajo la línea (naranja semitransparente) */
-.grafica-corporativa .chart-series-area-fill {
-    -fx-fill: rgba(252, 76, 2, 0.2);
-}
-
-/* Fondo de la zona de dibujo de la gráfica (transparente para que pille el blanco de fondo) */
-.grafica-corporativa .chart-plot-background {
-    -fx-background-color: transparent;
-}
-
-/* Limpiar la cuadrícula: quitamos las líneas verticales y ponemos las horizontales en gris clarito */
-.grafica-corporativa .chart-vertical-grid-lines {
-    -fx-stroke: transparent;
-}
-.grafica-corporativa .chart-horizontal-grid-lines {
-    -fx-stroke: #e6e6e6;
-    -fx-stroke-dash-array: 5 5;
-}
-
-/* Textos de los ejes (Distancia y Altitud) */
-.grafica-corporativa .axis-label {
-    -fx-text-fill: #333333;
-    -fx-font-weight: bold;
-}
-
-
-
-/* ========================================================= */
-/* ESTILOS BARRA DE NAVEGACIÓN Y MENÚS PRINCIPALES           */
-/* ========================================================= */
-
-/* La barra superior unida de lado a lado (Naranja) */
-.barra-menu-unida {
-    -fx-background-color: orange;
-    -fx-padding: 2px 10px; /* Un poco de aire por los lados */
-}
-
-/* Quitamos el fondo gris por defecto de los menús para que se fundan con la barra */
-.barra-menu-unida .menu-bar {
-    -fx-background-color: transparent;
-}
-
-/* Estilo del texto de los menús principales (App, Mapa, Username) */
-.barra-menu-unida .menu > .label {
-    -fx-text-fill: black;
-    -fx-font-weight: bold;
-    -fx-font-size: 14px;
-    -fx-padding: 5px 10px;
-    -fx-cursor: hand;
-}
-
-/* Efecto al pasar el ratón por App, Mapa o Username */
-.barra-menu-unida .menu:hover,
-.barra-menu-unida .menu:showing {
-    -fx-background-color: #E34402; /* Un naranja un poco más oscuro */
-    -fx-background-radius: 4px;
-}
-
-/* Estilo del desplegable (cuando haces clic y se abre hacia abajo) */
-.barra-menu-unida .context-menu {
-    -fx-background-color: white;
-    -fx-border-color: #FC4C02;
-    -fx-backgroung-radius: 25px;
-    -fx-border-width: 2px;
-}
-.barra-menu-unida .menu-item .label {
-    -fx-text-fill: #333333;
-    -fx-font-weight: bold;
-}
-.barra-menu-unida .menu-item:hover {
-    -fx-background-color: #E34402; /* Naranja super clarito al pasar el ratón */
-}
-
-/* ========================================================= */
-/* BOTONES SECUNDARIOS (Para herramientas debajo de la barra)*/
-/* ========================================================= */
+ 
 .boton-secundario {
     -fx-background-color: white;
-    -fx-border-color: #FC4C02;
-    -fx-text-fill: #FC4C02;
+    -fx-border-color: #2c3e50;
+    -fx-text-fill: #2c3e50;
     -fx-border-radius: 4px;
     -fx-background-radius: 4px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
     -fx-padding: 5px 10px;
 }
+ 
 .boton-secundario:hover {
-    -fx-background-color: #FFF0E6; 
+    -fx-background-color: #dce8f5;
 }
-
- .dialog-pane{
-  -fx-border-color:orangered;
-  -fx-border-width:2.0px;
- }
-
-/**Costumization of The Bar where the buttons are located**/
+ 
+/*******************************************************************************
+ *   Campos de entrada
+ ******************************************************************************/
+ 
+.campo {
+    -fx-background-color: #2c3e50, white, white;
+    -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
+}
+ 
+.campo:focused {
+    -fx-background-color: #34495e, white, white;
+    -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
+}
+ 
+/*******************************************************************************
+ *   Textos
+ ******************************************************************************/
+ 
+.panel-fondo {
+    -fx-background-color: white;
+}
+ 
+.titulo-destacado {
+    -fx-text-fill: white;
+}
+ 
+.text-info {
+    -fx-text-fill: #666666;
+}
+ 
+.texto-principal {
+    -fx-text-fill: #2c3e50;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+ 
+.texto-dato {
+    -fx-text-fill: #333333;
+}
+ 
+.texto-valor {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+ 
+/*******************************************************************************
+ *   Barra de navegacion superior
+ ******************************************************************************/
+ 
+.header {
+    -fx-background-color: #2c3e50;
+}
+ 
+.barra-menu-unida {
+    -fx-background-color: #2c3e50;
+    -fx-padding: 2px 10px;
+}
+ 
+.barra-menu-unida .menu-bar {
+    -fx-background-color: transparent;
+}
+ 
+.barra-menu-unida .menu > .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 5px 10px;
+    -fx-cursor: hand;
+}
+ 
+.barra-menu-unida .menu:hover,
+.barra-menu-unida .menu:showing {
+    -fx-background-color: #34495e;
+    -fx-background-radius: 4px;
+}
+ 
+.barra-menu-unida .context-menu {
+    -fx-background-color: white;
+    -fx-border-color: #2c3e50;
+    -fx-border-width: 2px;
+}
+ 
+.barra-menu-unida .menu-item .label {
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+}
+ 
+.barra-menu-unida .menu-item:hover {
+    -fx-background-color: #dce8f5;
+}
+ 
+/*******************************************************************************
+ *   Grafica de desnivel
+ ******************************************************************************/
+ 
+.grafica-corporativa .chart-series-area-line {
+    -fx-stroke: #2c3e50;
+    -fx-stroke-width: 2px;
+}
+ 
+.grafica-corporativa .chart-series-area-fill {
+    -fx-fill: rgba(44, 62, 80, 0.15);
+}
+ 
+.grafica-corporativa .chart-plot-background {
+    -fx-background-color: transparent;
+}
+ 
+.grafica-corporativa .chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+ 
+.grafica-corporativa .chart-horizontal-grid-lines {
+    -fx-stroke: #e6e6e6;
+    -fx-stroke-dash-array: 5 5;
+}
+ 
+.grafica-corporativa .axis-label {
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+}
+ 
+/*******************************************************************************
+ *   Dialogos
+ ******************************************************************************/
+ 
+.dialog-pane {
+    -fx-border-color: #2c3e50;
+    -fx-border-width: 2px;
+}
+ 
 .dialog-pane > .button-bar > .container {
-  -fx-background-color:white;
+    -fx-background-color: white;
 }
-
+ 
 .dialog-pane > .content.label {
-   -fx-padding: 0.5em 0.5em 0.5em 0.5em;
-   -fx-background-color: white;
-   -fx-text-fill:black;
-   -fx-font-size:13.0px;
-}
-
-/**Costumization of DialogPane Header**/
-.dialog-pane:header .header-panel {
-  -fx-background-color: orange;
-}
-
-.dialog-pane:header .header-panel .label{
-  -fx-background-radius:10px;
-  -fx-text-fill:black;
-  -fx-font-size:15.0px;
-}
-
-/**Costumization of Buttons**/
-.dialog-pane .button{
+    -fx-padding: 0.5em;
     -fx-background-color: white;
     -fx-text-fill: black;
+    -fx-font-size: 13px;
+}
+ 
+.dialog-pane:header .header-panel {
+    -fx-background-color: #2c3e50;
+}
+ 
+.dialog-pane:header .header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+ 
+.dialog-pane .button {
+    -fx-background-color: #2c3e50;
+    -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-background-radius: 4px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
     -fx-cursor: hand;
 }
-
-.dialog-pane .button:hover{     
-    -fx-background-color: #E34402; /* Un pelín más oscuro al pasar el ratón */
- }
  
-/*Estilos para la table view de estadisticas */
-.table-view{
-   -fx-background-color: transparent;
+.dialog-pane .button:hover {
+    -fx-background-color: #34495e;
 }
-
-.table-view:focused{
+ 
+/*******************************************************************************
+ *   TableView de estadisticas
+ ******************************************************************************/
+ 
+.table-view {
     -fx-background-color: transparent;
 }
-
+ 
+.table-view:focused {
+    -fx-background-color: transparent;
+}
+ 
 .table-view .column-header-background .filler {
-    -fx-background-color: linear-gradient(orange 0%, orangered 100%);
+    -fx-background-color: #2c3e50;
 }
-
-.table-view .column-header-background{
-    -fx-background-color: linear-gradient(orange 0%, orangered 100%);
+ 
+.table-view .column-header-background {
+    -fx-background-color: #2c3e50;
 }
-
-.table-view .column-header-background .label{
+ 
+.table-view .column-header-background .label {
     -fx-background-color: transparent;
     -fx-text-fill: white;
+    -fx-font-weight: bold;
 }
-
+ 
 .table-view .column-header {
     -fx-background-color: transparent;
 }
-
-.table-view .table-cell{
-    -fx-text-fill: black;
+ 
+.table-view .table-cell {
+    -fx-text-fill: #333333;
 }
-
-.table-row-cell{
-    -fx-background-color: -fx-table-cell-border-color, #ffb11e;
-    -fx-background-insets: 0, 0 0 1 0;
-    -fx-padding: 0.0em; 
-}
-
-.table-row-cell:odd{
-    -fx-background-color: -fx-table-cell-border-color, #e09200;
+ 
+.table-row-cell {
+    -fx-background-color: -fx-table-cell-border-color, #f4f8fb;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
 }
-
+ 
+.table-row-cell:odd {
+    -fx-background-color: -fx-table-cell-border-color, #dce8f5;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+ 
 .table-row-cell:selected {
-    -fx-background-color: #ffda94;
+    -fx-background-color: #b8cfe8;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }
+ 
+.boton-borrar {
+    -fx-background-color: white;
+    -fx-border-color: #e74c3c;
+    -fx-text-fill: #e74c3c;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 5px 10px;
+}
+ 
+.boton-borrar:hover {
+    -fx-background-color: #fdecea;
+}
+
+
+
 

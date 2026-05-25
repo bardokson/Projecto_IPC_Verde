@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="gridBase" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: orange;" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
+<GridPane fx:id="gridBase" minHeight="800.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #2c3e50;" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.FXMLDocumentController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -37,12 +37,10 @@
                <children>
                   <SplitPane fx:id="splitPane" dividerPositions="0.197" VBox.vgrow="ALWAYS">
                      <items>
-                        <VBox alignment="CENTER" style="-fx-background-color: orange;">
+                        <VBox alignment="CENTER" style="-fx-background-color: #f4f4f4;">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="22.0" prefWidth="194.0" styleClass="texto-principal" text="Actividades" textAlignment="CENTER" />
-                              <ListView fx:id="activityList" onMouseClicked="#activitySelected" prefHeight="536.0" prefWidth="194.0" stylesheets="@../resources/actividades.css" />
-                              <Label alignment="CENTER" prefHeight="22.0" prefWidth="199.0" styleClass="texto-principal" text="Anotaciones" />
-                              <ListView fx:id="map_listview" onMouseClicked="#listClicked" stylesheets="@../resources/anotaciones.css" />
+                              <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="22.0" styleClass="texto-principal" text="Actividades" textAlignment="CENTER" style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-padding: 5px;" />                              <ListView fx:id="activityList" onMouseClicked="#activitySelected" prefHeight="536.0" prefWidth="194.0" stylesheets="@../resources/actividades.css" />
+                              <Label alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="22.0" styleClass="texto-principal" text="Anotaciones" style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-padding: 5px;" />                              <ListView fx:id="map_listview" onMouseClicked="#listClicked" stylesheets="@../resources/anotaciones.css" />
                            </children>
                         </VBox>
                         <ScrollPane fx:id="map_scrollpane" hbarPolicy="ALWAYS" onMouseMoved="#showPosition" pannable="true" prefHeight="398.0" prefWidth="358.0" vbarPolicy="ALWAYS">
@@ -64,16 +62,16 @@
             </VBox>
          </center>
          <bottom>
-            <HBox alignment="CENTER_RIGHT" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" spacing="10.0" style="-fx-background-color: orange;" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER_RIGHT" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" spacing="10.0" style="-fx-background-color: #2c3e50;" BorderPane.alignment="CENTER">
                <children>
                   <HBox fx:id="modNotes" disable="true" prefHeight="35.0" prefWidth="315.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#modifyNote" styleClass="boton-secundario" text="Modificar Anotación">
+                        <Button mnemonicParsing="false" onAction="#modifyNote" styleClass="boton-secundario" text="Modificar Anotacion">
                            <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" />
                            </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#removeNote" styleClass="boton-secundario" text="Borrar Anotación">
+                        <Button mnemonicParsing="false" onAction="#removeNote" styleClass="boton-borrar" text="Borrar Anotacion">
                            <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" />
                            </HBox.margin>
@@ -83,7 +81,7 @@
                   <Region HBox.hgrow="ALWAYS" />
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="27.0" spacing="5.0">
                      <children>
-                        <Label styleClass="texto-dato" text="Zoom" />
+                        <Label styleClass="texto-dato" text="Zoom" style="-fx-text-fill: white;" />
                         <Button mnemonicParsing="false" onAction="#zoomOut" styleClass="boton-secundario" text="-" />
                         <Slider fx:id="zoom_slider" HBox.hgrow="SOMETIMES" />
                         <Button mnemonicParsing="false" onAction="#zoomIn" styleClass="boton-secundario" text="+" />
@@ -94,7 +92,7 @@
                         <Insets />
                      </HBox.margin>
                   </Separator>
-                  <Label fx:id="mousePosition" minHeight="-Infinity" minWidth="-Infinity" styleClass="texto-dato" text="SceneX:     ScenY:     " wrapText="true" HBox.hgrow="ALWAYS" />
+                  <Label fx:id="mousePosition" minHeight="-Infinity" minWidth="-Infinity" style="-fx-text-fill: white;" text="SceneX:     ScenY:     " wrapText="true" HBox.hgrow="ALWAYS" />
                </children>
                <BorderPane.margin>
                   <Insets top="5.0" />
@@ -128,31 +126,31 @@
                   </Pane>
                   <VBox prefHeight="97.0" prefWidth="920.0" spacing="5.0">
                      <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="35.0" style="-fx-background-color: orangered;" styleClass="barra-menu-unida">
+                        <HBox alignment="CENTER_LEFT" prefHeight="35.0" styleClass="barra-menu-unida">
                            <children>
-                              <MenuBar maxWidth="-Infinity" prefHeight="27.0">
+                              <MenuBar maxWidth="-Infinity" prefHeight="27.0" style="-fx-background-color: transparent;">
                                 <menus>
-                                  <Menu mnemonicParsing="false" style="-fx-border-color: white; -fx-border-wifdth: 3; -fx-border-radius: 50;" text="App">
+                                  <Menu mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 50;" text="App">
                                     <items>
                                       <MenuItem mnemonicParsing="false" onAction="#about" text="Acerca de" />
-                                          <MenuItem mnemonicParsing="false" onAction="#logOutExit" text="Cerrar" />
+                                      <MenuItem mnemonicParsing="false" onAction="#logOutExit" text="Cerrar" />
                                     </items>
                                   </Menu>
                                   <Menu fx:id="men" mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 50;" text="Mapa">
                                     <items>
-                                          <MenuItem mnemonicParsing="false" onAction="#cambiarMapa" text="Cambiar Mapa" />
-                                          <MenuItem mnemonicParsing="false" onAction="#abrirMenuAnadirMapa" text="Añadir Mapa" />
+                                      <MenuItem mnemonicParsing="false" onAction="#cambiarMapa" text="Cambiar Mapa" />
+                                      <MenuItem mnemonicParsing="false" onAction="#abrirMenuAnadirMapa" text="Anadir Mapa" />
                                     </items>
                                   </Menu>
                                 </menus>
                               </MenuBar>
-                              <Region style="-fx-background-color: orangered;" styleClass="header" HBox.hgrow="ALWAYS" />
-                              <MenuBar>
+                              <Region styleClass="header" HBox.hgrow="ALWAYS" />
+                              <MenuBar style="-fx-background-color: transparent;">
                                  <menus>
                                     <Menu fx:id="username" mnemonicParsing="false" style="-fx-border-color: white; -fx-border-radius: 50;" text="Username">
                                       <items>
                                           <MenuItem fx:id="mod" mnemonicParsing="false" onAction="#modPerfil" text="Modificar Perfil" />
-                                          <MenuItem fx:id="ests" mnemonicParsing="false" onAction="#abrirEstadisticas" text="Estadísticas" />
+                                          <MenuItem fx:id="ests" mnemonicParsing="false" onAction="#abrirEstadisticas" text="Estadisticas" />
                                           <MenuItem fx:id="ses" mnemonicParsing="false" onAction="#verSesiones" text="Sesiones" />
                                           <MenuItem fx:id="out" mnemonicParsing="false" onAction="#logOut" text="Log Out" />
                                           <MenuItem fx:id="auth" mnemonicParsing="false" onAction="#auth" text="Autentificarse" visible="false" />
@@ -165,7 +163,7 @@
                               </MenuBar>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0">
+                        <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" style="-fx-background-color: #f4f4f4;">
                            <children>
                               <HBox fx:id="imph" alignment="CENTER">
                                  <children>
@@ -178,7 +176,7 @@
                               <HBox fx:id="modActivity" alignment="CENTER" disable="true" spacing="10.0">
                                  <children>
                                     <Button mnemonicParsing="false" onAction="#renameActivity" styleClass="boton-secundario" text="Renombrar Actividad" />
-                                    <Button mnemonicParsing="false" onAction="#removeActivity" styleClass="boton-secundario" text="Borrar Actividad" />
+                                    <Button mnemonicParsing="false" onAction="#removeActivity" styleClass="boton-borrar" text="Borrar Actividad" />
                                  </children>
                                  <padding>
                                     <Insets left="5.0" />
@@ -198,3 +196,5 @@
       </BorderPane>
    </children>
 </GridPane>
+
+
