@@ -111,7 +111,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML private ScrollPane map_scrollpane;
     @FXML private Slider zoom_slider;
     @FXML private Label mousePosition;
-    @FXML private SplitPane splitPane;
+    @FXML private SplitPane splitPaneMapa;
     @FXML private ListView<Activity> activityList;
     @FXML private ImageView userAvatar;
     @FXML private GridPane gridBase;
@@ -1041,13 +1041,13 @@ public class FXMLDocumentController implements Initializable {
                     desControl.mostrarEstadisticasEnPantalla(tiempoFormateado, distanciaKm, velocidadMedia);
                 }
 
-                javafx.scene.layout.Region chartRegion = (javafx.scene.layout.Region) desRoot;
-                chartRegion.setMinWidth(320);
-                chartRegion.setMaxWidth(320);
-                if (splitPane.getItems().size() == 2) {
-                    splitPane.getItems().add(desRoot);
-                } else if (splitPane.getItems().size() > 2) {
-                    splitPane.getItems().set(2, desRoot);
+               javafx.scene.layout.Region chartRegion = (javafx.scene.layout.Region) desRoot;
+                   chartRegion.setMinHeight(200);
+                   chartRegion.setMaxHeight(200);
+                if (splitPaneMapa.getItems().size() == 1) {
+                    splitPaneMapa.getItems().add(desRoot);
+                } else if (splitPaneMapa.getItems().size() > 1) {
+                    splitPaneMapa.getItems().set(1, desRoot);
                 }
                 javafx.scene.control.SplitPane.setResizableWithParent(desRoot, false);
             } catch (Exception e) {
@@ -1134,7 +1134,7 @@ public class FXMLDocumentController implements Initializable {
      * @author Jiaxiang Liu
      */
     private void cerrarStatMapa() {
-        if (splitPane.getItems().size() > 2) splitPane.getItems().remove(2);
+        if (splitPaneMapa.getItems().size() > 1) splitPaneMapa.getItems().remove(1);
         LaSaforApp.abrirActividades();
     }
     
