@@ -174,7 +174,7 @@
             </HBox>
             <HBox maxWidth="-Infinity" prefHeight="60.0" prefWidth="73.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
                <children>
-                  <Button id="show" mnemonicParsing="false" onAction="#Pass_show" prefHeight="25.0" prefWidth="28.0" styleClass="boton-principal">
+                  <Button id="show" mnemonicParsing="false" onAction="#Pass_show" prefHeight="25.0" prefWidth="28.0" styleClass="boton-naranja">
                      <HBox.margin>
                         <Insets left="3.0" top="8.0" />
                      </HBox.margin>

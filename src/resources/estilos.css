@@ -3,7 +3,7 @@
  ******************************************************************************/
  
 #show {
-    -fx-background-color: #2c3e50;
+    -fx-background-color: slategray;
     -fx-padding: -10px -21px -10px -22px;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 2, 0, 0, 0);
 }
