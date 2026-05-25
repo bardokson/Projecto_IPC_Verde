@@ -3,27 +3,14 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="10.0" styleClass="panel-fondo" stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.DesnivelController">
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="800.0" spacing="15.0" styleClass="panel-fondo" stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.DesnivelController">
    <padding>
       <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
    </padding>
    <children>
-      <HBox alignment="CENTER">
-         <children>
-            <Label styleClass="titulo-destacado" text="Perfil de Desnivel">
-               <font>
-                  <Font name="System Bold" size="22.0" />
-               </font>
-            </Label>
-         </children>
-      </HBox>
-      
-      <AreaChart fx:id="graficaDesnivel" maxHeight="1.7976931348623157E308" styleClass="grafica-corporativa" VBox.vgrow="ALWAYS">
+      <AreaChart fx:id="graficaDesnivel" title="Perfil de Desnivel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="grafica-corporativa" HBox.hgrow="ALWAYS">
         <xAxis>
           <NumberAxis fx:id="ejeX" label="Distancia (km)" side="BOTTOM" />
         </xAxis>
@@ -32,4 +19,4 @@
         </yAxis>
       </AreaChart>
    </children>
-</VBox>
+</HBox>

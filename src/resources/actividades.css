@@ -1,13 +1,15 @@
-.list-cell:filled:selected:focused, .list-cell:filled:selected {
-    -fx-background-color: linear-gradient(orange 0%, #efb264 25%, orangered 75%, orange 100%);
-    -fx-text-fill: white;
-}
 
-.list-cell:even { /* <=== changed to even */
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #b8cfe8;
+    -fx-text-fill: #1e2a3a;
+}
+ 
+.list-cell:even {
     -fx-background-color: white;
 }
-
+ 
 .list-cell:filled:hover {
-    -fx-background-color: #ec8400;
-    -fx-text-fill: white;
+    -fx-background-color: #dce8f5;
+    -fx-text-fill: #1e2a3a;
 }
+ 

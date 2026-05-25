@@ -52,28 +52,27 @@ public class VelocidadController {
             tramo.setStrokeLineCap(StrokeLineCap.ROUND);
 
             if (velocidad < 8.0) {
-                tramo.setStroke(Color.RED);
+                tramo.setStroke(Color.web("#2c3e50"));   // Azul marino - Lento
             } else if (velocidad >= 8.0 && velocidad <= 12.0) {
-                tramo.setStroke(Color.ORANGE);
+                tramo.setStroke(Color.web("#7f8c8d"));   // Gris - Medio
             } else {
-                tramo.setStroke(Color.LIMEGREEN);
+                tramo.setStroke(Color.web("#27ae60"));   // Verde - Rapido
             }
 
             trazadoColores.getChildren().add(tramo);
         }
 
         javafx.scene.text.Text leyendaRoja = new javafx.scene.text.Text(10, 20, "▬ < 8 km/h (Lento)");
-        leyendaRoja.setFill(Color.RED);
+        leyendaRoja.setFill(Color.web("#2c3e50"));
         leyendaRoja.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
         javafx.scene.text.Text leyendaNaranja = new javafx.scene.text.Text(10, 40, "▬ 8-12 km/h (Medio)");
-        leyendaNaranja.setFill(Color.ORANGE);
+        leyendaNaranja.setFill(Color.web("#7f8c8d"));
         leyendaNaranja.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-        javafx.scene.text.Text leyendaVerde = new javafx.scene.text.Text(10, 60, "▬ > 12 km/h (Rápido)");
-        leyendaVerde.setFill(Color.LIMEGREEN);
+        javafx.scene.text.Text leyendaVerde = new javafx.scene.text.Text(10, 60, "▬ > 12 km/h (Rapido)");
+        leyendaVerde.setFill(Color.web("#27ae60"));
         leyendaVerde.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
-
         trazadoColores.getChildren().addAll(leyendaRoja, leyendaNaranja, leyendaVerde);
         return trazadoColores;
     }

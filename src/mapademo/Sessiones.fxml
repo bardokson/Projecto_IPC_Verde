@@ -16,7 +16,7 @@
          <children>
             <HBox alignment="CENTER" minHeight="100.0" prefHeight="100.0" prefWidth="200.0" styleClass="header">
                <children>
-                  <Label styleClass="titulo-destacado" text="Historial de sesiones">
+                  <Label styleClass="titulo-destacado" text="Historial de sesiones" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="31.0" />
                      </font></Label>

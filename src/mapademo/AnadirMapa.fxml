@@ -15,7 +15,7 @@
    <children>
       <HBox alignment="CENTER" prefHeight="63.0" prefWidth="523.0" styleClass="header">
          <children>
-            <Label styleClass="titulo-destacado" text="Añadir Nuevo Mapa">
+            <Label styleClass="titulo-destacado" text="Añadir Nuevo Mapa" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>

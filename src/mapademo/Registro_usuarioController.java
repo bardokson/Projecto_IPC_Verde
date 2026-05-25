@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -35,7 +36,7 @@ public class Registro_usuarioController implements Initializable {
     @FXML private Label Err_nick;
     @FXML private TextField Email_reg;
     @FXML private Label Err_email;
-    @FXML private TextField Pass_reg;
+    @FXML private PasswordField Pass_reg;
     @FXML private DatePicker Birth_reg;
     @FXML private Label Err_birth;
     @FXML private Label Err_tot;
@@ -75,12 +76,13 @@ public class Registro_usuarioController implements Initializable {
     public void initialize(URL url, ResourceBundle rb){
         // TODO
         Pass_reg.textProperty().bindBidirectional(Pass_shown.textProperty());
+        
         //Se encarga de enseñar el popover sobre la contraseña
         popover = new PopOver(new Label("  La contraseña debe tener entre 8 y 20 caracteres,  \n " 
                 + "  con al menos una mayúscula, una minúscula, un   \n"
                 + "             dígito y un símbolo (!@#$%&*()-+=)"));
         Info_pass.setOnMouseEntered(e -> popover.show(Info_pass)); 
-        
+        /*
         Pass_shown.setOnKeyTyped(e ->{Pass = Pass_shown.getText();
             if(!User.checkPassword(Pass)){
             if(!popover.isShowing()) popover.show(Info_pass);
@@ -91,6 +93,19 @@ public class Registro_usuarioController implements Initializable {
             Err_pass.setVisible(false);
             Pass_ok = true;
         }});
+        */
+        Pass_reg.textProperty().addListener((obs, oldVal, newVal) -> {
+            Pass = Pass_shown.getText();
+            if(!User.checkPassword(Pass)){
+            if(!popover.isShowing()) popover.show(Info_pass);
+            Err_pass.setVisible(true);
+            Pass_ok = false;
+            } else {
+            popover.hide();
+            Err_pass.setVisible(false);
+            Pass_ok = true;
+            }
+        });
         }    
     
     /**
@@ -253,7 +268,8 @@ public class Registro_usuarioController implements Initializable {
      */
     @FXML
     private void Pass_show(ActionEvent event) {
-        if(getPressed()){
+                
+        if(pressed){
             disableShown();
             enableReg();            
             Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_cerrado.png")));

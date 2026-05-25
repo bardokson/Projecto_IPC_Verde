@@ -8,12 +8,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox alignment="CENTER" prefHeight="418.0" prefWidth="602.0" spacing="10.0" styleClass="panel-fondo" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.CambiarMapaController">
    <children>
-      <HBox alignment="CENTER" minHeight="100.0" prefHeight="100.0" prefWidth="200.0" styleClass="header">
+      <HBox alignment="CENTER" minHeight="100.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" styleClass="header">
          <children>
-            <Label styleClass="titulo-destacado" text="Cambiar Mapa">
+            <Label styleClass="titulo-destacado" text="Cambiar Mapa" textFill="WHITE">
                <font>
                   <Font size="31.0" />
                </font>

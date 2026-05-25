@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,7 +24,7 @@ public class Inicio_de_sesionController implements Initializable{
 
     @FXML private TextField NickName_ini;
     @FXML private Label Err_nick_ini;
-    @FXML private TextField Pass_reg;
+    @FXML private PasswordField Pass_reg;
     @FXML private Label Err_pass_ini;
     @FXML private ImageView Img_pass;
     @FXML private TextField Pass_shown;
@@ -57,6 +58,7 @@ public class Inicio_de_sesionController implements Initializable{
                 Err_pass_ini.setVisible(false);
             }
         });
+        
         Pass_shown.setOnKeyTyped(e->{
             if(shown){
                 Err_nick_ini.setVisible(false);
@@ -73,6 +75,7 @@ public class Inicio_de_sesionController implements Initializable{
      */
     @FXML
     private void Ini_ses(ActionEvent event) {
+        
         if(LaSaforApp.app.login(Nick,Pass)){  
             Err_nick_ini.setVisible(false);
             Err_pass_ini.setVisible(false);
@@ -113,7 +116,8 @@ public class Inicio_de_sesionController implements Initializable{
      */
     @FXML
     private void Pass_show() {
-        if(getPressed()){
+        
+        if(pressed){
             disableShown();
             enableReg();            
             Img_pass.setImage(new Image(getClass().getResourceAsStream("/resources/ojo_cerrado.png")));
@@ -168,5 +172,5 @@ public class Inicio_de_sesionController implements Initializable{
         Pass_reg.setDisable(false);
         Pass_reg.setVisible(true);
     }
-
+    
 }

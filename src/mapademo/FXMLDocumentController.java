@@ -57,7 +57,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
@@ -112,7 +111,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML private ScrollPane map_scrollpane;
     @FXML private Slider zoom_slider;
     @FXML private Label mousePosition;
-    @FXML private SplitPane splitPane;
+    @FXML private SplitPane splitPaneMapa;
     @FXML private ListView<Activity> activityList;
     @FXML private ImageView userAvatar;
     @FXML private GridPane gridBase;
@@ -152,14 +151,23 @@ public class FXMLDocumentController implements Initializable {
     private Color lineColor;
     private Long actividadActualId = null;
     private String nombre;
-    private static File imgFile;
+    private static File imgFileCam;
     
-    public static void setGuest(boolean is){
-        guest = is;
-    }
-    private static boolean isGuest(){
-        return guest;
-    }
+    /**
+     * Pone al usuario como invitado o no.
+     * 
+     * @param is
+     * 
+     * @author Erik Tzvetkov
+     */
+    public static void setGuest(boolean is){guest = is;}
+    
+    /**
+     * Devuelve si el usuario es invitado.
+     * 
+     * @author Erik Tzvetkov
+     */
+    private static boolean isGuest(){return guest;}
     /**
      * Aumenta el zoom en 0.1 unidades al pulsar el botón "+".
      *
@@ -212,6 +220,8 @@ public class FXMLDocumentController implements Initializable {
      * Permite controlar el zoom combinando CTRL y mousewheel.
      * 
      * @param event 
+     * 
+     * @author Hector Saez
     */
     private void ZoomCtrl(ScrollEvent event) {
         if (event.isControlDown()) {
@@ -236,41 +246,21 @@ public class FXMLDocumentController implements Initializable {
      * Modificado del metodo original. Adaptado para usar anotaciones en general, no solo POIs.
      *
      * @param event evento de ratón sobre el ListView
+     * 
+     * @authors Jiaxiang Liu, Hector Saez
      */
     @FXML
     void listClicked(MouseEvent event) {
-
         Annotation note = map_listview.getSelectionModel().getSelectedItem();
         if (note == null) return;
-        
+
         Point2D p = projection.project(note.getGeoPoints().get(0));
         double x = p.getX();
         double y = p.getY();
 
         mapPane.layout();
-        
-        //GPT
-        double viewW = map_scrollpane.getViewportBounds().getWidth();
-        double viewH = map_scrollpane.getViewportBounds().getHeight();
 
-        double contentW = mapPane.getBoundsInParent().getWidth();
-        double contentH = mapPane.getBoundsInParent().getHeight();
-        //GPT
-
-        double scrollH = (x * zoomGroup.getScaleX() - viewW / 2) / (contentW - viewW);
-        double scrollV = (y * zoomGroup.getScaleY() - viewH / 2) / (contentH - viewH);
-
-        //GPT
-        scrollH = Math.max(0, Math.min(1, scrollH));
-        scrollV = Math.max(0, Math.min(1, scrollV));
-        //GPT
-
-        final Timeline timeline = new Timeline();
-        final KeyValue kv1 = new KeyValue(map_scrollpane.hvalueProperty(), scrollH);
-        final KeyValue kv2 = new KeyValue(map_scrollpane.vvalueProperty(), scrollV);
-        final KeyFrame kf  = new KeyFrame(Duration.millis(500), kv1, kv2);
-        timeline.getKeyFrames().add(kf);
-        timeline.play(); 
+        Platform.runLater(() -> centrarEnPunto(x, y));
     }
 
     // =========================================================
@@ -363,6 +353,8 @@ public class FXMLDocumentController implements Initializable {
      *
      * @param x coordenada X del clic en el sistema local del mapPane
      * @param y coordenada Y del clic en el sistema local del mapPane
+     * 
+     * @author Jiaxiang Liu
      */
     private void onMapRightClick(double x, double y) {
         if(!isGuest()){
@@ -452,11 +444,7 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
         });
-        
-        /*File archivoMapa = new File("/src/maps/upv.jpg");
-        if (!archivoMapa.exists()) {
-            archivoMapa = new File("maps/upv.jpg");
-        }*/
+
         File archivoMapa = new File("maps/upv.jpg");
         buildMap(archivoMapa, null);
         if(!isGuest()){
@@ -466,7 +454,7 @@ public class FXMLDocumentController implements Initializable {
         
         modActivity.disableProperty().bind(activityList.getSelectionModel().selectedItemProperty().isNull());
         modNotes.disableProperty().bind(map_listview.getSelectionModel().selectedItemProperty().isNull());
-        
+       
         map_scrollpane.addEventFilter(javafx.scene.input.ScrollEvent.SCROLL, event -> {
             if (event.getDeltaY() == 0) return;
 
@@ -484,12 +472,12 @@ public class FXMLDocumentController implements Initializable {
                 event.consume();
             }
         });
-         
+        if(mapas.isEmpty()) {
         mapas.add("maps/upv.jpg");
         mapas.add("maps/calderona.jpg");
         mapas.add("maps/pirineos.jpg"); 
         mapas.add("maps/valencia.jpg");
-        
+        }
     }
 
     // =========================================================
@@ -528,6 +516,8 @@ public class FXMLDocumentController implements Initializable {
      * su icono, ya que Alert no expone directamente esa propiedad.
      *
      * @param event evento de acción del menú
+     * 
+     * @author Jiaxiang Liu
      */
     @FXML
     private void about(ActionEvent event) {
@@ -554,6 +544,14 @@ public class FXMLDocumentController implements Initializable {
     // =========================================================
     //  AÑADIR UN POI (texto) AL MAPA
     // =========================================================
+    
+    /**
+     * Metodo para transformar de color a hexadecimal.
+     * 
+     * @param color
+     * 
+     * @author Hector Saez
+     */
     public String colorToHex(Color color) {
         if (color == null) {
             return "#000000";
@@ -563,11 +561,19 @@ public class FXMLDocumentController implements Initializable {
                 (int) (color.getGreen() * 255),
                 (int) (color.getBlue() * 255));
     }
+    
+    /**
+     * Metodo para transformar de hexadecimar a color.
+     * 
+     * @param hex
+     * 
+     * @autor Hector Saez
+     */
     public Color hexToColor(String hex) {
-    if (hex == null || hex.isEmpty()) {
-        return Color.BLACK; 
-    }
-    return Color.web(hex);
+        if (hex == null || hex.isEmpty()) {
+            return Color.BLACK; 
+        }
+        return Color.web(hex);
     }   
     
     /**
@@ -576,6 +582,8 @@ public class FXMLDocumentController implements Initializable {
      *
      * @param x coordenada X del clic en el sistema local del mapPane
      * @param y coordenada Y del clic en el sistema local del mapPane
+     * 
+     * @authors Jiaxiang Liu, Hector Saez
      */
     private void addPoi(double x, double y) {
         Dialog<ButtonType> poiDialog = new Dialog<>();
@@ -599,10 +607,16 @@ public class FXMLDocumentController implements Initializable {
             Annotation saved = LaSaforApp.app.addAnnotation(actividadActual, note);
             registrarAnotacion(saved);
             drawPoi(saved);
+        }
     }
-}
     
+    /**
+     * Dibuja el texto de un POI en el mapa.
+     * 
+     * @authors Jiaxiang Liu, Hector Saez
+     */
     private void drawPoi(Annotation note) {
+        
         GeoPoint a = note.getGeoPoints().get(0);
         Point2D p = projection.project(a);
         Text text = new Text(note.getText());
@@ -610,6 +624,7 @@ public class FXMLDocumentController implements Initializable {
         text.setY(p.getY());
         text.setFill(hexToColor(note.getColor()));
         text.setUserData("annotation");
+        
         mapPane.getChildren().add(text);
     }
 
@@ -642,14 +657,14 @@ public class FXMLDocumentController implements Initializable {
             stage.initOwner(mapPane.getScene().getWindow());
             stage.initModality(javafx.stage.Modality.WINDOW_MODAL);
             stage.showAndWait();
-        if (imgFile != null) {
-            System.out.println("Mapa seleccionado: " + imgFile.getCanonicalPath());
-            buildMap(imgFile, null); // Reconstruimos la vista con la nueva imagen
+        if (imgFileCam != null) {
+            //System.out.println("Mapa seleccionado: " + imgFileCam.getCanonicalPath());
+            buildMap(imgFileCam, null); // Reconstruimos la vista con la nueva imagen
             map_listview.getItems().clear(); // Borramos los datos del mapa anterior
         }
     }
-    public static File cambiarMapa(String mapa){
-        return imgFile = new File(mapa);
+    public static void cambiarMapa(String mapa){
+        imgFileCam = new File(mapa);
     }
     // =========================================================
     //  AÑADIR UN CÍRCULO AL MAPA
@@ -662,8 +677,11 @@ public class FXMLDocumentController implements Initializable {
      * 
      * @param x coordenada X en el sistema local del mapPane
      * @param y coordenada Y en el sistema local del mapPane
+     * 
+     * @authors Jiaxiang Liu, Hector Saez
      */
     private void addCircle(double x, double y) {
+        
         Dialog<ButtonType> circleDialog = new Dialog<>();
         circleDialog.setTitle("Nuevo circulo");
         circleDialog.setHeaderText("Introduce un nuevo circulo");
@@ -692,6 +710,8 @@ public class FXMLDocumentController implements Initializable {
      * Dibuja en el mapa la anotacion data de tipo circulo.
      * 
      * @param note anotacion que el metodo dibuja sobre el mapa
+     * 
+     * @authors Jiaxiang Liu, Hector Saez
      */
     private void drawCircle(Annotation note) {
         GeoPoint a = note.getGeoPoints().get(0);
@@ -710,6 +730,8 @@ public class FXMLDocumentController implements Initializable {
      * 
      * @param x coordenada X en el sistema local del mapPane
      * @param y coordenada Y en el sistema local del mapPane
+     * 
+     * @authors Jiaxiang Liu, Hector Saez
      */
     private void addPoint(double x, double y) {
         Dialog<ButtonType> pointDialog = new Dialog<>();
@@ -740,6 +762,8 @@ public class FXMLDocumentController implements Initializable {
      * Metodo que dibuja anotacion tipo punto sobre el mapa.
      * 
      * @param note anotacion que el metodo dibuja sobre le mapa.
+     * 
+     * @authors Jiaxiang Liu, Hector Saez
      */
     private void drawPoint(Annotation note) {
         GeoPoint a = note.getGeoPoints().get(0);
@@ -760,6 +784,8 @@ public class FXMLDocumentController implements Initializable {
      * 
      * @param x coordenada X en el sistema local del mapPane
      * @param y coordenada Y en el sistema local del mapPane
+     * 
+     * @authors Jiaxiang Liu, Hector Saez
      */
     private void addLine(double x, double y) {
         if (!lineInput) {
@@ -808,6 +834,8 @@ public class FXMLDocumentController implements Initializable {
      * @param y coordenada Y en el sistema local del mapPane
      * @param name nombre que darle a la anotacion
      * @param color color que darle a la anotacion
+     * 
+     * @authors Jiaxiang Liu, Hector Saez
      */
     private void drawLine(double x, double y, String name, Color color) {
         GeoPoint start = projection.unproject(lineX, lineY);
@@ -823,6 +851,8 @@ public class FXMLDocumentController implements Initializable {
      * Metodo que toma una anotacion tipo linea y la dibuja sobre el mapa.
      * 
      * @param note anotacion a dibujar sobre el mapa.
+     * 
+     * @authors Jiaxiang Liu, Hector Saez
      */
     private void drawLine(Annotation note) {
         GeoPoint start = note.getGeoPoints().get(0);
@@ -840,6 +870,8 @@ public class FXMLDocumentController implements Initializable {
 
     /**
      * Abre un filechooser para importar un archivo gpx y la añade a la lista de actividades.
+     * 
+     * @author Hector Saez
      */
     @FXML
     private void importarGPX() {
@@ -858,8 +890,22 @@ public class FXMLDocumentController implements Initializable {
             dialog.setTitle("Renombrar actividad");
             dialog.setHeaderText("Cambiar nombre actividad");
             dialog.setContentText("Nuevo nombre:");
+            dialog.initOwner(mapPane.getScene().getWindow());
+
+            dialog.getDialogPane().expandedProperty().addListener((obs, old, val) -> {
+                Platform.runLater(() -> {
+                    dialog.getEditor().requestFocus();
+                    dialog.getEditor().selectAll();
+                });
+            });
+
+            dialog.setOnShown(e -> Platform.runLater(() -> {
+                dialog.getEditor().requestFocus();
+                dialog.getEditor().selectAll();
+            }));
+
             dialog.showAndWait().ifPresent(newName -> {
-            if(newName != null) nombre = newName;
+                if(newName != null) nombre = newName;
             });
             
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
@@ -875,7 +921,7 @@ public class FXMLDocumentController implements Initializable {
             MapRegion region = app.findMapForActivity(actividadActual);
             File mapFile = new File(region.getImagePath());
             buildMap(mapFile, region);
-            mapPane.layout(); 
+            mapPane.layout();
             double anchoReal = mapPane.getWidth();
             double altoReal = mapPane.getHeight();
             this.projection = new MapProjection(region, anchoReal, altoReal);
@@ -884,6 +930,7 @@ public class FXMLDocumentController implements Initializable {
             verActividades();
             actividadActualId = null;
             abrirActividad(actividadActual);
+            Platform.runLater(() -> centrarEnActividad(actividadActual));
         }
     }
     
@@ -891,6 +938,8 @@ public class FXMLDocumentController implements Initializable {
 
     /**
      * Actualiza la lista de actividades cada vez que se añaden.
+     * 
+     * @author Jiaxiang Liu
      */
     private void verActividades() {
         
@@ -913,14 +962,31 @@ public class FXMLDocumentController implements Initializable {
     }
 
     /**
-     * Abre y mueve el mapa a la zona de inicio de la actividad seleccionada de la lista.
+     * Abre y mueve el mapa a la zona de inicio de la actividad seleccionada de la lista y repinta la actividad.
+     * 
+     * @author Jiaxiang Liu
      */
     @FXML
     private void activitySelected(MouseEvent event) {
+        SportActivityApp app = LaSaforApp.app;
         Activity actividad = activityList.getSelectionModel().getSelectedItem();
+        
         if (actividad == null) return;
-        actividadActual = actividad;
-        abrirActividad(actividadActual);
+        
+        MapRegion region = app.findMapForActivity(actividad);
+        File mapFile = new File(region.getImagePath());
+        
+        buildMap(mapFile, region);
+        mapPane.layout();
+        double anchoReal = mapPane.getWidth();
+        double altoReal = mapPane.getHeight();
+        this.projection = new MapProjection(region, anchoReal, altoReal);
+        mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
+        
+        dibujarRutaPorVelocidad();
+        
+        abrirActividad(actividad);
+        Platform.runLater(() -> centrarEnActividad(actividad));
     }
 
     /**
@@ -933,6 +999,8 @@ public class FXMLDocumentController implements Initializable {
      * IA
      * 
      * @param actividad Actividad a abrirse
+     * 
+     * @authors Jiaxiang Liu, Hector Saez, Javier Blanch
      */
     private void abrirActividad(Activity actividad) {
         boolean esNuevaActividad = !Long.valueOf(actividad.getId()).equals(actividadActualId);
@@ -945,10 +1013,12 @@ public class FXMLDocumentController implements Initializable {
             File mapFile = new File(region.getImagePath());
             buildMap(mapFile, region);
             mapPane.layout();
+            
             double anchoReal = mapPane.getWidth();
             double altoReal = mapPane.getHeight();
             this.projection = new MapProjection(region, anchoReal, altoReal);
             this.actividadActual = actividad;
+            
             dibujarRutaPorVelocidad();
             try {
                 javafx.fxml.FXMLLoader desLoader = new javafx.fxml.FXMLLoader(getClass().getResource("Desnivel.fxml"));
@@ -959,41 +1029,39 @@ public class FXMLDocumentController implements Initializable {
                 desControl.crearLeyendaVelocidad();
 
                 java.util.List<TrackPoint> puntos = actividad.getTrackPoints();
+                
                 if (puntos != null && puntos.size() >= 2) {
                     TrackPoint pInicio = puntos.get(0);
                     TrackPoint pFin = puntos.get(puntos.size() - 1);
 
-                    // Distancia
                     double distanciaMetros = 0;
+                    
                     for (int i = 0; i < puntos.size() - 1; i++) {
                         distanciaMetros += puntos.get(i).distanceTo(puntos.get(i+1));
                     }
+                    
                     double distanciaKm = distanciaMetros / 1000.0;
-
-                    // Tiempo
                     long segundosTotales = java.time.Duration.between(pInicio.getTime(), pFin.getTime()).getSeconds();
                     long horas = segundosTotales / 3600;
                     long minutos = (segundosTotales % 3600) / 60;
                     long segundos = segundosTotales % 60;
                     String tiempoFormateado = String.format("%02d:%02d:%02d", horas, minutos, segundos);
 
-                    // Velocidad
                     double velocidadMedia = 0.0;
                     if (segundosTotales > 0) {
                         velocidadMedia = (distanciaKm / (segundosTotales / 3600.0));
                     }
 
-                    // Enviamos los datos al panel de la derecha
                     desControl.mostrarEstadisticasEnPantalla(tiempoFormateado, distanciaKm, velocidadMedia);
                 }
 
-                javafx.scene.layout.Region chartRegion = (javafx.scene.layout.Region) desRoot;
-                chartRegion.setMinWidth(320);
-                chartRegion.setMaxWidth(320);
-                if (splitPane.getItems().size() == 2) {
-                    splitPane.getItems().add(desRoot);
-                } else if (splitPane.getItems().size() > 2) {
-                    splitPane.getItems().set(2, desRoot);
+               javafx.scene.layout.Region chartRegion = (javafx.scene.layout.Region) desRoot;
+                   chartRegion.setMinHeight(200);
+                   chartRegion.setMaxHeight(200);
+                if (splitPaneMapa.getItems().size() == 1) {
+                    splitPaneMapa.getItems().add(desRoot);
+                } else if (splitPaneMapa.getItems().size() > 1) {
+                    splitPaneMapa.getItems().set(1, desRoot);
                 }
                 javafx.scene.control.SplitPane.setResizableWithParent(desRoot, false);
             } catch (Exception e) {
@@ -1016,7 +1084,6 @@ public class FXMLDocumentController implements Initializable {
                 timeline.play();
             }
 
-            // Cargar anotaciones: primero buscamos en nuestra copia local
             if (anotacionesPorActividad.containsKey(actividad.getId())) {
                 map_listview.getItems().setAll(
                     anotacionesPorActividad.get(actividad.getId()).stream()
@@ -1044,6 +1111,8 @@ public class FXMLDocumentController implements Initializable {
     }
     /**
      * Cambia ventana a la de modificar perfil.
+     * 
+     * @author Jiaxiang Liu
      */
     @FXML
     private void modPerfil() throws IOException {
@@ -1052,6 +1121,8 @@ public class FXMLDocumentController implements Initializable {
 
     /**
      * Guarda la informacion y cambia ventana a la de iniciar sesion.
+     * 
+     * @author Jiaxiang Liu
      */
     @FXML
     private void logOut() {
@@ -1061,6 +1132,8 @@ public class FXMLDocumentController implements Initializable {
 
     /**
      * Guarda la informacion y cierra la aplicacion.
+     * 
+     * @author Jiaxiang Liu
      */
     @FXML
     private void logOutExit() {
@@ -1071,15 +1144,20 @@ public class FXMLDocumentController implements Initializable {
     
     /**
      * Metodo que cierra el mapa y restaura el tamaño de la ventana principal.
+     * 
+     * @author Jiaxiang Liu
      */
     private void cerrarStatMapa() {
-        if (splitPane.getItems().size() > 2) splitPane.getItems().remove(2);
+        if (splitPaneMapa.getItems().size() > 1) splitPaneMapa.getItems().remove(1);
         LaSaforApp.abrirActividades();
     }
     
     /**
      * Quita la actividad seleccionada de la lista de actividades.
-     * Al borrar una actividad vuelve al mapa por defecto
+     * IA
+     * Borrar una actividad vuelve al mapa por defecto
+     * 
+     * @author Jiaxiang Liu
      */
     @FXML
     private void removeActivity() {
@@ -1117,6 +1195,8 @@ public class FXMLDocumentController implements Initializable {
      * seleccionada, aplica el cambio en el sistema y refresca la lista para 
      * mostrar el nuevo nombre.
      * IA
+     * 
+     * @author Jiaxiang Liu
      */
     @FXML
     void renameActivity() {
@@ -1140,6 +1220,8 @@ public class FXMLDocumentController implements Initializable {
      * actualiza las estructuras de datos, elimina el elemento de la interfaz y 
      * redibuja las notas restantes en el mapa.
      * IA
+     * 
+     * @author Hector Saez
      */
     @FXML
     void removeNote() {
@@ -1174,6 +1256,8 @@ public class FXMLDocumentController implements Initializable {
         
     /**
      * Redibuja las anotaciones para representar cambios en tiempo real.
+     * 
+     * @author Jiaxiang Liu
      */
     private void refreshActivity() {
         if (actividadActual == null) return;
@@ -1183,6 +1267,8 @@ public class FXMLDocumentController implements Initializable {
     
     /**
      * Dibuja todas las anotaciones de la listview.
+     * 
+     * @author Jiaxiang Liu
      */
     private void drawNotes() {
         for (Annotation a : map_listview.getItems()) {
@@ -1198,6 +1284,8 @@ public class FXMLDocumentController implements Initializable {
     /**
      * Cambia la foto de perfil y el texto del nombre de usuario.
      * Se llama cada vez que se abre la ventana para refrescar por cambios.
+     * 
+     * @author Jiaxiang Liu
      */
     private void setupUser() {
         user = LaSaforApp.app.getCurrentUser();
@@ -1222,6 +1310,8 @@ public class FXMLDocumentController implements Initializable {
     /**
      * Abre el menu para añadir mapas.
      * IA
+     * 
+     * @author Javier Blanch
      */
     @FXML
     private void abrirMenuAnadirMapa() { 
@@ -1246,6 +1336,8 @@ public class FXMLDocumentController implements Initializable {
          * de colores dinámico a cada segmento según la velocidad detectada y añadiendo 
          * marcadores para el inicio y fin del recorrido.
          * IA
+         * 
+         * @author Hector Saez
          */
         private void dibujarRutaPorVelocidad() {
 
@@ -1300,11 +1392,11 @@ public class FXMLDocumentController implements Initializable {
                }
 
                if (velocidadKmH < 35.0) {
-                segmento.setStroke(Color.RED);   
+                    segmento.setStroke(Color.web("#2c3e50"));
                 } else if (velocidadKmH <= 40.0) {
-                    segmento.setStroke(Color.ORANGE);  
+                    segmento.setStroke(Color.web("#7f8c8d"));
                 } else {
-                    segmento.setStroke(Color.LIMEGREEN);    
+                    segmento.setStroke(Color.web("#27ae60"));
                 }
 
                segmento.setStrokeWidth(5.0);
@@ -1336,6 +1428,8 @@ public class FXMLDocumentController implements Initializable {
      * 
      * @param distanciaMetros distancia de la carrera
      * @param puntos lista de TrackPoints de la carrera
+     * 
+     * @authors Javier Blanch
      */
     private void mostrarEstadisticas(double distanciaMetros, java.util.List<TrackPoint> puntos) {
        if (puntos == null || puntos.size() < 2) return;
@@ -1358,6 +1452,8 @@ public class FXMLDocumentController implements Initializable {
 
     /**
      * Abre la ventana de sesiones.
+     * 
+     * @author Jiaxiang Liu
      */
     @FXML
     private void verSesiones() {
@@ -1368,6 +1464,8 @@ public class FXMLDocumentController implements Initializable {
     /**
      * Abre la ventana de estadisticas acumuladas.
      * IA
+     * 
+     * @author Javier Blanch
      */
     @FXML
     private void abrirEstadisticas() {
@@ -1395,6 +1493,8 @@ public class FXMLDocumentController implements Initializable {
     /**
      * Abre dialogo para modificar la anotacion.
      * Permite cambiar el nombre, color.
+     * 
+     * @authors Jiaxiang Liu, Hector Saez
      */
     @FXML
     private void modifyNote() {
@@ -1447,16 +1547,81 @@ public class FXMLDocumentController implements Initializable {
      * IA
      * 
      * @param saved anotacion que guardar
+     * 
+     * @author Hector Saez
      */
     private void registrarAnotacion(Annotation saved) {
         long id = actividadActual.getId();
         anotacionesPorActividad.computeIfAbsent(id, k -> new java.util.ArrayList<>()).add(saved);
         map_listview.getItems().add(saved);
     }
-
+    
+    /**
+     * Metodo de invitado para autenticar sesion
+     */
     @FXML
     private void auth(ActionEvent event) {
         LaSaforApp.abrirHub();
+    }
+    
+    /**
+     * Dirige la pantalla al centro de las coordenadas de la actividad en cualquier nivel de zoom.
+     * IA
+     * 
+     * @param actividad en la que centrar la pantalla
+     * 
+     * @author Hector Saez
+     */
+    private void centrarEnActividad(Activity actividad) {
+        
+        if (actividad == null || projection == null) return;
+        List<TrackPoint> puntos = actividad.getTrackPoints();
+        if (puntos == null || puntos.isEmpty()) return;
+
+        double sumX = 0, sumY = 0;
+        
+        for (TrackPoint p : puntos) {
+            Point2D px = projection.project(p.getLatitude(), p.getLongitude());
+            sumX += px.getX();
+            sumY += px.getY();
+        }
+        
+        double cx = sumX / puntos.size();
+        double cy = sumY / puntos.size();
+        
+        centrarEnPunto(cx, cy);
+    }
+    
+    /**
+    * Ayuda a centrar las anotaciones en el medio e la pantalla en cualquier nivel de zoon.
+    * IA
+    * 
+    * @param x coordenada x de la anotacion
+    * @param y coordenada y de la anotacion
+    * 
+    * @author Hector Saez
+    */
+    private void centrarEnPunto(double x, double y) {
+        double escala = zoomGroup.getScaleX();
+        double contentW = mapPane.getWidth() * escala;
+        double contentH = mapPane.getHeight() * escala;
+        double viewW = map_scrollpane.getViewportBounds().getWidth();
+        double viewH = map_scrollpane.getViewportBounds().getHeight();
+
+        double scrollH = (x * escala - viewW / 2.0) / (contentW - viewW);
+        double scrollV = (y * escala - viewH / 2.0) / (contentH - viewH);
+
+        scrollH = Math.max(0, Math.min(1, scrollH));
+        scrollV = Math.max(0, Math.min(1, scrollV));
+
+        final double fH = scrollH;
+        final double fV = scrollV;
+
+        Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(500),
+            new KeyValue(map_scrollpane.hvalueProperty(), fH),
+            new KeyValue(map_scrollpane.vvalueProperty(), fV)));
+        timeline.play();
     }
 }
     
