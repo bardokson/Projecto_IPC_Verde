@@ -962,16 +962,31 @@ public class FXMLDocumentController implements Initializable {
     }
 
     /**
-     * Abre y mueve el mapa a la zona de inicio de la actividad seleccionada de la lista.
+     * Abre y mueve el mapa a la zona de inicio de la actividad seleccionada de la lista y repinta la actividad.
      * 
      * @author Jiaxiang Liu
      */
     @FXML
     private void activitySelected(MouseEvent event) {
+        SportActivityApp app = LaSaforApp.app;
         Activity actividad = activityList.getSelectionModel().getSelectedItem();
+        
         if (actividad == null) return;
-        actividadActual = actividad;
-        abrirActividad(actividadActual);
+        
+        MapRegion region = app.findMapForActivity(actividad);
+        File mapFile = new File(region.getImagePath());
+        
+        buildMap(mapFile, region);
+        mapPane.layout();
+        double anchoReal = mapPane.getWidth();
+        double altoReal = mapPane.getHeight();
+        this.projection = new MapProjection(region, anchoReal, altoReal);
+        mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
+        
+        dibujarRutaPorVelocidad();
+        verActividades();
+        
+        abrirActividad(actividad);
         Platform.runLater(() -> centrarEnActividad(actividad));
     }
 
