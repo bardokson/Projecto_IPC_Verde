@@ -17,11 +17,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="253.0" prefWidth="456.0" styleClass="Background" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.Inicio_de_sesionController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="277.0" prefWidth="456.0" styleClass="panel-fondo" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.Inicio_de_sesionController">
    <children>
-      <HBox alignment="CENTER" prefHeight="61.0" prefWidth="400.0" style="-fx-background-color: orange;">
+      <HBox alignment="CENTER" prefHeight="61.0" prefWidth="400.0" style="-fx-background-color: #2c3e50;" styleClass="header">
          <children>
-            <Label styleClass="Header" text="Iniciar sesion">
+            <Label styleClass="titulo-destacado" text="Iniciar sesion" textFill="WHITE">
                <font>
                   <Font size="31.0" />
                </font>
@@ -29,7 +29,7 @@
          </children>
       </HBox>
       <Separator prefHeight="12.0" prefWidth="456.0" />
-      <GridPane alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="190.0" prefWidth="456.0">
+      <GridPane alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="190.0" prefWidth="456.0" styleClass="panel-fondo">
          <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="266.0" minWidth="10.0" prefWidth="164.0" />
             <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="292.0" />
@@ -43,7 +43,7 @@
          <children>
             <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="217.0" GridPane.columnIndex="1">
                <children>
-                  <TextField fx:id="NickName_ini" maxWidth="-Infinity" prefHeight="26.0" prefWidth="221.0" styleClass="Field">
+                  <TextField fx:id="NickName_ini" maxWidth="-Infinity" prefHeight="26.0" prefWidth="221.0" styleClass="campo">
                      <VBox.margin>
                         <Insets right="45.0" top="14.0" />
                      </VBox.margin></TextField>
@@ -55,7 +55,7 @@
             </VBox>
             <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="265.0">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="Label" text="NickName:  " textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="texto-principal" text="NickName:  " textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -70,7 +70,7 @@
             </VBox>
             <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="60.0" prefWidth="164.0" GridPane.rowIndex="1">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="Label" text="Contraseña:  " textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="texto-principal" text="Contraseña:  " textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -84,8 +84,8 @@
                      <children>
                         <StackPane prefHeight="20.0" prefWidth="220.0">
                            <children>
-                              <PasswordField fx:id="Pass_reg" prefHeight="26.0" prefWidth="221.0" styleClass="Field" />
-                              <TextField fx:id="Pass_shown" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="219.0" styleClass="Field" visible="false" />
+                              <PasswordField fx:id="Pass_reg" prefHeight="26.0" prefWidth="221.0" styleClass="campo" />
+                              <TextField fx:id="Pass_shown" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="219.0" styleClass="campo" visible="false" />
                            </children>
                         </StackPane>
                         <Label fx:id="Err_pass_ini" maxWidth="-Infinity" prefHeight="18.0" prefWidth="237.0" textFill="RED" visible="false">
@@ -94,7 +94,7 @@
                            </font></Label>
                      </children>
                   </VBox>
-                  <Button mnemonicParsing="false" onAction="#Pass_show" prefHeight="25.0" prefWidth="28.0" styleClass="Boton">
+                  <Button id="show" mnemonicParsing="false" onAction="#Pass_show" prefHeight="25.0" prefWidth="28.0" styleClass="boton-principal">
                      <padding>
                         <Insets bottom="-10.0" left="-22.0" right="-21.0" top="-10.0" />
                      </padding>
@@ -113,12 +113,12 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="91.0" prefWidth="383.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
                <children>
-                  <Button defaultButton="true" mnemonicParsing="false" onAction="#Ini_ses" styleClass="Boton-pos" text="Iniciar sesion">
+                  <Button defaultButton="true" mnemonicParsing="false" onAction="#Ini_ses" styleClass="boton-principal" text="Iniciar sesion">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#Cancel_reg" styleClass="Boton-neg" text="Cancelar">
+                  <Button mnemonicParsing="false" onAction="#Cancel_reg" styleClass="boton-principal-neg" text="Cancelar">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
@@ -130,9 +130,8 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="89.0" prefWidth="456.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
                <children>
-                  <Label id="Text" alignment="CENTER" text="Si no tienes una cuenta puedes" />
-                  <Hyperlink maxWidth="-Infinity" minWidth="-Infinity" onAction="#Reg_ses" prefHeight="24.0" prefWidth="74.0" styleClass="Hyper" text="registrarte" />
-                  <Label styleClass="Text" text="aqui." />
+                  <Label id="Text" alignment="CENTER" styleClass="texto-info" text="Si no tienes una cuenta puedes registrarte" />
+                  <Hyperlink maxWidth="-Infinity" minWidth="-Infinity" onAction="#Reg_ses" prefHeight="24.0" prefWidth="38.0" styleClass="Hyper" text="aqui" />
                </children>
             </HBox>
          </children>

@@ -72,20 +72,15 @@ public class LaSaforApp extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Principal.fxml"));
         Parent root = loader.load();
         roots.put("principal", root);
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/coconut.jpg")));
-        
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));    
         scene = new Scene(root);
+        scene.getStylesheets().add("/resources/estilos.css");
         stage.setTitle("Principal");
         stage.setScene(scene);
-        /*
-        loader = new FXMLLoader(getClass().getResource("Inicio_de_sesion.fxml"));
-        root = loader.load();
-        roots.put("inicio_sesion", root);*/
-        
+
         stage.show();
     }
    
@@ -158,12 +153,23 @@ public class LaSaforApp extends Application {
         } catch (Exception e) {e.printStackTrace();}
     }
     
+    /**
+     * Abre la pantalla inicial del app, permitiendo iniciar sesion o registrar.
+     */
     public static void abrirHub() {
         try {
             FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("Principal.fxml"));
             Parent principal = loader.load();
             LaSaforApp.roots.put("principal", principal);
             setRoot(principal,"Principal", 456, 500);
+        } catch (Exception e) {e.printStackTrace();}
+    }
+    public static void abrirCambMap() {
+        try {
+            FXMLLoader loader = new FXMLLoader(LaSaforApp.class.getResource("cambiarMapa.fxml"));
+            Parent cambMapa = loader.load();
+            LaSaforApp.roots.put("cambMapa", cambMapa);
+            setRoot(cambMapa,"cambMapa", 456, 500);
         } catch (Exception e) {e.printStackTrace();}
     }
     /**

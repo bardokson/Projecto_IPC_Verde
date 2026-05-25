@@ -1,6 +1,7 @@
 package mapademo;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,13 +11,20 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-// Importamos las clases de la librería de la práctica
 import upv.ipc.sportlib.MapRegion;
 import upv.ipc.sportlib.SportActivityApp;
 
+
+
+/**
+ * Controlador encargado de la lógica de la ventana emergente "Añadir Nuevo Mapa".
+ * Gestiona la selección del archivo físico (JPG) y la validación de las coordenadas
+ * del Bounding Box introducidas por el usuario antes de inyectarlas en el sistema.
+ */
+
+
 public class AnadirMapaController {
 
-    // Las variables inyectadas desde el Scene Builder (fx:id)
     @FXML private TextField rutaImagenField;
     @FXML private TextField latMinField;
     @FXML private TextField latMaxField;
@@ -24,14 +32,16 @@ public class AnadirMapaController {
     @FXML private TextField lonMaxField;    
     @FXML private Button btnGuardar;
     @FXML private Button btnCancelar;
-
-    // Guardaremos el archivo de imagen que seleccione el usuario
+    
     private File imagenSeleccionada;
 
     /**
-     * Permite al usuario seleccionar un mapa para ser usado
-     * @param event 
+     * Abre el explorador de archivos nativo para que el usuario seleccione el mapa físico.
+     * Una vez seleccionado, muestra la ruta absoluta del archivo en el campo de texto correspondiente.
+     *
+     * @param event Evento disparado por la pulsación del botón "Examinar...".
      */
+    
     @FXML
     void seleccionarImagen(ActionEvent event) {
         // Abrimos el explorador de archivos
@@ -50,12 +60,13 @@ public class AnadirMapaController {
         }
     }
     
-    /**
-     * Guarda el mapa para poder ser seleccionado despues
-     * @param event 
+   /**
+     * Procesa, valida y guarda la información del nuevo mapa en el sistema.
+     * [Código asistido por IA]
+     * @param event Evento disparado por la pulsación del botón "Guardar Mapa".
      */
     @FXML
-    void guardarMapa(ActionEvent event) {
+    void guardarMapa(ActionEvent event) throws IOException {
         if (imagenSeleccionada == null) {
             mostrarAlerta(Alert.AlertType.ERROR, "Error", "Debes seleccionar una imagen para el mapa.");
             return;
@@ -66,26 +77,22 @@ public class AnadirMapaController {
             double latMax = Double.parseDouble(latMaxField.getText());
             double lonMin = Double.parseDouble(lonMinField.getText());
             double lonMax = Double.parseDouble(lonMaxField.getText());
-            
-            
-            // MEJORA: Comprobamos que las coordenadas tengan sentido lógico
+
             if (latMin >= latMax || lonMin >= lonMax) {
                 mostrarAlerta(Alert.AlertType.WARNING, "Coordenadas inválidas", "Las coordenadas máximas deben ser estrictamente mayores que las mínimas.");
-                return; // Cortamos la ejecución aquí para no guardar un mapa roto
+                return;
             }
             
 
             String nombreMapa = imagenSeleccionada.getName().replaceFirst("[.][^.]+$", "");
-
+            FXMLDocumentController.mapaOb.add(imagenSeleccionada.getCanonicalPath());
             SportActivityApp app = SportActivityApp.getInstance();
             
             MapRegion nuevaRegion = app.addMapRegion(nombreMapa, imagenSeleccionada, latMin, latMax, lonMin, lonMax);
 
             if (nuevaRegion != null) {
                 mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "El mapa se ha añadido correctamente a la base de datos.");
-                
-                // Cierra la ventana actual tras guardar
-                
+
                 javafx.scene.Node source = (javafx.scene.Node) event.getSource();
                 Stage stage = (Stage) source.getScene().getWindow();
                 stage.close();
@@ -99,11 +106,13 @@ public class AnadirMapaController {
         }
     }
 
-    
-    
-    
-
-    // Método de apoyo para mostrar ventanas emergentes 
+   /**
+     * Método auxiliar para generar y mostrar alertas en pantalla.
+     *
+     * @param tipo    El tipo de alerta (ERROR, WARNING, INFORMATION, CONFIRMATION).
+     * @param titulo  El título superior de la ventana de alerta.
+     * @param mensaje El texto que leerá el usuario.
+     */
     private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
@@ -113,11 +122,17 @@ public class AnadirMapaController {
     }
     
     /**
-     * Devuelve a la ventana de actividades 
-     * @param event 
+     * Intercepta cancelar la subida del mapa y pide confirmación al usuario.
+     * Evita la pérdida accidental de datos 
+     * Si el usuario confirma, obtiene la referencia del Stage actual y destruye la ventana.
+     * 
+     * [Código asistido por IA]
+     *
+     * @param event Evento disparado por la pulsación del botón "Cancelar".
      */
     @FXML
     private void accCancelar(ActionEvent event) {
+        
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle("Confirmar cancelación");
         alerta.setHeaderText(null);
@@ -126,7 +141,6 @@ public class AnadirMapaController {
         Optional<ButtonType> resultado = alerta.showAndWait();
         
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-            // Obtiene la referencia a la ventana actual a través del evento y la cierra
             javafx.scene.Node source = (javafx.scene.Node) event.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
             stage.close();
@@ -134,9 +148,8 @@ public class AnadirMapaController {
     }
     
     /**
-     * Inicializador del controlador para añadir mapas
+     * Inicializador del controlador para añadir mapas.
      */
-    
     @FXML
     public void initialize() {
         configurarFiltroNumerico(latMinField);
@@ -145,8 +158,12 @@ public class AnadirMapaController {
         configurarFiltroNumerico(lonMaxField);
     }
 
-    /*
-     * permitir unicamente la entrada de caracteres numericos, el punto decimal y el signo negativo.
+    /**
+     * Aplica un listener reactivo a un campo de texto para restringir su entrada en tiempo real.
+     * 
+     * [Código asistido por IA]
+     * 
+     * @param campoTexto El TextField sobre el que se aplicará el filtro de validación.
      */
     private void configurarFiltroNumerico(TextField campoTexto) {
         campoTexto.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -156,3 +173,4 @@ public class AnadirMapaController {
         });
     }
 }
+

@@ -26,20 +26,35 @@ public class PrincipalController implements Initializable {
         // TODO
     }    
 
+    /**
+     * Llama al metodo abrirReg().
+     */
     @FXML
     private void Reg(ActionEvent event) {
         LaSaforApp.abrirReg();
     }
 
+    /**
+     * Llama al metodo abrirSignIn().
+     */
     @FXML
     private void Ini_ses(ActionEvent event) {
         LaSaforApp.abrirSignIn();
     }
-
+    @FXML
+    private void Invitado(ActionEvent event) {
+        FXMLDocumentController.setGuest(true);
+        LaSaforApp.abrirActividades();
+    }
+    /**
+     * Cierra la aplicacion.
+     */
     @FXML
     private void Salir(ActionEvent event) {
         Platform.exit();
         System.exit(0);
     }
+
+    
     
 }

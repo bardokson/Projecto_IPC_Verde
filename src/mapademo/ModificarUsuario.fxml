@@ -18,16 +18,16 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapademo.ModificarUsuarioController">
    <children>
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="471.0" style="-fx-background-color: orange;">
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="471.0" style="-fx-background-color: #2c3e50&quot;;" styleClass="texto-principal">
          <children>
-            <Label text="Modificar">
+            <Label styleClass="titulo-destacado" text="Modificar">
                <font>
                   <Font size="31.0" />
                </font>
             </Label>
          </children>
       </HBox>
-      <GridPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="398.0" prefWidth="471.0">
+      <GridPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="398.0" prefWidth="471.0" styleClass="panel-fondo">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="161.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="310.0" minWidth="10.0" prefWidth="310.0" />
@@ -49,7 +49,7 @@
                      <font>
                         <Font size="10.0" />
                      </font></Label>
-                  <Label fx:id="name" prefHeight="0.0" prefWidth="182.0" text="Nombre" VBox.vgrow="NEVER">
+                  <Label fx:id="name" prefHeight="0.0" prefWidth="182.0" styleClass="texto-principal" text="Nombre" VBox.vgrow="NEVER">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -61,7 +61,7 @@
             </VBox>
             <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="65.0" prefWidth="237.0" GridPane.rowIndex="1">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="NickName:   " textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="texto-principal" text="NickName:   " textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -71,7 +71,7 @@
             </VBox>
             <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="64.0" prefWidth="237.0" GridPane.rowIndex="2">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="Email:  " textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="texto-principal" text="Email:  " textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -81,7 +81,7 @@
             </VBox>
             <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="59.0" prefWidth="237.0" GridPane.rowIndex="3">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="Contraseña:  " textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="texto-principal" text="Contraseña:  " textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -91,7 +91,7 @@
             </VBox>
             <VBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="59.0" prefWidth="237.0" GridPane.rowIndex="4">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" text="Fecha nacimiento:  " textAlignment="RIGHT">
+                  <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="182.0" styleClass="texto-principal" text="Fecha nacimiento:  " textAlignment="RIGHT">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -101,7 +101,7 @@
             </VBox>
             <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="64.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <TextField fx:id="Email_mod" maxWidth="-Infinity" onKeyTyped="#Entering_email" prefHeight="26.0" prefWidth="236.0" promptText="usuario@dominio">
+                  <TextField fx:id="Email_mod" maxWidth="-Infinity" onKeyTyped="#Entering_email" prefHeight="26.0" prefWidth="236.0" promptText="usuario@dominio" styleClass="campo">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
@@ -123,7 +123,7 @@
             </VBox>
             <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
-                  <PasswordField fx:id="Pass_mod" maxWidth="-Infinity" onKeyPressed="#Entering_pass" prefHeight="26.0" prefWidth="236.0" />
+                  <PasswordField fx:id="Pass_mod" maxWidth="-Infinity" onKeyPressed="#Entering_pass" prefHeight="26.0" prefWidth="236.0" styleClass="campo" />
                   <Label fx:id="Err_pass" prefHeight="18.0" prefWidth="338.0" text="El formato de la contraseña es incorecto" textFill="RED" visible="false">
                      <font>
                         <Font size="10.0" />
@@ -132,7 +132,7 @@
             </VBox>
             <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="61.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <children>
-                  <DatePicker fx:id="Birth_mod" onAction="#Entering_birth" prefHeight="26.0" prefWidth="122.0" promptText="dd/mm/yyyy" />
+                  <DatePicker fx:id="Birth_mod" onAction="#Entering_birth" prefHeight="26.0" prefWidth="122.0" promptText="dd/mm/yyyy" stylesheets="@../resources/dater.css" />
                   <Label fx:id="Err_birth" prefHeight="18.0" prefWidth="226.0" text="El usuario debe ser mayor de 12 años" textFill="RED" visible="false">
                      <font>
                         <Font size="10.0" />
@@ -141,12 +141,12 @@
             </VBox>
             <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="47.0" prefWidth="250.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="7">
                <children>
-                  <Button mnemonicParsing="false" onAction="#saveChange" text="Guardar">
+                  <Button mnemonicParsing="false" onAction="#saveChange" styleClass="boton-principal" text="Guardar">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="11.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#cancelMod" text="Cancelar">
+                  <Button mnemonicParsing="false" onAction="#cancelMod" styleClass="boton-principal-neg" text="Cancelar">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="11.0" />
                      </HBox.margin>
@@ -159,9 +159,9 @@
             <Separator prefWidth="200.0" GridPane.columnSpan="2" />
             <HBox maxWidth="-Infinity" prefHeight="60.0" prefWidth="73.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                <children>
-                  <Button fx:id="Pass_show" mnemonicParsing="false" onAction="#Pass_show" prefHeight="25.0" prefWidth="28.0">
+                  <Button id="show" fx:id="Pass_show" mnemonicParsing="false" onAction="#Pass_show" prefHeight="25.0" prefWidth="28.0" styleClass="boton-principal">
                      <HBox.margin>
-                        <Insets left="3.0" top="10.0" />
+                        <Insets left="3.0" top="8.0" />
                      </HBox.margin>
                      <padding>
                         <Insets bottom="-10.0" left="-22.0" right="-21.0" top="-10.0" />
@@ -196,7 +196,7 @@
             </Label>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#Avatar_mod">
+                  <Button mnemonicParsing="false" onAction="#Avatar_mod" styleClass="boton-principal-neg">
                      <graphic>
                         <ImageView fx:id="Avatar_mod" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
