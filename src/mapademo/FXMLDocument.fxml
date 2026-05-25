@@ -39,9 +39,9 @@
                      <items>
                         <VBox alignment="CENTER" style="-fx-background-color: #f4f4f4;">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="22.0" styleClass="texto-principal" text="Actividades" textAlignment="CENTER" style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-padding: 5px;" />
+                              <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="22.0" style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-padding: 5px;" styleClass="texto-principal" text="Actividades" textAlignment="CENTER" />
                               <ListView fx:id="activityList" onMouseClicked="#activitySelected" prefHeight="536.0" prefWidth="194.0" stylesheets="@../resources/actividades.css" />
-                              <Label alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="22.0" styleClass="texto-principal" text="Anotaciones" style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-padding: 5px;" />
+                              <Label alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="22.0" style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-padding: 5px;" styleClass="texto-principal" text="Anotaciones" />
                               <ListView fx:id="map_listview" onMouseClicked="#listClicked" stylesheets="@../resources/anotaciones.css" />
                            </children>
                         </VBox>
@@ -86,10 +86,10 @@
                         </Button>
                      </children>
                   </HBox>
-                  <Region HBox.hgrow="ALWAYS" />
+                  <Region minWidth="255.0" HBox.hgrow="ALWAYS" />
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="27.0" spacing="5.0">
                      <children>
-                        <Label styleClass="texto-dato" text="Zoom" style="-fx-text-fill: white;" />
+                        <Label style="-fx-text-fill: white;" styleClass="texto-dato" text="Zoom" />
                         <Button mnemonicParsing="false" onAction="#zoomOut" styleClass="boton-secundario" text="-" />
                         <Slider fx:id="zoom_slider" HBox.hgrow="SOMETIMES" />
                         <Button mnemonicParsing="false" onAction="#zoomIn" styleClass="boton-secundario" text="+" />
@@ -101,6 +101,7 @@
                      </HBox.margin>
                   </Separator>
                   <Label fx:id="mousePosition" minHeight="-Infinity" minWidth="-Infinity" style="-fx-text-fill: white;" text="SceneX:     ScenY:     " wrapText="true" HBox.hgrow="ALWAYS" />
+                  <Region prefHeight="200.0" prefWidth="5.0" />
                </children>
                <BorderPane.margin>
                   <Insets top="5.0" />
@@ -161,7 +162,7 @@
                                           <MenuItem fx:id="ests" mnemonicParsing="false" onAction="#abrirEstadisticas" text="Estadisticas" />
                                           <MenuItem fx:id="ses" mnemonicParsing="false" onAction="#verSesiones" text="Sesiones" />
                                           <MenuItem fx:id="out" mnemonicParsing="false" onAction="#logOut" text="Log Out" />
-                                          <MenuItem fx:id="auth" mnemonicParsing="false" onAction="#auth" text="Autentificarse" visible="false" />
+                                          <MenuItem fx:id="auth" mnemonicParsing="false" onAction="#auth" text="Autenticarse" visible="false" />
                                       </items>
                                     </Menu>
                                  </menus>
@@ -204,5 +205,3 @@
       </BorderPane>
    </children>
 </GridPane>
-
-

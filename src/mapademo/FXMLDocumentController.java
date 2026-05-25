@@ -658,7 +658,7 @@ public class FXMLDocumentController implements Initializable {
             stage.initModality(javafx.stage.Modality.WINDOW_MODAL);
             stage.showAndWait();
         if (imgFileCam != null) {
-            System.out.println("Mapa seleccionado: " + imgFileCam.getCanonicalPath());
+            //System.out.println("Mapa seleccionado: " + imgFileCam.getCanonicalPath());
             buildMap(imgFileCam, null); // Reconstruimos la vista con la nueva imagen
             map_listview.getItems().clear(); // Borramos los datos del mapa anterior
         }
@@ -984,7 +984,6 @@ public class FXMLDocumentController implements Initializable {
         mapPane.getChildren().removeIf(node -> node instanceof javafx.scene.shape.Line);
         
         dibujarRutaPorVelocidad();
-        verActividades();
         
         abrirActividad(actividad);
         Platform.runLater(() -> centrarEnActividad(actividad));
