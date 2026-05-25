@@ -835,8 +835,22 @@ public class FXMLDocumentController implements Initializable {
             dialog.setTitle("Renombrar actividad");
             dialog.setHeaderText("Cambiar nombre actividad");
             dialog.setContentText("Nuevo nombre:");
+            dialog.initOwner(mapPane.getScene().getWindow());
+
+            dialog.getDialogPane().expandedProperty().addListener((obs, old, val) -> {
+                Platform.runLater(() -> {
+                    dialog.getEditor().requestFocus();
+                    dialog.getEditor().selectAll();
+                });
+            });
+
+            dialog.setOnShown(e -> Platform.runLater(() -> {
+                dialog.getEditor().requestFocus();
+                dialog.getEditor().selectAll();
+            }));
+
             dialog.showAndWait().ifPresent(newName -> {
-            if(newName != null) nombre = newName;
+                if(newName != null) nombre = newName;
             });
             
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
